@@ -61,5 +61,8 @@ TestResults/
 # ---------- Tài liệu bản nháp / bản in ----------
 # File khóa tạm của Word khi đang mở tài liệu
 ~$*
+*.md
 *.docx
 *.docx.bak
+docs/
+.github/
