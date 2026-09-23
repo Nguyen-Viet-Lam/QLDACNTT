@@ -1,0 +1,65 @@
+# ---------- .NET / ASP.NET Core ----------
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+appsettings.Development.json
+appsettings.Local.json
+*.pfx
+
+# ---------- Node / Web Admin ----------
+node_modules/
+dist/
+build/
+.npm
+npm-debug.log*
+yarn-error.log*
+.env
+.env.local
+
+# ---------- Flutter / Dart / Android ----------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+**/android/.gradle/
+**/android/local.properties
+**/android/app/debug/
+**/android/app/release/
+**/ios/Pods/
+*.apk
+*.aab
+*.ipa
+
+# ---------- SQL Server ----------
+*.mdf
+*.ldf
+*.ndf
+*.bak
+
+# ---------- IDE / OS ----------
+.idea/
+*.iml
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Logs & temp ----------
+logs/
+*.log
+*.tmp
+TestResults/
+
+# ---------- Tài liệu bản nháp / bản in ----------
+# File khóa tạm của Word khi đang mở tài liệu
+~$*
+*.docx
+*.docx.bak
