@@ -1,0 +1,97 @@
+@baseUrl = http://localhost:5055
+@adminToken =
+@staffToken =
+@techToken =
+
+### Health check
+GET {{baseUrl}}/health
+
+### Login admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+### Login staff
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "staff",
+  "password": "123456"
+}
+
+### Login technician
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tech",
+  "password": "123456"
+}
+
+### Current user
+GET {{baseUrl}}/api/auth/me
+X-Session-Token: {{adminToken}}
+
+### Admin: users
+GET {{baseUrl}}/api/users
+X-Session-Token: {{adminToken}}
+
+### Staff: customers
+GET {{baseUrl}}/api/customers
+X-Session-Token: {{staffToken}}
+
+### Staff: create customer
+POST {{baseUrl}}/api/customers
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "fullName": "Le Van Cuong",
+  "phone": "0901000003",
+  "email": "cuong.demo@example.com",
+  "address": "Quan 5, TP.HCM"
+}
+
+### Staff: devices of customer
+GET {{baseUrl}}/api/customers/KH000001/devices
+X-Session-Token: {{staffToken}}
+
+### Staff: create repair ticket
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "customerCode": "KH000001",
+  "deviceCode": "TB000001",
+  "serviceCode": "DV003",
+  "deviceCondition": "Laptop nong bat thuong, quat keu lon"
+}
+
+### Staff: assign technician
+PATCH {{baseUrl}}/api/tickets/PSC2026090001/assign
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "technicianUsername": "tech"
+}
+
+### Technician: update diagnosis
+PATCH {{baseUrl}}/api/tickets/PSC2026090001/diagnosis
+Content-Type: application/json
+X-Session-Token: {{techToken}}
+
+{
+  "diagnosis": "Can ve sinh va thay keo tan nhiet",
+  "quotedLaborCost": 120000
+}
+
+### Admin: dashboard summary
+GET {{baseUrl}}/api/dashboard/summary
+X-Session-Token: {{adminToken}}
