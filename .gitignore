@@ -20,22 +20,6 @@ yarn-error.log*
 .env
 .env.local
 
-# ---------- Flutter / Dart / Android ----------
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-**/android/.gradle/
-**/android/local.properties
-**/android/app/debug/
-**/android/app/release/
-**/ios/Pods/
-*.apk
-*.aab
-*.ipa
-
 # ---------- SQL Server ----------
 *.mdf
 *.ldf
@@ -58,11 +42,16 @@ logs/
 *.tmp
 TestResults/
 
-# ---------- Tài liệu bản nháp / bản in ----------
-# File khóa tạm của Word khi đang mở tài liệu
+# ---------- File khóa tạm của Word khi đang mở ----------
 ~$*
-*.md
-*.docx
 *.docx.bak
+PHAN_CONG_3_TUAN_DAU.md
+
+# ---------- Báo cáo / Excel / Word / Tài liệu (chỉ lưu cục bộ, không đẩy GitHub) ----------
+*.docx
+*.xlsx
+*.xls
+*.csv
+BaoCao/
+Jira_Import_Chuan/
 docs/
-.github/
