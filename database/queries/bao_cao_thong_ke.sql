@@ -1,4 +1,4 @@
-/* =====================================================================
+﻿/* =====================================================================
    LV33-001 — Truy vấn báo cáo thống kê
    Người viết: Trần Ngọc Lợi (Database)
    Các truy vấn này là nguồn dữ liệu cho dashboard và báo cáo Web Admin.

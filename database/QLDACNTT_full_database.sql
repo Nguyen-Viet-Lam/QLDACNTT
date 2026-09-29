@@ -1,15 +1,16 @@
 ﻿/* ================================================================
    QLDACNTT - Full SQL script
-   Chay theo thu tu: tao database, tao bang, seed data, truy van bao cao.
+   Chạy theo thứ tự: tạo database, tạo bảng, seed data, truy vấn báo cáo.
+   Người thực hiện: Trần Ngọc Lợi (Database)
+   Đề tài: Hệ thống quản lý tổng thể cho cửa hàng sửa chữa TechCare
    ================================================================ */
-
 
 /* ===== BEGIN: database\schema\01_create_database.sql ===== */
 
 /* =====================================================================
-   LV33-001 â€” Há»‡ thá»‘ng quáº£n lÃ½ tá»•ng thá»ƒ cho cá»­a hÃ ng sá»­a chá»¯a
-   Script 01: Táº¡o cÆ¡ sá»Ÿ dá»¯ liá»‡u
-   NgÆ°á»i viáº¿t: Tráº§n Ngá»c Lá»£i (Database)
+   LV33-001 — Hệ thống quản lý tổng thể cho cửa hàng sửa chữa
+   Script 01: Tạo cơ sở dữ liệu
+   Người viết: Trần Ngọc Lợi (Database)
    ===================================================================== */
 
 USE master;
@@ -31,15 +32,14 @@ GO
 
 /* ===== END: database\schema\01_create_database.sql ===== */
 
-
 /* ===== BEGIN: database\schema\02_create_tables.sql ===== */
 
 /* =====================================================================
-   LV33-001 â€” Há»‡ thá»‘ng quáº£n lÃ½ tá»•ng thá»ƒ cho cá»­a hÃ ng sá»­a chá»¯a
-   Script 02: Táº¡o báº£ng
-   NgÆ°á»i viáº¿t: Tráº§n Ngá»c Lá»£i (Database)
+   LV33-001 — Hệ thống quản lý tổng thể cho cửa hàng sửa chữa
+   Script 02: Tạo bảng
+   Người viết: Trần Ngọc Lợi (Database)
 
-   13 báº£ng: Roles, Users, Customers, Devices, ServiceTypes, RepairTickets,
+   13 bảng: Roles, Users, Customers, Devices, ServiceTypes, RepairTickets,
             TicketStatusHistory, SparePartCategories, SpareParts,
             StockTransactions, TicketParts, Invoices, Warranties
    ===================================================================== */
@@ -47,14 +47,14 @@ GO
 USE RepairShopDB;
 GO
 
-/* Báº¯t buá»™c báº­t 2 tÃ¹y chá»n nÃ y: cÃ¡c báº£ng bÃªn dÆ°á»›i cÃ³ cá»™t tÃ­nh toÃ¡n PERSISTED
-   (QuotedTotal, LineTotal, TotalAmount). SSMS báº­t sáºµn nhÆ°ng sqlcmd máº·c Ä‘á»‹nh
-   Ä‘á»ƒ QUOTED_IDENTIFIER OFF nÃªn sáº½ lá»—i 1934 náº¿u khÃ´ng set tÆ°á»ng minh. */
+/* Bắt buộc bật 2 tùy chọn này: các bảng bên dưới có cột tính toán PERSISTED
+   (QuotedTotal, LineTotal, TotalAmount). SSMS bật sẵn nhưng sqlcmd mặc định
+   để QUOTED_IDENTIFIER OFF nên sẽ lỗi 1934 nếu không set tường minh. */
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 GO
 
-/* ---------- 1. Vai trÃ² (RBAC) ---------- */
+/* ---------- 1. Vai trò (RBAC) ---------- */
 IF OBJECT_ID('dbo.Roles') IS NULL
 CREATE TABLE dbo.Roles (
     RoleId          INT IDENTITY(1,1) PRIMARY KEY,
@@ -66,7 +66,7 @@ CREATE TABLE dbo.Roles (
 );
 GO
 
-/* ---------- 2. NgÆ°á»i dÃ¹ng há»‡ thá»‘ng ---------- */
+/* ---------- 2. Người dùng hệ thống ---------- */
 IF OBJECT_ID('dbo.Users') IS NULL
 CREATE TABLE dbo.Users (
     UserId          INT IDENTITY(1,1) PRIMARY KEY,
@@ -87,7 +87,7 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Users_RoleId' AND object
     CREATE INDEX IX_Users_RoleId ON dbo.Users(RoleId);
 GO
 
-/* ---------- 3. KhÃ¡ch hÃ ng ---------- */
+/* ---------- 3. Khách hàng ---------- */
 IF OBJECT_ID('dbo.Customers') IS NULL
 CREATE TABLE dbo.Customers (
     CustomerId      INT IDENTITY(1,1) PRIMARY KEY,
@@ -106,12 +106,12 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Customers_Phone' AND obj
     CREATE INDEX IX_Customers_Phone ON dbo.Customers(Phone);
 GO
 
-/* ---------- 4. Thiáº¿t bá»‹ cá»§a khÃ¡ch ---------- */
+/* ---------- 4. Thiết bị của khách ---------- */
 IF OBJECT_ID('dbo.Devices') IS NULL
 CREATE TABLE dbo.Devices (
     DeviceId        INT IDENTITY(1,1) PRIMARY KEY,
     CustomerId      INT           NOT NULL,
-    DeviceType      NVARCHAR(50)  NOT NULL,          -- Äiá»‡n thoáº¡i, Laptop, MÃ¡y in...
+    DeviceType      NVARCHAR(50)  NOT NULL,          -- Điện thoại, Laptop, Máy in...
     Brand           NVARCHAR(50)  NULL,
     Model           NVARCHAR(100) NULL,
     SerialNumber    VARCHAR(100)  NULL,
@@ -126,14 +126,14 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Devices_SerialNumber' AN
     CREATE INDEX IX_Devices_SerialNumber ON dbo.Devices(SerialNumber);
 GO
 
-/* ---------- 5. Loáº¡i dá»‹ch vá»¥ & biá»ƒu giÃ¡ tiá»n cÃ´ng ---------- */
+/* ---------- 5. Loại dịch vụ & biểu giá tiền công ---------- */
 IF OBJECT_ID('dbo.ServiceTypes') IS NULL
 CREATE TABLE dbo.ServiceTypes (
     ServiceTypeId    INT IDENTITY(1,1) PRIMARY KEY,
     ServiceCode      VARCHAR(20)    NOT NULL UNIQUE,
     ServiceName      NVARCHAR(100)  NOT NULL,
     LaborCost        DECIMAL(18,2)  NOT NULL DEFAULT 0,
-    WarrantyDays     INT            NOT NULL DEFAULT 0,  -- Thá»i háº¡n báº£o hÃ nh máº·c Ä‘á»‹nh
+    WarrantyDays     INT            NOT NULL DEFAULT 0,  -- Thời hạn bảo hành mặc định
     Description      NVARCHAR(300)  NULL,
     IsActive         BIT            NOT NULL DEFAULT 1,
     CONSTRAINT CK_ServiceTypes_LaborCost    CHECK (LaborCost >= 0),
@@ -141,7 +141,7 @@ CREATE TABLE dbo.ServiceTypes (
 );
 GO
 
-/* ---------- 6. Phiáº¿u sá»­a chá»¯a ---------- */
+/* ---------- 6. Phiếu sửa chữa ---------- */
 IF OBJECT_ID('dbo.RepairTickets') IS NULL
 CREATE TABLE dbo.RepairTickets (
     TicketId          INT IDENTITY(1,1) PRIMARY KEY,
@@ -149,18 +149,18 @@ CREATE TABLE dbo.RepairTickets (
     CustomerId        INT            NOT NULL,
     DeviceId          INT            NOT NULL,
     ServiceTypeId     INT            NULL,
-    ReceivedByUserId  INT            NOT NULL,         -- NhÃ¢n viÃªn tiáº¿p nháº­n
-    TechnicianUserId  INT            NULL,             -- Ká»¹ thuáº­t viÃªn Ä‘Æ°á»£c phÃ¢n cÃ´ng
+    ReceivedByUserId  INT            NOT NULL,         -- Nhân viên tiếp nhận
+    TechnicianUserId  INT            NULL,             -- Kỹ thuật viên được phân công
     Status            VARCHAR(30)    NOT NULL DEFAULT 'RECEIVED',
     -- RECEIVED, DIAGNOSING, WAITING_CONFIRM, REPAIRING, COMPLETED, DELIVERED, CANCELLED
-    DeviceCondition   NVARCHAR(1000) NULL,             -- TÃ¬nh tráº¡ng lÃºc nháº­n
+    DeviceCondition   NVARCHAR(1000) NULL,             -- Tình trạng lúc nhận
     CustomerRequest   NVARCHAR(1000) NULL,
     Diagnosis         NVARCHAR(1000) NULL,
     QuotedLaborCost   DECIMAL(18,2)  NOT NULL DEFAULT 0,
     QuotedPartsCost   DECIMAL(18,2)  NOT NULL DEFAULT 0,
     QuotedTotal       AS (QuotedLaborCost + QuotedPartsCost) PERSISTED,
     IsWarrantyRepair  BIT            NOT NULL DEFAULT 0,
-    OriginalTicketId  INT            NULL,             -- Phiáº¿u gá»‘c náº¿u lÃ  sá»­a báº£o hÃ nh
+    OriginalTicketId  INT            NULL,             -- Phiếu gốc nếu là sửa bảo hành
     ReceivedAt        DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
     ExpectedFinishAt  DATETIME2      NULL,
     CompletedAt       DATETIME2      NULL,
@@ -188,7 +188,7 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Tickets_Technician' AND 
     CREATE INDEX IX_Tickets_Technician ON dbo.RepairTickets(TechnicianUserId);
 GO
 
-/* ---------- 7. Lá»‹ch sá»­ tráº¡ng thÃ¡i phiáº¿u ---------- */
+/* ---------- 7. Lịch sử trạng thái phiếu ---------- */
 IF OBJECT_ID('dbo.TicketStatusHistory') IS NULL
 CREATE TABLE dbo.TicketStatusHistory (
     HistoryId       INT IDENTITY(1,1) PRIMARY KEY,
@@ -206,7 +206,7 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_History_TicketId' AND ob
     CREATE INDEX IX_History_TicketId ON dbo.TicketStatusHistory(TicketId);
 GO
 
-/* ---------- 8. NhÃ³m linh kiá»‡n ---------- */
+/* ---------- 8. Nhóm linh kiện ---------- */
 IF OBJECT_ID('dbo.SparePartCategories') IS NULL
 CREATE TABLE dbo.SparePartCategories (
     CategoryId      INT IDENTITY(1,1) PRIMARY KEY,
@@ -216,18 +216,18 @@ CREATE TABLE dbo.SparePartCategories (
 );
 GO
 
-/* ---------- 9. Linh kiá»‡n ---------- */
+/* ---------- 9. Linh kiện ---------- */
 IF OBJECT_ID('dbo.SpareParts') IS NULL
 CREATE TABLE dbo.SpareParts (
     PartId          INT IDENTITY(1,1) PRIMARY KEY,
     PartCode        VARCHAR(30)    NOT NULL UNIQUE,   -- LK00001
     CategoryId      INT            NOT NULL,
     PartName        NVARCHAR(150)  NOT NULL,
-    Unit            NVARCHAR(20)   NOT NULL DEFAULT N'CÃ¡i',
+    Unit            NVARCHAR(20)   NOT NULL DEFAULT N'Cái',
     PurchasePrice   DECIMAL(18,2)  NOT NULL DEFAULT 0,
     SellingPrice    DECIMAL(18,2)  NOT NULL DEFAULT 0,
     StockQuantity   INT            NOT NULL DEFAULT 0,
-    MinStockLevel   INT            NOT NULL DEFAULT 0, -- Má»©c tá»“n tá»‘i thiá»ƒu Ä‘á»ƒ cáº£nh bÃ¡o
+    MinStockLevel   INT            NOT NULL DEFAULT 0, -- Mức tồn tối thiểu để cảnh báo
     WarrantyDays    INT            NOT NULL DEFAULT 0,
     IsActive        BIT            NOT NULL DEFAULT 1,
     CreatedAt       DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
@@ -245,17 +245,17 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Parts_PartName' AND obje
     CREATE INDEX IX_Parts_PartName ON dbo.SpareParts(PartName);
 GO
 
-/* ---------- 10. Giao dá»‹ch kho (nháº­p / xuáº¥t / Ä‘iá»u chá»‰nh) ---------- */
+/* ---------- 10. Giao dịch kho (nhập / xuất / điều chỉnh) ---------- */
 IF OBJECT_ID('dbo.StockTransactions') IS NULL
 CREATE TABLE dbo.StockTransactions (
     TransactionId     INT IDENTITY(1,1) PRIMARY KEY,
     PartId            INT            NOT NULL,
     TransactionType   VARCHAR(20)    NOT NULL,   -- IN, OUT, ADJUST, RETURN
-    Quantity          INT            NOT NULL,   -- LuÃ´n dÆ°Æ¡ng, hÆ°á»›ng do TransactionType quyáº¿t Ä‘á»‹nh
+    Quantity          INT            NOT NULL,   -- Luôn dương, hướng do TransactionType quyết định
     UnitPrice         DECIMAL(18,2)  NOT NULL DEFAULT 0,
     StockBefore       INT            NOT NULL,
     StockAfter        INT            NOT NULL,
-    TicketId          INT            NULL,       -- Náº¿u xuáº¥t cho phiáº¿u sá»­a chá»¯a
+    TicketId          INT            NULL,       -- Nếu xuất cho phiếu sửa chữa
     PerformedByUserId INT            NOT NULL,
     Note              NVARCHAR(500)  NULL,
     TransactionAt     DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
@@ -274,14 +274,14 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Stock_TransactionAt' AND
     CREATE INDEX IX_Stock_TransactionAt ON dbo.StockTransactions(TransactionAt);
 GO
 
-/* ---------- 11. Linh kiá»‡n dÃ¹ng cho phiáº¿u sá»­a chá»¯a ---------- */
+/* ---------- 11. Linh kiện dùng cho phiếu sửa chữa ---------- */
 IF OBJECT_ID('dbo.TicketParts') IS NULL
 CREATE TABLE dbo.TicketParts (
     TicketPartId    INT IDENTITY(1,1) PRIMARY KEY,
     TicketId        INT            NOT NULL,
     PartId          INT            NOT NULL,
     Quantity        INT            NOT NULL,
-    UnitPrice       DECIMAL(18,2)  NOT NULL,          -- GiÃ¡ bÃ¡n táº¡i thá»i Ä‘iá»ƒm xuáº¥t
+    UnitPrice       DECIMAL(18,2)  NOT NULL,          -- Giá bán tại thời điểm xuất
     LineTotal       AS (Quantity * UnitPrice) PERSISTED,
     Note            NVARCHAR(300)  NULL,
     CreatedAt       DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
@@ -297,12 +297,12 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_TicketParts_PartId' AND 
     CREATE INDEX IX_TicketParts_PartId ON dbo.TicketParts(PartId);
 GO
 
-/* ---------- 12. HÃ³a Ä‘Æ¡n ---------- */
+/* ---------- 12. Hóa đơn ---------- */
 IF OBJECT_ID('dbo.Invoices') IS NULL
 CREATE TABLE dbo.Invoices (
     InvoiceId       INT IDENTITY(1,1) PRIMARY KEY,
     InvoiceCode     VARCHAR(20)    NOT NULL UNIQUE,  -- HD2026090001
-    TicketId        INT            NOT NULL UNIQUE,  -- Má»™t phiáº¿u má»™t hÃ³a Ä‘Æ¡n
+    TicketId        INT            NOT NULL UNIQUE,  -- Một phiếu một hóa đơn
     CustomerId      INT            NOT NULL,
     LaborCost       DECIMAL(18,2)  NOT NULL DEFAULT 0,
     PartsCost       DECIMAL(18,2)  NOT NULL DEFAULT 0,
@@ -328,7 +328,7 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Invoices_CreatedAt' AND 
     CREATE INDEX IX_Invoices_CreatedAt ON dbo.Invoices(CreatedAt);
 GO
 
-/* ---------- 13. Phiáº¿u báº£o hÃ nh ---------- */
+/* ---------- 13. Phiếu bảo hành ---------- */
 IF OBJECT_ID('dbo.Warranties') IS NULL
 CREATE TABLE dbo.Warranties (
     WarrantyId      INT IDENTITY(1,1) PRIMARY KEY,
@@ -339,7 +339,7 @@ CREATE TABLE dbo.Warranties (
     StartDate       DATE           NOT NULL,
     EndDate         DATE           NOT NULL,
     WarrantyDays    INT            NOT NULL,
-    Scope           NVARCHAR(500)  NULL,             -- Pháº¡m vi báº£o hÃ nh
+    Scope           NVARCHAR(500)  NULL,             -- Phạm vi bảo hành
     Status          VARCHAR(20)    NOT NULL DEFAULT 'ACTIVE', -- ACTIVE, EXPIRED, VOID, USED
     VoidReason      NVARCHAR(300)  NULL,
     CreatedAt       DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
@@ -364,88 +364,87 @@ GO
 
 /* ===== END: database\schema\02_create_tables.sql ===== */
 
-
 /* ===== BEGIN: database\seed\01_seed_master_data.sql ===== */
 
 /* =====================================================================
-   LV33-001 â€” Há»‡ thá»‘ng quáº£n lÃ½ tá»•ng thá»ƒ cho cá»­a hÃ ng sá»­a chá»¯a
-   Script seed 01: Dá»¯ liá»‡u danh má»¥c ná»n (master data)
-   NgÆ°á»i viáº¿t: Tráº§n Ngá»c Lá»£i (Database)
+   LV33-001 — Hệ thống quản lý tổng thể cho cửa hàng sửa chữa
+   Script seed 01: Dữ liệu danh mục nền (master data)
+   Người viết: Trần Ngọc Lợi (Database)
 
-   LÆ°u Ã½: toÃ n bá»™ dá»¯ liá»‡u khÃ¡ch hÃ ng lÃ  dá»¯ liá»‡u giáº£ phá»¥c vá»¥ demo.
-   Máº­t kháº©u máº«u cá»§a má»i tÃ i khoáº£n: Abc@12345 (hash tháº­t sáº½ do Backend sinh).
+   Lưu ý: toàn bộ dữ liệu khách hàng là dữ liệu giả phục vụ demo.
+   Mật khẩu mẫu của mọi tài khoản: Abc@12345 (hash thật sẽ do Backend sinh).
    ===================================================================== */
 
 USE RepairShopDB;
 GO
 
-/* Báº¯t buá»™c báº­t khi cháº¡y báº±ng sqlcmd â€” cÃ¡c báº£ng phiáº¿u/hÃ³a Ä‘Æ¡n cÃ³ cá»™t tÃ­nh toÃ¡n
-   PERSISTED, thiáº¿u 2 dÃ²ng nÃ y thÃ¬ INSERT sáº½ lá»—i 1934. SSMS Ä‘Ã£ báº­t sáºµn. */
+/* Bắt buộc bật khi chạy bằng sqlcmd — các bảng phiếu/hóa đơn có cột tính toán
+   PERSISTED, thiếu 2 dòng này thì INSERT sẽ lỗi 1934. SSMS đã bật sẵn. */
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 GO
 
-/* ---------- Vai trÃ² ---------- */
+/* ---------- Vai trò ---------- */
 IF NOT EXISTS (SELECT 1 FROM dbo.Roles)
 INSERT INTO dbo.Roles (RoleCode, RoleName, Description) VALUES
-    ('ADMIN',      N'Quáº£n trá»‹ viÃªn',     N'Chá»§ cá»­a hÃ ng / quáº£n lÃ½, toÃ n quyá»n há»‡ thá»‘ng'),
-    ('STAFF',      N'NhÃ¢n viÃªn',          N'Tiáº¿p nháº­n thiáº¿t bá»‹, láº­p phiáº¿u, thu tiá»n'),
-    ('TECHNICIAN', N'Ká»¹ thuáº­t viÃªn',      N'Cháº©n Ä‘oÃ¡n, sá»­a chá»¯a, xuáº¥t linh kiá»‡n'),
-    ('CUSTOMER',   N'KhÃ¡ch hÃ ng',         N'Tra cá»©u tiáº¿n Ä‘á»™ vÃ  báº£o hÃ nh qua mobile app');
+    ('ADMIN',      N'Quản trị viên',     N'Chủ cửa hàng / quản lý, toàn quyền hệ thống'),
+    ('STAFF',      N'Nhân viên',          N'Tiếp nhận thiết bị, lập phiếu, thu tiền'),
+    ('TECHNICIAN', N'Kỹ thuật viên',      N'Chẩn đoán, sửa chữa, xuất linh kiện'),
+    ('CUSTOMER',   N'Khách hàng',         N'Tra cứu tiến độ và bảo hành qua mobile app');
 GO
 
-/* ---------- NgÆ°á»i dÃ¹ng ---------- */
+/* ---------- Người dùng ---------- */
 IF NOT EXISTS (SELECT 1 FROM dbo.Users)
 INSERT INTO dbo.Users (RoleId, Username, PasswordHash, FullName, Email, Phone) VALUES
-    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='ADMIN'),      'admin',   'SEED_REPLACE_ME', N'Chá»§ cá»­a hÃ ng',      'admin@repairshop.local', '0900000001'),
-    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='STAFF'),      'staff01', 'SEED_REPLACE_ME', N'LÃª Thá»‹ Tiáº¿p Nháº­n',  'staff01@repairshop.local','0900000002'),
-    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='TECHNICIAN'), 'tech01',  'SEED_REPLACE_ME', N'Pháº¡m VÄƒn Ká»¹ Thuáº­t', 'tech01@repairshop.local', '0900000003'),
-    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='TECHNICIAN'), 'tech02',  'SEED_REPLACE_ME', N'VÃµ Minh Ká»¹ Thuáº­t',  'tech02@repairshop.local', '0900000004');
+    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='ADMIN'),      'admin',   'SEED_REPLACE_ME', N'Chủ cửa hàng',      'admin@repairshop.local', '0900000001'),
+    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='STAFF'),      'staff01', 'SEED_REPLACE_ME', N'Lê Thị Tiếp Nhận',  'staff01@repairshop.local','0900000002'),
+    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='TECHNICIAN'), 'tech01',  'SEED_REPLACE_ME', N'Phạm Văn Kỹ Thuật', 'tech01@repairshop.local', '0900000003'),
+    ((SELECT RoleId FROM dbo.Roles WHERE RoleCode='TECHNICIAN'), 'tech02',  'SEED_REPLACE_ME', N'Võ Minh Kỹ Thuật',  'tech02@repairshop.local', '0900000004');
 GO
 
-/* ---------- Loáº¡i dá»‹ch vá»¥ & biá»ƒu giÃ¡ tiá»n cÃ´ng ---------- */
+/* ---------- Loại dịch vụ & biểu giá tiền công ---------- */
 IF NOT EXISTS (SELECT 1 FROM dbo.ServiceTypes)
 INSERT INTO dbo.ServiceTypes (ServiceCode, ServiceName, LaborCost, WarrantyDays, Description) VALUES
-    ('DV001', N'Thay mÃ n hÃ¬nh Ä‘iá»‡n thoáº¡i',   150000,  90, N'ThÃ¡o láº¯p vÃ  thay mÃ n hÃ¬nh'),
-    ('DV002', N'Thay pin Ä‘iá»‡n thoáº¡i',        100000, 180, N'Thay pin vÃ  kiá»ƒm tra sáº¡c'),
-    ('DV003', N'Vá»‡ sinh mÃ¡y, tra keo táº£n nhiá»‡t', 120000, 30, N'Vá»‡ sinh laptop, thay keo táº£n nhiá»‡t'),
-    ('DV004', N'CÃ i Ä‘áº·t láº¡i há»‡ Ä‘iá»u hÃ nh',    80000,  15, N'CÃ i Windows, driver, pháº§n má»m cÆ¡ báº£n'),
-    ('DV005', N'Sá»­a mainboard',              350000,  60, N'Sá»­a chá»¯a máº¡ch, hÃ n linh kiá»‡n'),
-    ('DV006', N'Thay á»• cá»©ng / nÃ¢ng cáº¥p SSD', 100000, 365, N'Thay á»• cá»©ng, sao lÆ°u dá»¯ liá»‡u'),
-    ('DV007', N'Sá»­a nguá»“n mÃ¡y tÃ­nh',         180000,  90, N'Kiá»ƒm tra vÃ  sá»­a bá»™ nguá»“n'),
-    ('DV008', N'Thay má»±c, sá»­a mÃ¡y in',       130000,  30, N'Vá»‡ sinh, thay má»±c, sá»­a cÆ¡ cáº¥u náº¡p giáº¥y');
+    ('DV001', N'Thay màn hình điện thoại',   150000,  90, N'Tháo lắp và thay màn hình'),
+    ('DV002', N'Thay pin điện thoại',        100000, 180, N'Thay pin và kiểm tra sạc'),
+    ('DV003', N'Vệ sinh máy, tra keo tản nhiệt', 120000, 30, N'Vệ sinh laptop, thay keo tản nhiệt'),
+    ('DV004', N'Cài đặt lại hệ điều hành',    80000,  15, N'Cài Windows, driver, phần mềm cơ bản'),
+    ('DV005', N'Sửa mainboard',              350000,  60, N'Sửa chữa mạch, hàn linh kiện'),
+    ('DV006', N'Thay ổ cứng / nâng cấp SSD', 100000, 365, N'Thay ổ cứng, sao lưu dữ liệu'),
+    ('DV007', N'Sửa nguồn máy tính',         180000,  90, N'Kiểm tra và sửa bộ nguồn'),
+    ('DV008', N'Thay mực, sửa máy in',       130000,  30, N'Vệ sinh, thay mực, sửa cơ cấu nạp giấy');
 GO
 
-/* ---------- NhÃ³m linh kiá»‡n ---------- */
+/* ---------- Nhóm linh kiện ---------- */
 IF NOT EXISTS (SELECT 1 FROM dbo.SparePartCategories)
 INSERT INTO dbo.SparePartCategories (CategoryName, Description) VALUES
-    (N'MÃ n hÃ¬nh',        N'MÃ n hÃ¬nh Ä‘iá»‡n thoáº¡i, laptop'),
-    (N'Pin & Sáº¡c',       N'Pin, adapter, cÃ¡p sáº¡c'),
-    (N'á»” cá»©ng & RAM',    N'HDD, SSD, thanh RAM'),
-    (N'Mainboard & IC',  N'Bo máº¡ch, IC, chip'),
-    (N'Váº­t tÆ° tiÃªu hao', N'Keo táº£n nhiá»‡t, má»±c in, á»‘c vÃ­t'),
-    (N'Phá»¥ kiá»‡n khÃ¡c',   N'BÃ n phÃ­m, loa, camera, quáº¡t');
+    (N'Màn hình',        N'Màn hình điện thoại, laptop'),
+    (N'Pin & Sạc',       N'Pin, adapter, cáp sạc'),
+    (N'Ổ cứng & RAM',    N'HDD, SSD, thanh RAM'),
+    (N'Mainboard & IC',  N'Bo mạch, IC, chip'),
+    (N'Vật tư tiêu hao', N'Keo tản nhiệt, mực in, ốc vít'),
+    (N'Phụ kiện khác',   N'Bàn phím, loa, camera, quạt');
 GO
 
-/* ---------- Linh kiá»‡n ---------- */
+/* ---------- Linh kiện ---------- */
 IF NOT EXISTS (SELECT 1 FROM dbo.SpareParts)
 INSERT INTO dbo.SpareParts (PartCode, CategoryId, PartName, Unit, PurchasePrice, SellingPrice, StockQuantity, MinStockLevel, WarrantyDays) VALUES
-    ('LK00001', 1, N'MÃ n hÃ¬nh iPhone 11 (linh kiá»‡n)', N'CÃ¡i',  850000, 1200000, 12,  3,  90),
-    ('LK00002', 1, N'MÃ n hÃ¬nh Samsung A32',           N'CÃ¡i',  620000,  900000,  8,  3,  90),
-    ('LK00003', 1, N'MÃ n hÃ¬nh laptop 15.6" FHD',      N'CÃ¡i',  980000, 1400000,  5,  2,  90),
-    ('LK00004', 2, N'Pin iPhone 11',                  N'CÃ¡i',  280000,  450000, 20,  5, 180),
-    ('LK00005', 2, N'Pin laptop Dell 3 cell',         N'CÃ¡i',  450000,  700000,  6,  2, 180),
-    ('LK00006', 2, N'Adapter laptop 65W',             N'CÃ¡i',  190000,  320000, 15,  4,  90),
-    ('LK00007', 3, N'SSD 256GB SATA',                 N'CÃ¡i',  480000,  700000, 18,  5, 365),
-    ('LK00008', 3, N'SSD 512GB NVMe',                 N'CÃ¡i',  820000, 1150000, 10,  3, 365),
+    ('LK00001', 1, N'Màn hình iPhone 11 (linh kiện)', N'Cái',  850000, 1200000, 12,  3,  90),
+    ('LK00002', 1, N'Màn hình Samsung A32',           N'Cái',  620000,  900000,  8,  3,  90),
+    ('LK00003', 1, N'Màn hình laptop 15.6" FHD',      N'Cái',  980000, 1400000,  5,  2,  90),
+    ('LK00004', 2, N'Pin iPhone 11',                  N'Cái',  280000,  450000, 20,  5, 180),
+    ('LK00005', 2, N'Pin laptop Dell 3 cell',         N'Cái',  450000,  700000,  6,  2, 180),
+    ('LK00006', 2, N'Adapter laptop 65W',             N'Cái',  190000,  320000, 15,  4,  90),
+    ('LK00007', 3, N'SSD 256GB SATA',                 N'Cái',  480000,  700000, 18,  5, 365),
+    ('LK00008', 3, N'SSD 512GB NVMe',                 N'Cái',  820000, 1150000, 10,  3, 365),
     ('LK00009', 3, N'RAM DDR4 8GB 3200MHz',           N'Thanh',520000,  750000, 14,  4, 365),
-    ('LK00010', 4, N'IC nguá»“n Ä‘iá»‡n thoáº¡i',            N'CÃ¡i',   65000,  150000, 25,  8,  30),
-    ('LK00011', 4, N'ChÃ¢n sáº¡c iPhone',                N'CÃ¡i',   45000,  120000, 30, 10,  60),
-    ('LK00012', 5, N'Keo táº£n nhiá»‡t MX-4 (tuÃ½p nhá»)',  N'TuÃ½p',  55000,  100000, 22,  6,   0),
-    ('LK00013', 5, N'Má»±c in Canon 2900',              N'Há»™p',  120000,  210000,  9,  3,   0),
-    ('LK00014', 6, N'BÃ n phÃ­m laptop Dell',           N'CÃ¡i',  230000,  380000,  7,  2,  90),
-    ('LK00015', 6, N'Quáº¡t táº£n nhiá»‡t laptop',          N'CÃ¡i',  110000,  200000, 11,  3,  90),
-    ('LK00016', 6, N'Loa trong Ä‘iá»‡n thoáº¡i',           N'CÃ¡i',   40000,   95000, 16,  5,  30);
+    ('LK00010', 4, N'IC nguồn điện thoại',            N'Cái',   65000,  150000, 25,  8,  30),
+    ('LK00011', 4, N'Chân sạc iPhone',                N'Cái',   45000,  120000, 30, 10,  60),
+    ('LK00012', 5, N'Keo tản nhiệt MX-4 (tuýp nhỏ)',  N'Tuýp',  55000,  100000, 22,  6,   0),
+    ('LK00013', 5, N'Mực in Canon 2900',              N'Hộp',  120000,  210000,  9,  3,   0),
+    ('LK00014', 6, N'Bàn phím laptop Dell',           N'Cái',  230000,  380000,  7,  2,  90),
+    ('LK00015', 6, N'Quạt tản nhiệt laptop',          N'Cái',  110000,  200000, 11,  3,  90),
+    ('LK00016', 6, N'Loa trong điện thoại',           N'Cái',   40000,   95000, 16,  5,  30);
 GO
 
 PRINT 'Da nap xong du lieu danh muc nen.';
@@ -454,20 +453,19 @@ GO
 
 /* ===== END: database\seed\01_seed_master_data.sql ===== */
 
-
 /* ===== BEGIN: database\queries\bao_cao_thong_ke.sql ===== */
 
 /* =====================================================================
-   LV33-001 â€” Truy váº¥n bÃ¡o cÃ¡o thá»‘ng kÃª
-   NgÆ°á»i viáº¿t: Tráº§n Ngá»c Lá»£i (Database)
-   CÃ¡c truy váº¥n nÃ y lÃ  nguá»“n dá»¯ liá»‡u cho dashboard vÃ  bÃ¡o cÃ¡o Web Admin.
+   LV33-001 — Truy vấn báo cáo thống kê
+   Người viết: Trần Ngọc Lợi (Database)
+   Các truy vấn này là nguồn dữ liệu cho dashboard và báo cáo Web Admin.
    ===================================================================== */
 
 USE RepairShopDB;
 GO
 
-/* ---------- 1. Doanh thu theo ngÃ y trong khoáº£ng thá»i gian ---------- */
--- Tham sá»‘: @FromDate, @ToDate
+/* ---------- 1. Doanh thu theo ngày trong khoảng thời gian ---------- */
+-- Tham số: @FromDate, @ToDate
 DECLARE @FromDate DATE = '2026-09-01', @ToDate DATE = '2026-11-03';
 
 SELECT
@@ -484,7 +482,7 @@ GROUP BY CAST(i.CreatedAt AS DATE)
 ORDER BY Ngay;
 GO
 
-/* ---------- 2. Doanh thu theo thÃ¡ng ---------- */
+/* ---------- 2. Doanh thu theo tháng ---------- */
 SELECT
     YEAR(i.CreatedAt)                AS Nam,
     MONTH(i.CreatedAt)               AS Thang,
@@ -497,7 +495,7 @@ GROUP BY YEAR(i.CreatedAt), MONTH(i.CreatedAt)
 ORDER BY Nam, Thang;
 GO
 
-/* ---------- 3. Sá»‘ phiáº¿u theo tráº¡ng thÃ¡i ---------- */
+/* ---------- 3. Số phiếu theo trạng thái ---------- */
 SELECT
     t.Status                         AS TrangThai,
     COUNT(*)                         AS SoPhieu
@@ -506,7 +504,7 @@ GROUP BY t.Status
 ORDER BY SoPhieu DESC;
 GO
 
-/* ---------- 4. Linh kiá»‡n tiÃªu thá»¥ nhiá»u nháº¥t ---------- */
+/* ---------- 4. Linh kiện tiêu thụ nhiều nhất ---------- */
 SELECT TOP 10
     p.PartCode                       AS MaLinhKien,
     p.PartName                       AS TenLinhKien,
@@ -520,7 +518,7 @@ GROUP BY p.PartCode, p.PartName
 ORDER BY SoLuongDaXuat DESC;
 GO
 
-/* ---------- 5. Linh kiá»‡n dÆ°á»›i má»©c tá»“n tá»‘i thiá»ƒu (cáº£nh bÃ¡o) ---------- */
+/* ---------- 5. Linh kiện dưới mức tồn tối thiểu (cảnh báo) ---------- */
 SELECT
     p.PartCode                       AS MaLinhKien,
     p.PartName                       AS TenLinhKien,
@@ -535,7 +533,7 @@ WHERE p.IsActive = 1
 ORDER BY CanNhapThem DESC;
 GO
 
-/* ---------- 6. Hiá»‡u suáº¥t ká»¹ thuáº­t viÃªn ---------- */
+/* ---------- 6. Hiệu suất kỹ thuật viên ---------- */
 SELECT
     u.FullName                       AS KyThuatVien,
     COUNT(t.TicketId)                AS TongPhieu,
@@ -551,7 +549,7 @@ GROUP BY u.FullName
 ORDER BY PhieuHoanTat DESC;
 GO
 
-/* ---------- 7. Doanh thu theo loáº¡i dá»‹ch vá»¥ ---------- */
+/* ---------- 7. Doanh thu theo loại dịch vụ ---------- */
 SELECT
     s.ServiceName                    AS LoaiDichVu,
     COUNT(t.TicketId)                AS SoPhieu,
@@ -563,7 +561,7 @@ GROUP BY s.ServiceName
 ORDER BY DoanhThu DESC;
 GO
 
-/* ---------- 8. Phiáº¿u báº£o hÃ nh sáº¯p háº¿t háº¡n trong 30 ngÃ y ---------- */
+/* ---------- 8. Phiếu bảo hành sắp hết hạn trong 30 ngày ---------- */
 SELECT
     w.WarrantyCode                   AS MaBaoHanh,
     c.FullName                       AS KhachHang,
@@ -580,7 +578,7 @@ WHERE w.Status = 'ACTIVE'
 ORDER BY ConLaiNgay;
 GO
 
-/* ---------- 9. KhÃ¡ch hÃ ng thÃ¢n thiáº¿t (chi nhiá»u nháº¥t) ---------- */
+/* ---------- 9. Khách hàng thân thiết (chi nhiều nhất) ---------- */
 SELECT TOP 10
     c.CustomerCode                   AS MaKhachHang,
     c.FullName                       AS TenKhachHang,
@@ -595,7 +593,7 @@ GROUP BY c.CustomerCode, c.FullName, c.Phone
 ORDER BY TongChiTieu DESC;
 GO
 
-/* ---------- 10. Äá»‘i soÃ¡t: linh kiá»‡n Ä‘Ã£ xuáº¥t so vá»›i tiá»n Ä‘Ã£ thu ---------- */
+/* ---------- 10. Đối soát: linh kiện đã xuất so với tiền đã thu ---------- */
 SELECT
     t.TicketCode                     AS MaPhieu,
     t.Status                         AS TrangThai,
