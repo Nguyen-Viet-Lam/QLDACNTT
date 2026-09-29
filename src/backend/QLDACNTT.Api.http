@@ -1,12 +1,23 @@
 @baseUrl = http://localhost:5055
-@adminToken =
-@staffToken =
-@techToken =
+@adminToken = 
+@staffToken = 
+@techToken = 
+@customerToken = 
 
-### Health check
+### =========================================================================
+### NHÓM 11 - BỘ 22 KỊCH BẢN KIỂM THỬ HTTP CLIENT (QA TESTER: NGUYỄN ĐẠI KỲ)
+### Kiểm tra đăng nhập 4 vai trò, kiểm thử bảo mật mã lỗi 401 và 403
+### =========================================================================
+
+### [Request 01] Kiểm tra trạng thái hoạt động hệ thống (Health Check)
 GET {{baseUrl}}/health
 
-### Login admin
+
+### -------------------------------------------------------------------------
+### PHẦN 1: ĐĂNG NHẬP 4 VAI TRÒ & KIỂM THỬ XÁC THỰC MÃ LỖI 401 UNAUTHORIZED
+### -------------------------------------------------------------------------
+
+### [Request 02] Đăng nhập vai trò Quản trị viên (ADMIN) -> Mong đợi: 200 OK
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -15,7 +26,7 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Login staff
+### [Request 03] Đăng nhập vai trò Nhân viên quầy (STAFF) -> Mong đợi: 200 OK
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -24,7 +35,7 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Login technician
+### [Request 04] Đăng nhập vai trò Kỹ thuật viên (TECHNICIAN) -> Mong đợi: 200 OK
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -33,19 +44,83 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Current user
+### [Request 05] Đăng nhập vai trò Khách hàng (CUSTOMER) -> Mong đợi: 200 OK
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "customer",
+  "password": "123456"
+}
+
+### [Request 06] Kiểm thử mã lỗi 401: Đăng nhập sai mật khẩu -> Mong đợi: 401 Unauthorized
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "WrongPassword999"
+}
+
+### [Request 07] Kiểm thử mã lỗi 401: Đăng nhập tài khoản không tồn tại -> Mong đợi: 401 Unauthorized
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "non_existing_user",
+  "password": "123456"
+}
+
+### [Request 08] Xác thực phiên: Lấy thông tin user hiện tại (/api/auth/me) -> Mong đợi: 200 OK
 GET {{baseUrl}}/api/auth/me
 X-Session-Token: {{adminToken}}
 
-### Admin: users
+### [Request 09] Kiểm thử mã lỗi 401: Gọi API không truyền Header Token -> Mong đợi: 401 Unauthorized
+GET {{baseUrl}}/api/auth/me
+
+### [Request 10] Kiểm thử mã lỗi 401: Gọi API với Token giả mạo/hết hạn -> Mong đợi: 401 Unauthorized
+GET {{baseUrl}}/api/auth/me
+X-Session-Token: FAKE_EXPIRED_TOKEN_ABC123
+
+
+### -------------------------------------------------------------------------
+### PHẦN 2: QUẢN LÝ TÀI KHOẢN & KIỂM THỬ PHÂN QUYỀN MÃ LỖI 403 FORBIDDEN
+### -------------------------------------------------------------------------
+
+### [Request 11] Admin: Xem danh sách tài khoản người dùng -> Mong đợi: 200 OK
 GET {{baseUrl}}/api/users
 X-Session-Token: {{adminToken}}
 
-### Staff: customers
+### [Request 12] Kiểm thử mã lỗi 403: Staff cố tình truy cập API quản lý User của Admin -> Mong đợi: 403 Forbidden
+GET {{baseUrl}}/api/users
+X-Session-Token: {{staffToken}}
+
+### [Request 13] Kiểm thử mã lỗi 403: Technician cố tình truy cập API quản lý User của Admin -> Mong đợi: 403 Forbidden
+GET {{baseUrl}}/api/users
+X-Session-Token: {{techToken}}
+
+### [Request 14] Admin: Xem danh sách vai trò hệ thống (/api/roles) -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/roles
+X-Session-Token: {{adminToken}}
+
+
+### -------------------------------------------------------------------------
+### PHẦN 3: NGHIỆP VỤ DANH MỤC & QUẢN LÝ KHÁCH HÀNG (STAFF / ADMIN)
+### -------------------------------------------------------------------------
+
+### [Request 15] Tra cứu danh mục dịch vụ sửa chữa và tiền công -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/service-types
+X-Session-Token: {{staffToken}}
+
+### [Request 16] Tra cứu danh mục linh kiện và số lượng tồn kho -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/spare-parts
+X-Session-Token: {{staffToken}}
+
+### [Request 17] Staff: Lấy danh sách khách hàng (/api/customers) -> Mong đợi: 200 OK
 GET {{baseUrl}}/api/customers
 X-Session-Token: {{staffToken}}
 
-### Staff: create customer
+### [Request 18] Staff: Thêm khách hàng mới -> Mong đợi: 201 Created
 POST {{baseUrl}}/api/customers
 Content-Type: application/json
 X-Session-Token: {{staffToken}}
@@ -57,11 +132,16 @@ X-Session-Token: {{staffToken}}
   "address": "Quan 5, TP.HCM"
 }
 
-### Staff: devices of customer
+### [Request 19] Staff: Tra cứu thiết bị đã gửi sửa của khách hàng -> Mong đợi: 200 OK
 GET {{baseUrl}}/api/customers/KH000001/devices
 X-Session-Token: {{staffToken}}
 
-### Staff: create repair ticket
+
+### -------------------------------------------------------------------------
+### PHẦN 4: NGHIỆP VỤ PHIẾU SỬA CHỮA & THỐNG KÊ DASHBOARD
+### -------------------------------------------------------------------------
+
+### [Request 20] Staff: Lập phiếu sửa chữa mới cho máy hỏng -> Mong đợi: 201 Created
 POST {{baseUrl}}/api/tickets
 Content-Type: application/json
 X-Session-Token: {{staffToken}}
@@ -73,7 +153,7 @@ X-Session-Token: {{staffToken}}
   "deviceCondition": "Laptop nong bat thuong, quat keu lon"
 }
 
-### Staff: assign technician
+### [Request 21] Staff: Phân công kỹ thuật viên cho phiếu sửa chữa -> Mong đợi: 200 OK
 PATCH {{baseUrl}}/api/tickets/PSC2026090001/assign
 Content-Type: application/json
 X-Session-Token: {{staffToken}}
@@ -82,16 +162,6 @@ X-Session-Token: {{staffToken}}
   "technicianUsername": "tech"
 }
 
-### Technician: update diagnosis
-PATCH {{baseUrl}}/api/tickets/PSC2026090001/diagnosis
-Content-Type: application/json
-X-Session-Token: {{techToken}}
-
-{
-  "diagnosis": "Can ve sinh va thay keo tan nhiet",
-  "quotedLaborCost": 120000
-}
-
-### Admin: dashboard summary
+### [Request 22] Admin: Xem tổng hợp bảng điều khiển Dashboard -> Mong đợi: 200 OK
 GET {{baseUrl}}/api/dashboard/summary
 X-Session-Token: {{adminToken}}
