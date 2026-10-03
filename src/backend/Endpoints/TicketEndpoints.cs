@@ -11,13 +11,27 @@ public static class TicketEndpoints
     {
         app.MapGet("/api/tickets", (HttpRequest request, string? status) =>
         {
-            var auth = AuthHelper.RequireRole(request, data, "ADMIN", "STAFF", "TECHNICIAN");
+            var session = AuthHelper.GetSession(request, data);
+            var auth = AuthHelper.RequireSessionRole(session, "ADMIN", "STAFF", "TECHNICIAN", "CUSTOMER");
             if (auth is not null)
             {
                 return auth;
             }
 
             var query = data.Tickets.AsEnumerable();
+
+            // VÁ LỖ HỔNG IDOR L05 (Tuần 5 - Sprint 5):
+            // Khách hàng chỉ xem được danh sách phiếu của chính mình (KH000001)
+            if (session!.Role == "CUSTOMER")
+            {
+                query = query.Where(x => x.CustomerCode.Equals("KH000001", StringComparison.OrdinalIgnoreCase));
+            }
+            // Kỹ thuật viên chỉ xem phiếu được giao cho mình hoặc phiếu chưa phân công
+            else if (session.Role == "TECHNICIAN")
+            {
+                query = query.Where(x => x.TechnicianUsername == null || x.TechnicianUsername.Equals(session.Username, StringComparison.OrdinalIgnoreCase));
+            }
+
             if (!string.IsNullOrWhiteSpace(status))
             {
                 query = query.Where(x => x.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
@@ -28,16 +42,37 @@ public static class TicketEndpoints
 
         app.MapGet("/api/tickets/{code}", (HttpRequest request, string code) =>
         {
-            var auth = AuthHelper.RequireRole(request, data, "ADMIN", "STAFF", "TECHNICIAN");
+            var session = AuthHelper.GetSession(request, data);
+            var auth = AuthHelper.RequireSessionRole(session, "ADMIN", "STAFF", "TECHNICIAN", "CUSTOMER");
             if (auth is not null)
             {
                 return auth;
             }
 
             var ticket = FindTicket(data, code);
-            return ticket is null
-                ? Results.NotFound(new { message = "Khong tim thay phieu sua chua" })
-                : Results.Ok(AuthHelper.EnrichTicket(ticket));
+            if (ticket is null)
+            {
+                return Results.NotFound(new { message = "Khong tim thay phieu sua chua" });
+            }
+
+            // VÁ LỖ HỔNG PHÂN QUYỀN NGANG IDOR L05:
+            // Khách hàng tuyệt đối không được xem đơn hàng/phiếu sửa chữa của khách hàng khác!
+            if (session!.Role == "CUSTOMER")
+            {
+                if (!ticket.CustomerCode.Equals("KH000001", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Results.Json(
+                        new
+                        {
+                            message = "Canh bao bao mat IDOR (L05): Ban khong co quyen xem phieu sua chua cua nguoi khac!",
+                            violation = "HORIZONTAL_ACCESS_CONTROL_VIOLATION",
+                            ticketCode = code
+                        },
+                        statusCode: StatusCodes.Status403Forbidden);
+                }
+            }
+
+            return Results.Ok(AuthHelper.EnrichTicket(ticket));
         });
 
         app.MapPost("/api/tickets", (HttpRequest request, CreateTicketRequest input) =>
