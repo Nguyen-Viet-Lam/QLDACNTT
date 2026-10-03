@@ -165,3 +165,22 @@ X-Session-Token: {{staffToken}}
 ### [Request 22] Admin: Xem tổng hợp bảng điều khiển Dashboard -> Mong đợi: 200 OK
 GET {{baseUrl}}/api/dashboard/summary
 X-Session-Token: {{adminToken}}
+
+
+### -------------------------------------------------------------------------
+### PHẦN 5: KIỂM THỬ BẢO MẬT VÁ LỖ HỔNG IDOR L05 (SPRINT 5 - TUẦN 5)
+### Vá lỗi P0: "Người dùng xem được đơn hàng của người khác" trong bài Pareto
+### -------------------------------------------------------------------------
+
+### [Request 23] Khách hàng xem danh sách phiếu hợp lệ của chính mình -> Mong đợi: 200 OK (Chỉ trả về phiếu KH000001)
+GET {{baseUrl}}/api/tickets
+X-Session-Token: {{customerToken}}
+
+### [Request 24] Khách hàng xem chi tiết phiếu hợp lệ của chính mình (PSC2026090001) -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/tickets/PSC2026090001
+X-Session-Token: {{customerToken}}
+
+### [Request 25] Kiểm thử IDOR L05: Khách hàng cố tình xem phiếu PSC2026090002 của người khác (KH000002) -> Mong đợi: 403 Forbidden!
+GET {{baseUrl}}/api/tickets/PSC2026090002
+X-Session-Token: {{customerToken}}
+
