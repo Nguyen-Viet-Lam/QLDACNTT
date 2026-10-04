@@ -19,6 +19,8 @@ public sealed class AppData
 
     public required List<RepairTicketDto> Tickets { get; init; }
 
+    public required List<StockTransactionDto> StockTransactions { get; init; }
+
     public static AppData CreateDemo()
     {
         return new AppData
@@ -53,13 +55,20 @@ public sealed class AppData
                 new("LK00001", "Man hinh iPhone 11", 12, 3, 1200000),
                 new("LK00002", "Pin iPhone 11", 20, 5, 450000),
                 new("LK00003", "SSD 512GB NVMe", 10, 3, 1150000),
-                new("LK00004", "Keo tan nhiet MX-4", 22, 6, 100000)
+                new("LK00004", "Keo tan nhiet MX-4", 22, 6, 100000),
+                new("LK00005", "RAM 8GB DDR4 Laptop", 2, 5, 550000)
             ],
             Tickets =
             [
                 new("PSC2026090001", "KH000001", "TB000001", "DV003", "RECEIVED", "staff", null, "May nong, tu tat", null, 120000),
                 new("PSC2026090002", "KH000002", "TB000002", "DV002", "DIAGNOSING", "staff", "tech", "Pin chai nhanh", "Can thay pin moi", 100000)
+            ],
+            StockTransactions =
+            [
+                new(1, "LK00001", "IN", 15, 0, 15, null, "admin", DateTimeOffset.UtcNow.AddDays(-10), "Nhap kho linh kien dot 1"),
+                new(2, "LK00001", "OUT", 3, 15, 12, "PSC2026090001", "tech", DateTimeOffset.UtcNow.AddDays(-2), "Xuat linh kien lap may cho khach")
             ]
         };
     }
 }
+

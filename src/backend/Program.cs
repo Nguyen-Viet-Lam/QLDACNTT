@@ -25,7 +25,8 @@ app.MapGet("/", () => Results.Ok(new
         "/api/service-types",
         "/api/spare-parts",
         "/api/tickets",
-        "/api/dashboard/summary"
+        "/api/dashboard/summary",
+        "/api/inventory"
     }
 }));
 
@@ -39,5 +40,7 @@ app.MapAuthEndpoints(data);
 app.MapCatalogEndpoints(data);
 app.MapTicketEndpoints(data);
 app.MapDashboardEndpoints(data);
+app.MapInventoryEndpoints(data);
 
 app.Run();
+

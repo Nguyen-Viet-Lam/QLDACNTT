@@ -184,3 +184,30 @@ X-Session-Token: {{customerToken}}
 GET {{baseUrl}}/api/tickets/PSC2026090002
 X-Session-Token: {{customerToken}}
 
+### =========================================================================
+### PHẦN 6: KIỂM THỬ MODULE KHO LINH KIỆN & CẢNH BÁO TỒN KHO (SPRINT 6 - IN PROGRESS)
+### Phụ trách: Nguyễn Viết Lãm (PM / Backend Lead) - Task MBA-61
+### =========================================================================
+
+### [Request 26] Xem tổng quan kho linh kiện và cảnh báo -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/inventory/summary
+X-Session-Token: {{staffToken}}
+
+### [Request 27] Lọc danh sách linh kiện chạm ngưỡng tồn tối thiểu (Low Stock) -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/inventory/low-stock
+X-Session-Token: {{techToken}}
+
+### [Request 28] Tạo giao dịch xuất kho linh kiện thay thế -> Mong đợi: 201 Created
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: {{techToken}}
+
+{
+  "partCode": "LK00001",
+  "transactionType": "OUT",
+  "quantity": 1,
+  "ticketCode": "PSC2026090001",
+  "note": "Xuat thay man hinh iPhone 11 theo phieu PSC2026090001"
+}
+
+

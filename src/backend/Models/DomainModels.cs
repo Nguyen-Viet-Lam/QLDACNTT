@@ -23,3 +23,16 @@ public record RepairTicketDto(
     string DeviceCondition,
     string? Diagnosis,
     decimal QuotedLaborCost);
+
+public record StockTransactionDto(
+    int TransactionId,
+    string PartCode,
+    string TransactionType,
+    int Quantity,
+    int StockBefore,
+    int StockAfter,
+    string? TicketCode,
+    string PerformedByUsername,
+    DateTimeOffset TransactionAt,
+    string? Note);
+

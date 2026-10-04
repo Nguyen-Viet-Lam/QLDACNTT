@@ -17,3 +17,11 @@ public record AssignTechnicianRequest(string TechnicianUsername);
 public record UpdateDiagnosisRequest(string Diagnosis, decimal QuotedLaborCost);
 
 public record UpdateTicketStatusRequest(string Status);
+
+public record CreateStockTransactionRequest(
+    string PartCode,
+    string TransactionType,
+    int Quantity,
+    string? TicketCode,
+    string? Note);
+
