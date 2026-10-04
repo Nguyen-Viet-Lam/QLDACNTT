@@ -1,0 +1,51 @@
+### =========================================================================
+### NHÓM 11 - KỊCH BẢN KIỂM THỬ E2E: XUẤT KHO LINH KIỆN & CẢNH BÁO (SPRINT 6)
+### PHỤ TRÁCH: NGUYỄN ĐẠI KỲ (QA TESTER / UI DESIGNER) - TASK MBA-72
+### Trạng thái: In Progress (Đang hoàn thiện kịch bản kiểm thử luồng khép kín)
+### =========================================================================
+
+@baseUrl = http://localhost:5055
+@techToken = 
+@staffToken = 
+
+### [Test 01] Kiểm thử đăng nhập Kỹ thuật viên để chuẩn bị xuất kho
+# @name techLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tech",
+  "password": "123456"
+}
+
+### [Test 02] KTV kiểm tra danh sách linh kiện chạm ngưỡng thiếu hàng trước khi xuất
+GET {{baseUrl}}/api/inventory/low-stock
+X-Session-Token: {{techToken}}
+
+### [Test 03] KTV thực hiện xuất linh kiện cho phiếu sửa chữa PSC2026090001
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: {{techToken}}
+
+{
+  "partCode": "LK00001",
+  "transactionType": "OUT",
+  "quantity": 1,
+  "ticketCode": "PSC2026090001",
+  "note": "KTV xuat thay man hinh theo phieu sua chua"
+}
+
+### [Test 04] Kiểm thử chặn xuất kho khi số lượng vượt quá tồn thực tế -> Mong đợi: 400 Bad Request
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: {{techToken}}
+
+{
+  "partCode": "LK00005",
+  "transactionType": "OUT",
+  "quantity": 999,
+  "ticketCode": "PSC2026090001",
+  "note": "Co tinh xuat vuot qua so luong ton de test bat loi"
+}
+
+### TODO (Sprint 6 - In Progress): Nguyễn Đại Kỳ đang viết tiếp test case kiểm tra biên nhận in hóa đơn thanh toán.
