@@ -150,3 +150,5 @@ GROUP BY t.TicketCode, t.Status, i.PartsCost
 HAVING ISNULL(SUM(tp.LineTotal), 0) <> ISNULL(i.PartsCost, 0)
 ORDER BY ABS(ISNULL(SUM(tp.LineTotal), 0) - ISNULL(i.PartsCost, 0)) DESC;
 GO
+
+-- Xac nhan hoan thanh task MBA-34 boi Tran Ngoc Loi (BA/DB)
