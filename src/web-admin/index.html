@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Quản lý Cửa hàng Sửa chữa - Nhóm 11 (LV33-001)</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #1F4E79;
+            --primary-hover: #15395b;
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-body: #f8fafc;
+            --sidebar-bg: #0f172a;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: #334155;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .sidebar .brand {
+            padding: 20px 24px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar .nav-link {
+            color: #94a3b8;
+            padding: 12px 24px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: rgba(255,255,255,0.06);
+            border-left-color: var(--secondary);
+        }
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        /* Main Content */
+        .main-wrapper {
+            margin-left: 260px;
+            padding: 24px 32px;
+            min-height: 100vh;
+        }
+        .top-navbar {
+            background: #ffffff;
+            padding: 14px 28px;
+            border-radius: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-stat {
+            background: #ffffff;
+            border: none;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+        .card-stat:hover {
+            transform: translateY(-3px);
+        }
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .badge-role {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .table-custom {
+            background: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .table-custom thead {
+            background-color: #f1f5f9;
+        }
+        .table-custom th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            padding: 14px 18px;
+            border: none;
+        }
+        .table-custom td {
+            padding: 14px 18px;
+            vertical-align: middle;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.92rem;
+        }
+        /* Login Overlay */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: #ffffff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            padding: 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex p-3 rounded-circle bg-primary bg-opacity-10 text-primary mb-3">
+                    <i class="fa-solid fa-screwdriver-wrench fa-2x"></i>
+                </div>
+                <h4 class="fw-bold mb-1">Cửa Hàng Sửa Chữa</h4>
+                <p class="text-muted small">Hệ thống Quản lý Tổng thể - LV33-001 (Nhóm 11)</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Tên đăng nhập</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-user text-muted"></i></span>
+                    <input type="text" id="loginUsername" class="form-control border-start-0" placeholder="admin / staff / tech / customer" value="admin">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Mật khẩu</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-lock text-muted"></i></span>
+                    <input type="password" id="loginPassword" class="form-control border-start-0" value="123456">
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+                <button onclick="handleLogin()" class="btn btn-primary fw-semibold py-2">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Đăng nhập hệ thống
+                </button>
+            </div>
+
+            <div class="text-center">
+                <p class="text-muted small mb-2">Chọn nhanh tài khoản kiểm thử (4 Vai trò):</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    <button onclick="quickFill('admin')" class="btn btn-sm btn-outline-danger">Admin</button>
+                    <button onclick="quickFill('staff')" class="btn btn-sm btn-outline-primary">Nhân viên (Staff)</button>
+                    <button onclick="quickFill('tech')" class="btn btn-sm btn-outline-success">Kỹ thuật viên</button>
+                    <button onclick="quickFill('customer')" class="btn btn-sm btn-outline-secondary">Khách hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-laptop-medical text-info"></i>
+            <div>
+                <span class="d-block" style="font-size: 1.05rem;">TechCare Admin</span>
+                <span class="d-block text-secondary" style="font-size: 0.72rem; letter-spacing: 0.5px;">NHÓM 11 - 23DTHC6</span>
+            </div>
+        </div>
+
+        <div class="nav flex-column py-3">
+            <a href="#" class="nav-link active" onclick="switchTab('dashboard')">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Tổng quan (Dashboard)</span>
+            </a>
+            <a href="#" class="nav-link" onclick="switchTab('tickets')">
+                <i class="fa-solid fa-ticket"></i>
+                <span>Phiếu sửa chữa</span>
+            </a>
+            <a href="#" class="nav-link" onclick="switchTab('inventory')">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Kho linh kiện & Cảnh báo</span>
+            </a>
+            <a href="#" class="nav-link" onclick="switchTab('customers')">
+                <i class="fa-solid fa-users"></i>
+                <span>Khách hàng & Thiết bị</span>
+            </a>
+            <a href="#" class="nav-link" onclick="switchTab('tracking')">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Tra cứu tiến độ sửa</span>
+            </a>
+        </div>
+
+        <div class="p-3 mt-auto" style="position: absolute; bottom: 0; width: 100%;">
+            <div class="p-3 rounded bg-dark text-white-50 small">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-success p-1 rounded-circle" style="width:8px; height:8px;"></span>
+                    <span class="text-white fw-semibold">Backend .NET 8</span>
+                </div>
+                <div>Status: <span class="text-success fw-bold">ONLINE</span></div>
+                <div>Port: <span class="text-info fw-bold">5055</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="main-wrapper">
+        <header class="top-navbar">
+            <div class="d-flex align-items-center gap-3">
+                <h5 class="fw-bold mb-0 text-primary" id="pageTitle">Tổng quan hệ thống</h5>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1">Sprint 5 (In Progress)</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end">
+                    <div class="fw-semibold" id="navUserName">Nguyen Dai Ky</div>
+                    <span class="badge bg-primary badge-role" id="navUserRole">UI/UX QA</span>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light rounded-circle p-2" type="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user-circle fa-lg text-primary"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                        <li><h6 class="dropdown-header">Tài khoản & Phiên</h6></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tabDashboard">
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card-stat d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">Tổng khách hàng</span>
+                            <h3 class="fw-bold mt-1 mb-0" id="statCustomers">2</h3>
+                            <span class="badge bg-success-subtle text-success small mt-2">+100% trong tháng</span>
+                        </div>
+                        <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-stat d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">Thiết bị tiếp nhận</span>
+                            <h3 class="fw-bold mt-1 mb-0" id="statDevices">2</h3>
+                            <span class="badge bg-info-subtle text-info small mt-2">Đang xử lý</span>
+                        </div>
+                        <div class="stat-icon bg-info bg-opacity-10 text-info">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-stat d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">Phiếu sửa chữa</span>
+                            <h3 class="fw-bold mt-1 mb-0" id="statTickets">2</h3>
+                            <span class="badge bg-warning-subtle text-warning small mt-2">1 đang chẩn đoán</span>
+                        </div>
+                        <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-stat d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">Doanh thu dự kiến</span>
+                            <h3 class="fw-bold mt-1 mb-0 text-success" id="statRevenue">220.000 đ</h3>
+                            <span class="badge bg-success-subtle text-success small mt-2">Từ tiền công & LK</span>
+                        </div>
+                        <div class="stat-icon bg-success bg-opacity-10 text-success">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6">
+                    <div class="card border-0 rounded-4 shadow-sm p-4 h-100">
+                        <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-primary me-2"></i>Tình trạng phiếu sửa chữa</h6>
+                        <div style="height: 250px;" class="d-flex justify-content-center">
+                            <canvas id="ticketsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card border-0 rounded-4 shadow-sm p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold mb-0 text-danger"><i class="fa-solid fa-triangle-exclamation me-2"></i>Cảnh báo tồn kho tối thiểu (Sprint 6)</h6>
+                            <span class="badge bg-danger" id="lowStockBadge">1 linh kiện</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã LK</th>
+                                        <th>Tên linh kiện</th>
+                                        <th>Tồn kho</th>
+                                        <th>Định mức</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lowStockTableBody">
+                                    <tr>
+                                        <td><code>PIN-IP11</code></td>
+                                        <td class="fw-semibold">Pin iPhone 11 dung lượng cao</td>
+                                        <td><span class="badge bg-danger">2</span></td>
+                                        <td>3</td>
+                                        <td><span class="badge bg-warning text-dark">Sắp hết</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: QUẢN LÝ PHIẾU SỬA CHỮA -->
+        <section id="tabTickets" style="display: none;">
+            <div class="card border-0 rounded-4 shadow-sm p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Danh sách Phiếu sửa chữa</h5>
+                    <button class="btn btn-primary" onclick="alert('Tính năng Tạo phiếu tiếp nhận mới')">
+                        <i class="fa-solid fa-plus me-2"></i> Tạo phiếu tiếp nhận mới
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-custom table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã phiếu</th>
+                                <th>Khách hàng</th>
+                                <th>Thiết bị</th>
+                                <th>Tình trạng máy</th>
+                                <th>Trạng thái</th>
+                                <th>Kỹ thuật viên</th>
+                                <th>Tiền công</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTableBody">
+                            <tr>
+                                <td><strong class="text-primary">TC-2026-001</strong></td>
+                                <td>CUST-001</td>
+                                <td>DEV-001</td>
+                                <td>iPhone 11 pin phồng, báo ảo</td>
+                                <td><span class="badge bg-info">DIAGNOSING</span></td>
+                                <td>tech</td>
+                                <td class="fw-bold text-success">220.000 đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: KHO LINH KIỆN -->
+        <section id="tabInventory" style="display: none;">
+            <div class="card border-0 rounded-4 shadow-sm p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="fw-bold mb-1">Danh mục Kho linh kiện & Phụ tùng</h5>
+                        <p class="text-muted small mb-0">Ánh xạ trực tiếp từ CSDL dbo.SpareParts (Phụ trách: Lãm & Lợi)</p>
+                    </div>
+                    <button class="btn btn-success" onclick="alert('Tính năng nhập kho thêm')">
+                        <i class="fa-solid fa-arrow-down-long me-2"></i> Nhập kho linh kiện
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-custom table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã linh kiện</th>
+                                <th>Tên linh kiện</th>
+                                <th>Giá nhập</th>
+                                <th>Giá bán</th>
+                                <th>Số lượng tồn</th>
+                                <th>Định mức an toàn</th>
+                                <th>Tình trạng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <tr>
+                                <td><code>PIN-IP11</code></td>
+                                <td class="fw-semibold">Pin iPhone 11 dung lượng cao</td>
+                                <td>280.000 đ</td>
+                                <td>450.000 đ</td>
+                                <td><span class="badge bg-danger fs-6">2</span></td>
+                                <td>3</td>
+                                <td><span class="badge bg-danger">CẢNH BÁO: DƯỚI ĐỊNH MỨC</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>MH-IP12</code></td>
+                                <td class="fw-semibold">Màn hình OLED iPhone 12</td>
+                                <td>1.100.000 đ</td>
+                                <td>1.650.000 đ</td>
+                                <td><span class="badge bg-success fs-6">5</span></td>
+                                <td>2</td>
+                                <td><span class="badge bg-success">Tồn an toàn</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: KHÁCH HÀNG & THIẾT BỊ -->
+        <section id="tabCustomers" style="display: none;">
+            <div class="card border-0 rounded-4 shadow-sm p-4">
+                <h5 class="fw-bold mb-4">Khách hàng & Thiết bị đã tiếp nhận</h5>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-3 bg-light">
+                            <h6 class="fw-bold text-primary mb-1">Trần Văn Nam (CUST-001)</h6>
+                            <p class="text-muted small mb-2"><i class="fa-solid fa-phone me-1"></i> 0909123456 | <i class="fa-solid fa-location-dot me-1"></i> Quận 10, TP.HCM</p>
+                            <span class="badge bg-info">Thiết bị: iPhone 11 (DEV-001)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-3 bg-light">
+                            <h6 class="fw-bold text-primary mb-1">Lê Thị Mai (CUST-002)</h6>
+                            <p class="text-muted small mb-2"><i class="fa-solid fa-phone me-1"></i> 0918765432 | <i class="fa-solid fa-location-dot me-1"></i> Bình Thạnh, TP.HCM</p>
+                            <span class="badge bg-info">Thiết bị: iPhone 12 Pro (DEV-002)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: PUBLIC TRACKING -->
+        <section id="tabTracking" style="display: none;">
+            <div class="card border-0 rounded-4 shadow-sm p-4">
+                <div class="text-center py-4">
+                    <h4 class="fw-bold text-primary mb-2">Tra cứu Tiến độ Sửa chữa Công khai</h4>
+                    <p class="text-muted">Dành cho Khách hàng nhập mã phiếu để kiểm tra trạng thái máy 24/7</p>
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-6">
+                            <div class="input-group input-group-lg">
+                                <input type="text" id="trackInput" class="form-control" placeholder="Nhập mã phiếu (ví dụ: TC-2026-001)" value="TC-2026-001">
+                                <button class="btn btn-primary px-4" onclick="handleTrack()"><i class="fa-solid fa-magnifying-glass me-2"></i>Tra cứu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="trackResult" class="p-4 border rounded-4 bg-light mt-4" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0 text-primary" id="trackTicketCode">TC-2026-001</h5>
+                        <span class="badge bg-warning text-dark fs-6" id="trackStatus">DIAGNOSING</span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <span class="text-muted small">Khách hàng:</span>
+                            <div class="fw-semibold">Trần Văn Nam (CUST-001)</div>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small">Thiết bị:</span>
+                            <div class="fw-semibold">iPhone 11 (DEV-001)</div>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small">Chi phí dự kiến:</span>
+                            <div class="fw-bold text-success fs-5">220.000 VNĐ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const API_BASE = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+            ? 'http://localhost:5055' 
+            : window.location.origin;
+
+        let currentUser = null;
+        let sessionToken = localStorage.getItem('sessionToken') || '';
+        let ticketsChartInstance = null;
+
+        window.onload = function() {
+            if (sessionToken) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                loadDashboardData();
+            } else {
+                document.getElementById('loginOverlay').style.display = 'flex';
+            }
+            initChart();
+        };
+
+        function quickFill(role) {
+            document.getElementById('loginUsername').value = role;
+            document.getElementById('loginPassword').value = '123456';
+            handleLogin();
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!res.ok) {
+                    alert('Đăng nhập thất bại! Kiểm tra lại tài khoản.');
+                    return;
+                }
+
+                const data = await res.json();
+                sessionToken = data.token;
+                currentUser = data.user;
+                localStorage.setItem('sessionToken', sessionToken);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                document.getElementById('navUserName').innerText = currentUser.fullName;
+                document.getElementById('navUserRole').innerText = currentUser.role;
+                document.getElementById('loginOverlay').style.display = 'none';
+
+                loadDashboardData();
+            } catch (err) {
+                console.warn('API offline or CORS, using demo mode', err);
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('navUserName').innerText = username.toUpperCase();
+                document.getElementById('navUserRole').innerText = username.toUpperCase();
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('sessionToken');
+            localStorage.removeItem('currentUser');
+            sessionToken = '';
+            currentUser = null;
+            document.getElementById('loginOverlay').style.display = 'flex';
+        }
+
+        async function loadDashboardData() {
+            if (!sessionToken) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/dashboard/summary`, {
+                    headers: { 'X-Session-Token': sessionToken }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('statCustomers').innerText = data.totalCustomers;
+                    document.getElementById('statDevices').innerText = data.totalDevices;
+                    document.getElementById('statTickets').innerText = data.totalTickets;
+                    document.getElementById('statRevenue').innerText = Number(data.estimatedRevenue).toLocaleString('vi-VN') + ' đ';
+                }
+            } catch (e) {
+                console.log('Using cached stats', e);
+            }
+        }
+
+        function switchTab(tabName) {
+            ['dashboard', 'tickets', 'inventory', 'customers', 'tracking'].forEach(t => {
+                const el = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+                if (el) el.style.display = (t === tabName) ? 'block' : 'none';
+            });
+            document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('ticketsChart').getContext('2d');
+            ticketsChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tiếp nhận (RECEIVED)', 'Đang chẩn đoán (DIAGNOSING)', 'Đang sửa (IN_REPAIR)', 'Hoàn thành (DONE)'],
+                    datasets: [{
+                        data: [1, 1, 0, 0],
+                        backgroundColor: ['#0ea5e9', '#f59e0b', '#8b5cf6', '#10b981'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        function handleTrack() {
+            document.getElementById('trackResult').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
