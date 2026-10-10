@@ -40,6 +40,8 @@ desktop.ini
 logs/
 *.log
 *.tmp
+__pycache__/
+*.py[cod]
 TestResults/
 
 # ---------- File khóa tạm của Word khi đang mở ----------
@@ -56,3 +58,8 @@ BaoCao/
 Jira_Import_Chuan/
 docs/
 tools/
+!tools/
+!tools/.gitkeep
+!tools/sync_jira_to_github.py
+!tools/jira_github_sync.env.example
+!tools/README_jira_github_sync.md
