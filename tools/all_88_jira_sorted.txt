@@ -1,4 +1,32 @@
-﻿MBA-7 | Done | lam nguyen viet | Due: 2026-09-17 | Xác định đề tài và mục tiêu hệ thống sửa chữa
+﻿MBA-75 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Lập bộ dữ liệu kiểm thử hệ thống tổng thể
+MBA-76 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử tải và đo thời gian đáp ứng hệ thống
+MBA-77 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử tương thích đa trình duyệt (Chrome, Edge, Firefox)
+MBA-78 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử thâm nhập an toàn thông tin và chống XSS/CSRF
+MBA-79 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Đo lường và tối ưu hiệu năng truy vấn SQL Server
+MBA-80 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Soạn tài liệu hướng dẫn sử dụng cho nhân viên quầy
+MBA-81 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Soạn tài liệu hướng dẫn cho kỹ thuật viên sửa chữa
+MBA-83 | To Do | lam nguyen viet | Due: 2026-10-26 | Đóng gói ứng dụng Docker và deploy lên Server
+MBA-84 | To Do | lam nguyen viet | Due: 2026-10-26 | Cấu hình quy trình tự động hóa CI/CD GitHub Actions
+MBA-85 | To Do | Trần Ngọc Lợi | Due: 2026-10-26 | Sao lưu dự phòng CSDL (Backup) trước khi Golive
+MBA-86 | To Do | lam nguyen viet | Due: 2026-10-26 | Tổ chức training bàn giao cho cửa hàng TechCare
+MBA-87 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-26 | Viết kịch bản Demo nghiệm thu đồ án chi tiết
+MBA-88 | To Do | Trần Ngọc Lợi | Due: 2026-10-26 | Khảo sát và đánh giá người dùng sau triển khai
+MBA-89 | To Do | lam nguyen viet | Due: 2026-11-02 | Tiếp nhận phản hồi và vá lỗi phát sinh (Hotfix)
+MBA-90 | To Do | lam nguyen viet | Due: 2026-11-02 | Kế hoạch bảo trì định kỳ hệ thống sau 3 tháng
+MBA-91 | To Do | lam nguyen viet | Due: 2026-11-02 | Hợp đồng hỗ trợ kỹ thuật và cam kết SLA hàng năm
+MBA-92 | To Do | lam nguyen viet | Due: 2026-11-02 | Tổng kết đánh giá KPI và đóng góp của từng thành viên
+MBA-93 | To Do | Trần Ngọc Lợi | Due: 2026-11-02 | Soạn biên bản nghiệm thu và thanh lý hợp đồng dịch vụ
+MBA-94 | To Do | Đại Kỳ Nguyễn | Due: 2026-11-02 | Lập checklist bàn giao mã nguồn và tài liệu cho trường
+MBA-59 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Tối ưu hóa truy vấn dữ liệu lớn và caching
+MBA-60 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Rà soát an toàn bảo mật OWASP cho Web Admin
+MBA-65 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Lọc và truy vết lịch sử xuất nhập linh kiện
+MBA-70 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Màn hình xuất kho và in hóa đơn thanh toán
+MBA-71 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Giao diện tra cứu bảo hành điện tử cho khách hàng
+MBA-72 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Kiểm thử luồng khép kín tiếp nhận đến thanh toán
+MBA-73 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Xây dựng báo cáo doanh thu theo thợ và dịch vụ
+MBA-74 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Báo cáo thống kê linh kiện bán chạy và tồn lâu
+MBA-82 | In Progress | lam nguyen viet | Due: 2026-10-19 | Soạn tài liệu quản trị hệ thống và cấu hình server
+MBA-7 | Done | lam nguyen viet | Due: 2026-09-17 | Xác định đề tài và mục tiêu hệ thống sửa chữa
 MBA-8 | Done | lam nguyen viet | Due: 2026-09-17 | Lập tôn chỉ dự án (Project Charter)
 MBA-9 | Done | lam nguyen viet | Due: 2026-09-17 | Lập tuyên bố phạm vi (Scope Statement - SOW)
 MBA-10 | Done | lam nguyen viet | Due: 2026-09-17 | Lập cấu trúc phân rã công việc (WBS 8 tuần)
@@ -47,42 +75,14 @@ MBA-52 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Trang phân công kỹ 
 MBA-53 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Component Modal xác nhận và Toast thông báo lỗi
 MBA-54 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Xử lý phân trang và tìm kiếm khách hàng trên Web Admin
 MBA-55 | Done | lam nguyen viet | Due: 2026-10-12 | Kết nối Backend Minimal API với SQL Server thật
-MBA-56 | In Progress | lam nguyen viet | Due: 2026-10-12 | Xử lý Transaction cập nhật trạng thái phiếu
+MBA-56 | Done | lam nguyen viet | Due: 2026-10-12 | Xử lý Transaction cập nhật trạng thái phiếu
 MBA-57 | Done | lam nguyen viet | Due: 2026-10-05 | Hỗ trợ khung giao diện Admin kéo lại tiến độ trễ
 MBA-58 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Kiểm thử tích hợp giao diện Web với API
-MBA-59 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Tối ưu hóa truy vấn dữ liệu lớn và caching
-MBA-60 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Rà soát an toàn bảo mật OWASP cho Web Admin
 MBA-61 | Done | lam nguyen viet | Due: 2026-10-12 | API quản lý danh mục và tồn kho linh kiện
 MBA-62 | Done | Trần Ngọc Lợi | Due: 2026-10-12 | Nghiệp vụ xuất linh kiện thay thế theo phiếu
 MBA-63 | Done | Trần Ngọc Lợi | Due: 2026-10-05 | Cảnh báo tự động linh kiện dưới mức tồn tối thiểu
 MBA-64 | Done | Trần Ngọc Lợi | Due: 2026-10-12 | Nghiệp vụ hoàn trả linh kiện lỗi vào kho
-MBA-65 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Lọc và truy vết lịch sử xuất nhập linh kiện
-MBA-66 | In Progress | lam nguyen viet | Due: 2026-10-12 | API tính chi phí và lập hóa đơn thanh toán
-MBA-67 | To Do | lam nguyen viet | Due: 2026-10-12 | Xử lý thanh toán tiền mặt và chuyển khoản
-MBA-68 | To Do | lam nguyen viet | Due: 2026-10-12 | Tự động kích hoạt sổ bảo hành điện tử theo máy
-MBA-69 | To Do | lam nguyen viet | Due: 2026-10-12 | API tra cứu thời hạn bảo hành theo serial máy
-MBA-70 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Màn hình xuất kho và in hóa đơn thanh toán
-MBA-71 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-12 | Giao diện tra cứu bảo hành điện tử cho khách hàng
-MBA-72 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Kiểm thử luồng khép kín tiếp nhận đến thanh toán
-MBA-73 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Xây dựng báo cáo doanh thu theo thợ và dịch vụ
-MBA-74 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Báo cáo thống kê linh kiện bán chạy và tồn lâu
-MBA-75 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Lập bộ dữ liệu kiểm thử hệ thống tổng thể
-MBA-76 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử tải và đo thời gian đáp ứng hệ thống
-MBA-77 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử tương thích đa trình duyệt (Chrome, Edge, Firefox)
-MBA-78 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử thâm nhập an toàn thông tin và chống XSS/CSRF
-MBA-79 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Đo lường và tối ưu hiệu năng truy vấn SQL Server
-MBA-80 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Soạn tài liệu hướng dẫn sử dụng cho nhân viên quầy
-MBA-81 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Soạn tài liệu hướng dẫn cho kỹ thuật viên sửa chữa
-MBA-82 | To Do | lam nguyen viet | Due: 2026-10-19 | Soạn tài liệu quản trị hệ thống và cấu hình server
-MBA-83 | To Do | lam nguyen viet | Due: 2026-10-26 | Đóng gói ứng dụng Docker và deploy lên Server
-MBA-84 | To Do | lam nguyen viet | Due: 2026-10-26 | Cấu hình quy trình tự động hóa CI/CD GitHub Actions
-MBA-85 | To Do | Trần Ngọc Lợi | Due: 2026-10-26 | Sao lưu dự phòng CSDL (Backup) trước khi Golive
-MBA-86 | To Do | lam nguyen viet | Due: 2026-10-26 | Tổ chức training bàn giao cho cửa hàng TechCare
-MBA-87 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-26 | Viết kịch bản Demo nghiệm thu đồ án chi tiết
-MBA-88 | To Do | Trần Ngọc Lợi | Due: 2026-10-26 | Khảo sát và đánh giá người dùng sau triển khai
-MBA-89 | To Do | lam nguyen viet | Due: 2026-11-02 | Tiếp nhận phản hồi và vá lỗi phát sinh (Hotfix)
-MBA-90 | To Do | lam nguyen viet | Due: 2026-11-02 | Kế hoạch bảo trì định kỳ hệ thống sau 3 tháng
-MBA-91 | To Do | lam nguyen viet | Due: 2026-11-02 | Hợp đồng hỗ trợ kỹ thuật và cam kết SLA hàng năm
-MBA-92 | To Do | lam nguyen viet | Due: 2026-11-02 | Tổng kết đánh giá KPI và đóng góp của từng thành viên
-MBA-93 | To Do | Trần Ngọc Lợi | Due: 2026-11-02 | Soạn biên bản nghiệm thu và thanh lý hợp đồng dịch vụ
-MBA-94 | To Do | Đại Kỳ Nguyễn | Due: 2026-11-02 | Lập checklist bàn giao mã nguồn và tài liệu cho trường
+MBA-66 | Done | lam nguyen viet | Due: 2026-10-12 | API tính chi phí và lập hóa đơn thanh toán
+MBA-67 | Done | lam nguyen viet | Due: 2026-10-12 | Xử lý thanh toán tiền mặt và chuyển khoản
+MBA-68 | Done | lam nguyen viet | Due: 2026-10-12 | Tự động kích hoạt sổ bảo hành điện tử theo máy
+MBA-69 | Done | lam nguyen viet | Due: 2026-10-12 | API tra cứu thời hạn bảo hành theo serial máy
