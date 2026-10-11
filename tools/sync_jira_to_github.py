@@ -265,11 +265,20 @@ def build_github_issue(issue: dict[str, Any], config: Config) -> dict[str, Any]:
     if description:
         body_parts.extend(["", "## Jira description", description])
 
-    return {
+    status_obj = fields.get("status") or {}
+    status_cat = (status_obj.get("statusCategory") or {}).get("key", "").lower()
+    is_done = (status_cat == "done") or (status.lower() == "done")
+
+    payload: dict[str, Any] = {
         "title": f"{key}: {summary}",
         "body": "\n".join(body_parts).strip() + "\n",
         "labels": config.github_labels,
+        "state": "closed" if is_done else "open",
     }
+    if is_done:
+        payload["state_reason"] = "completed"
+
+    return payload
 
 
 def extract_jira_key(body: str | None) -> str | None:
@@ -336,26 +345,36 @@ def create_or_update_github_issue(
     if existing:
         if not config.update_existing:
             return key, f"skip existing #{existing['number']}"
+        state_str = github_issue.get("state", "open")
         if config.dry_run:
-            return key, f"would update #{existing['number']}: {github_issue['title']}"
+            return key, f"would update #{existing['number']} [{state_str}]: {github_issue['title']}"
         request_json(
             existing["url"],
             method="PATCH",
             headers=github_headers(config),
             body=github_issue,
         )
-        return key, f"updated #{existing['number']}"
+        return key, f"updated #{existing['number']} [{state_str}]"
 
+    state_str = github_issue.get("state", "open")
     if config.dry_run:
-        return key, f"would create: {github_issue['title']}"
+        return key, f"would create [{state_str}]: {github_issue['title']}"
 
-    request_json(
+    create_payload = {k: v for k, v in github_issue.items() if k not in ("state", "state_reason")}
+    created = request_json(
         f"https://api.github.com/repos/{config.github_repository}/issues",
         method="POST",
         headers=github_headers(config),
-        body=github_issue,
+        body=create_payload,
     )
-    return key, "created"
+    if state_str == "closed" and isinstance(created, dict) and "url" in created:
+        request_json(
+            created["url"],
+            method="PATCH",
+            headers=github_headers(config),
+            body={"state": "closed", "state_reason": "completed"},
+        )
+    return key, f"created [{state_str}]"
 
 
 def main() -> int:

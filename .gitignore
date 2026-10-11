@@ -63,3 +63,4 @@ tools/
 !tools/sync_jira_to_github.py
 !tools/jira_github_sync.env.example
 !tools/README_jira_github_sync.md
+GOI_NGUYEN_DAI_KY/
