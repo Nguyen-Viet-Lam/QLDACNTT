@@ -27,10 +27,16 @@ public sealed class AppData
         {
             Users =
             [
-                new(1, "admin", "123456", "Nguyen Viet Lam", "ADMIN", true),
+                new(1, "admin", "123456", "Nguyen Viet Lam (Admin/PM)", "ADMIN", true),
                 new(2, "staff", "123456", "Nhan vien tiep nhan", "STAFF", true),
                 new(3, "tech", "123456", "Ky thuat vien", "TECHNICIAN", true),
-                new(4, "customer", "123456", "Khach hang demo", "CUSTOMER", true)
+                new(4, "customer", "123456", "Khach hang demo", "CUSTOMER", true),
+                new(5, "loi.staff", "123456", "Tran Ngoc Loi (BA / Tiep nhan)", "STAFF", true),
+                new(6, "ky.tech", "123456", "Nguyen Dai Ky (QA / Ky thuat)", "TECHNICIAN", true),
+                new(7, "staff01", "123456", "Le Thi Tiep Nhan", "STAFF", true),
+                new(8, "tech01", "123456", "Pham Van Ky Thuat", "TECHNICIAN", true),
+                new(9, "khach01", "123456", "Nguyen Van An (Khach hang)", "CUSTOMER", true),
+                new(10, "khach02", "123456", "Tran Thi Binh (Khach hang)", "CUSTOMER", true)
             ],
             Sessions = new ConcurrentDictionary<string, UserSession>(),
             Customers =

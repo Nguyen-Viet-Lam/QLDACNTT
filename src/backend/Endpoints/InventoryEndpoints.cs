@@ -87,7 +87,6 @@ public static class InventoryEndpoints
         });
 
         // 4. Tạo giao dịch nhập / xuất linh kiện theo phiếu sửa chữa
-        // TODO: Dang hoan thien kiem tra rang buoc khoa ngoai voi TicketCode (Sprint 6 - In Progress)
         app.MapPost("/api/inventory/transactions", (HttpRequest request, CreateStockTransactionRequest input) =>
         {
             var auth = AuthHelper.RequireRole(request, data, "ADMIN", "STAFF", "TECHNICIAN");
@@ -98,23 +97,41 @@ public static class InventoryEndpoints
 
             var currentSession = AuthHelper.GetSession(request, data)!;
 
-            var partIndex = data.SpareParts.FindIndex(x => x.Code.Equals(input.PartCode, StringComparison.OrdinalIgnoreCase));
+            var partCode = input.PartCode?.Trim();
+            if (string.IsNullOrWhiteSpace(partCode))
+            {
+                return Results.BadRequest(new { message = "Ma linh kien khong duoc de trong" });
+            }
+
+            var partIndex = data.SpareParts.FindIndex(x => x.Code.Equals(partCode, StringComparison.OrdinalIgnoreCase));
             if (partIndex < 0)
             {
-                return Results.NotFound(new { message = $"Khong tim thay ma linh kien: {input.PartCode}" });
+                return Results.NotFound(new { message = $"Khong tim thay ma linh kien: {partCode}" });
             }
 
             var part = data.SpareParts[partIndex];
-            var type = input.TransactionType.ToUpperInvariant();
+            var type = input.TransactionType?.Trim().ToUpperInvariant();
 
-            if (type is not ("IN" or "OUT" or "ADJUST"))
+            if (type is not ("IN" or "OUT" or "ADJUST" or "RETURN"))
             {
-                return Results.BadRequest(new { message = "Loai giao dich chi chap nhan: IN (Nhap), OUT (Xuat), ADJUST (Dieu chinh)" });
+                return Results.BadRequest(new { message = "Loai giao dich chi chap nhan: IN, OUT, ADJUST, RETURN" });
             }
 
             if (input.Quantity <= 0)
             {
                 return Results.BadRequest(new { message = "So luong giao dich phai lon hon 0" });
+            }
+
+            var ticketCode = input.TicketCode?.Trim();
+            if (type == "OUT" && string.IsNullOrWhiteSpace(ticketCode))
+            {
+                return Results.BadRequest(new { message = "Giao dich OUT phai gan voi mot phieu sua chua" });
+            }
+
+            if (!string.IsNullOrWhiteSpace(ticketCode)
+                && !data.Tickets.Any(x => x.Code.Equals(ticketCode, StringComparison.OrdinalIgnoreCase)))
+            {
+                return Results.BadRequest(new { message = $"Khong tim thay phieu sua chua: {ticketCode}" });
             }
 
             var stockBefore = part.StockQuantity;
@@ -142,13 +159,13 @@ public static class InventoryEndpoints
 
             // Ghi nhật ký giao dịch kho (StockTransactions)
             var transaction = new StockTransactionDto(
-                TransactionId: data.StockTransactions.Count + 1,
+                TransactionId: data.StockTransactions.Count == 0 ? 1 : data.StockTransactions.Max(x => x.TransactionId) + 1,
                 PartCode: part.Code,
                 TransactionType: type,
                 Quantity: input.Quantity,
                 StockBefore: stockBefore,
                 StockAfter: stockAfter,
-                TicketCode: input.TicketCode?.Trim(),
+                TicketCode: ticketCode,
                 PerformedByUsername: currentSession.Username,
                 TransactionAt: DateTimeOffset.UtcNow,
                 Note: input.Note?.Trim()
@@ -158,7 +175,7 @@ public static class InventoryEndpoints
 
             return Results.Created($"/api/inventory/transactions/{transaction.TransactionId}", new
             {
-                message = "Giao dich kho thanh cong (Sprint 6 Prototype)",
+                message = "Giao dich kho thanh cong",
                 transaction,
                 warning = stockAfter <= part.MinStockLevel ? "Canh bao: Linh kien sau giao dich da cham muc ton toi thieu!" : null
             });
