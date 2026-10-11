@@ -197,12 +197,17 @@
             </div>
 
             <div class="text-center">
-                <p class="text-muted small mb-2">Chọn nhanh tài khoản kiểm thử (4 Vai trò):</p>
+                <p class="text-muted small mb-2 fw-semibold">Chọn nhanh tài khoản kiểm thử (Nhóm 11 & Khách):</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center mb-2">
+                    <button onclick="quickFill('admin')" class="btn btn-sm btn-outline-danger" title="Nguyễn Viết Lãm - PM / Admin"><i class="fa-solid fa-user-shield me-1"></i>Lãm (Admin)</button>
+                    <button onclick="quickFill('loi.staff')" class="btn btn-sm btn-outline-primary" title="Trần Ngọc Lợi - BA / Lễ tân"><i class="fa-solid fa-user-tie me-1"></i>Lợi (Staff)</button>
+                    <button onclick="quickFill('ky.tech')" class="btn btn-sm btn-outline-success" title="Nguyễn Đại Kỳ - QA / Kỹ thuật"><i class="fa-solid fa-screwdriver-wrench me-1"></i>Kỳ (Tech)</button>
+                </div>
                 <div class="d-flex flex-wrap gap-2 justify-content-center">
-                    <button onclick="quickFill('admin')" class="btn btn-sm btn-outline-danger">Admin</button>
-                    <button onclick="quickFill('staff')" class="btn btn-sm btn-outline-primary">Nhân viên (Staff)</button>
-                    <button onclick="quickFill('tech')" class="btn btn-sm btn-outline-success">Kỹ thuật viên</button>
-                    <button onclick="quickFill('customer')" class="btn btn-sm btn-outline-secondary">Khách hàng</button>
+                    <button onclick="quickFill('staff01')" class="btn btn-sm btn-outline-secondary" title="Lê Thị Tiếp Nhận">staff01</button>
+                    <button onclick="quickFill('tech01')" class="btn btn-sm btn-outline-secondary" title="Phạm Văn Kỹ Thuật">tech01</button>
+                    <button onclick="quickFill('khach01')" class="btn btn-sm btn-outline-info" title="Nguyễn Văn An - Khách hàng laptop"><i class="fa-solid fa-user me-1"></i>Khách An</button>
+                    <button onclick="quickFill('khach02')" class="btn btn-sm btn-outline-info" title="Trần Thị Bình - Khách hàng iPhone"><i class="fa-solid fa-user me-1"></i>Khách Bình</button>
                 </div>
             </div>
         </div>
@@ -243,12 +248,16 @@
 
         <div class="p-3 mt-auto" style="position: absolute; bottom: 0; width: 100%;">
             <div class="p-3 rounded bg-dark text-white-50 small">
-                <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="badge bg-success p-1 rounded-circle" style="width:8px; height:8px;"></span>
                     <span class="text-white fw-semibold">Backend .NET 8</span>
+                    <span class="text-success fw-bold ms-auto">ONLINE</span>
                 </div>
-                <div>Status: <span class="text-success fw-bold">ONLINE</span></div>
-                <div>Port: <span class="text-info fw-bold">5055</span></div>
+                <div class="d-flex align-items-center gap-2 mb-1 text-white-50">
+                    <i class="fa-solid fa-database text-warning"></i>
+                    <span id="dbStatusText">SQL: <strong class="text-success">RepairShopDB</strong></span>
+                </div>
+                <div class="small text-muted">Port: 5055 | 13 Bảng SQL</div>
             </div>
         </div>
     </aside>
