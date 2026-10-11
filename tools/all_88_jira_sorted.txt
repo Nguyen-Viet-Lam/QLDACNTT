@@ -17,14 +17,14 @@ MBA-91 | To Do | lam nguyen viet | Due: 2026-11-02 | Hợp đồng hỗ trợ k�
 MBA-92 | To Do | lam nguyen viet | Due: 2026-11-02 | Tổng kết đánh giá KPI và đóng góp của từng thành viên
 MBA-93 | To Do | Trần Ngọc Lợi | Due: 2026-11-02 | Soạn biên bản nghiệm thu và thanh lý hợp đồng dịch vụ
 MBA-94 | To Do | Đại Kỳ Nguyễn | Due: 2026-11-02 | Lập checklist bàn giao mã nguồn và tài liệu cho trường
-MBA-59 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Tối ưu hóa truy vấn dữ liệu lớn và caching
-MBA-60 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Rà soát an toàn bảo mật OWASP cho Web Admin
-MBA-65 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Lọc và truy vết lịch sử xuất nhập linh kiện
+MBA-59 | In Progress | Trần Ngọc Lợi | Due: 2026-10-19 | Tối ưu hóa truy vấn dữ liệu lớn và caching
+MBA-60 | In Progress | Trần Ngọc Lợi | Due: 2026-10-19 | Rà soát an toàn bảo mật OWASP cho Web Admin
+MBA-65 | In Progress | Trần Ngọc Lợi | Due: 2026-10-19 | Lọc và truy vết lịch sử xuất nhập linh kiện
 MBA-70 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Màn hình xuất kho và in hóa đơn thanh toán
-MBA-71 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Giao diện tra cứu bảo hành điện tử cho khách hàng
+MBA-71 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-19 | Giao diện tra cứu bảo hành điện tử cho khách hàng
 MBA-72 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Kiểm thử luồng khép kín tiếp nhận đến thanh toán
 MBA-73 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Xây dựng báo cáo doanh thu theo thợ và dịch vụ
-MBA-74 | In Progress | Trần Ngọc Lợi | Due: 2026-10-12 | Báo cáo thống kê linh kiện bán chạy và tồn lâu
+MBA-74 | In Progress | Trần Ngọc Lợi | Due: 2026-10-19 | Báo cáo thống kê linh kiện bán chạy và tồn lâu
 MBA-82 | In Progress | lam nguyen viet | Due: 2026-10-19 | Soạn tài liệu quản trị hệ thống và cấu hình server
 MBA-7 | Done | lam nguyen viet | Due: 2026-09-17 | Xác định đề tài và mục tiêu hệ thống sửa chữa
 MBA-8 | Done | lam nguyen viet | Due: 2026-09-17 | Lập tôn chỉ dự án (Project Charter)
