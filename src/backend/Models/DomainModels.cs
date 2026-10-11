@@ -36,3 +36,43 @@ public record StockTransactionDto(
     DateTimeOffset TransactionAt,
     string? Note);
 
+public record TicketStatusLogDto(
+    int LogId,
+    string TicketCode,
+    string OldStatus,
+    string NewStatus,
+    string ChangedByUsername,
+    DateTimeOffset ChangedAt,
+    string? Note);
+
+public record InvoiceDto(
+    string InvoiceCode,
+    string TicketCode,
+    string CustomerCode,
+    decimal LaborCost,
+    decimal PartsCost,
+    decimal TotalAmount,
+    string PaymentStatus, // UNPAID, PAID
+    DateTimeOffset CreatedAt);
+
+public record PaymentDto(
+    int PaymentId,
+    string InvoiceCode,
+    string TicketCode,
+    decimal Amount,
+    string PaymentMethod, // CASH, TRANSFER, MOMO, VNPAY
+    string ReceivedByUsername,
+    DateTimeOffset PaidAt,
+    string? Note);
+
+public record WarrantyCardDto(
+    string WarrantyCode,
+    string TicketCode,
+    string DeviceCode,
+    string CustomerCode,
+    string SerialNumber,
+    DateTimeOffset StartDate,
+    DateTimeOffset EndDate,
+    int WarrantyDays,
+    string Status); // ACTIVE, EXPIRED, VOID
+

@@ -25,3 +25,16 @@ public record CreateStockTransactionRequest(
     string? TicketCode,
     string? Note);
 
+public record UpdateTicketStatusWithNoteRequest(
+    string Status,
+    string? Note);
+
+public record CreateInvoiceRequest(
+    string TicketCode,
+    decimal? DiscountAmount);
+
+public record ProcessPaymentRequest(
+    string PaymentMethod, // CASH, TRANSFER, MOMO, VNPAY
+    decimal Amount,
+    string? Note);
+

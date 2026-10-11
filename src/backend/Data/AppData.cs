@@ -21,6 +21,14 @@ public sealed class AppData
 
     public required List<StockTransactionDto> StockTransactions { get; init; }
 
+    public required List<TicketStatusLogDto> StatusLogs { get; init; }
+
+    public required List<InvoiceDto> Invoices { get; init; }
+
+    public required List<PaymentDto> Payments { get; init; }
+
+    public required List<WarrantyCardDto> Warranties { get; init; }
+
     public static AppData CreateDemo()
     {
         return new AppData
@@ -73,6 +81,20 @@ public sealed class AppData
             [
                 new(1, "LK00001", "IN", 15, 0, 15, null, "admin", DateTimeOffset.UtcNow.AddDays(-10), "Nhap kho linh kien dot 1"),
                 new(2, "LK00001", "OUT", 3, 15, 12, "PSC2026090001", "tech", DateTimeOffset.UtcNow.AddDays(-2), "Xuat linh kien lap may cho khach")
+            ],
+            StatusLogs =
+            [
+                new(1, "PSC2026090001", "NONE", "RECEIVED", "staff", DateTimeOffset.UtcNow.AddDays(-5), "Tiep nhan may tu khach hang"),
+                new(2, "PSC2026090002", "RECEIVED", "DIAGNOSING", "staff", DateTimeOffset.UtcNow.AddDays(-3), "Phan cong KTV tech chan doan")
+            ],
+            Invoices =
+            [
+                new("HD2026100001", "PSC2026090001", "KH000001", 120000, 100000, 220000, "UNPAID", DateTimeOffset.UtcNow.AddDays(-1))
+            ],
+            Payments = [],
+            Warranties =
+            [
+                new("BH2026100001", "PSC2026090001", "TB000001", "KH000001", "DL-2026-001", DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddDays(29), 30, "ACTIVE")
             ]
         };
     }

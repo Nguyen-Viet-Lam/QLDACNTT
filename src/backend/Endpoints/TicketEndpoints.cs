@@ -187,8 +187,38 @@ public static class TicketEndpoints
                 return Results.NotFound(new { message = "Khong tim thay phieu sua chua" });
             }
 
-            ReplaceTicket(data, ticket, ticket with { Status = input.Status.ToUpperInvariant() });
+            var oldStatus = ticket.Status;
+            var newStatus = input.Status.ToUpperInvariant();
+            ReplaceTicket(data, ticket, ticket with { Status = newStatus });
+
+            // MBA-56: Ghi nhan Transaction nhat ky trang thai phieu (TicketStatusLogs)
+            var session = AuthHelper.GetSession(request, data);
+            data.StatusLogs.Add(new TicketStatusLogDto(
+                data.StatusLogs.Count + 1,
+                ticket.Code,
+                oldStatus,
+                newStatus,
+                session?.Username ?? "system",
+                DateTimeOffset.UtcNow,
+                $"Cap nhat trang thai tu {oldStatus} sang {newStatus}"));
+
             return Results.Ok(AuthHelper.EnrichTicket(FindTicket(data, code)!));
+        });
+
+        // MBA-56: API xem lich su chuyen doi trang thai phieu sua chua (Audit Trail)
+        app.MapGet("/api/tickets/{code}/logs", (HttpRequest request, string code) =>
+        {
+            var auth = AuthHelper.RequireRole(request, data, "ADMIN", "STAFF", "TECHNICIAN");
+            if (auth is not null)
+            {
+                return auth;
+            }
+
+            var logs = data.StatusLogs
+                .Where(x => x.TicketCode.Equals(code, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(x => x.ChangedAt);
+
+            return Results.Ok(logs);
         });
     }
 

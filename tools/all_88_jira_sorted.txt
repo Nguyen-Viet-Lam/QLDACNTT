@@ -1,0 +1,88 @@
+﻿MBA-7 | Done | lam nguyen viet | Due: 2026-09-17 | Xác định đề tài và mục tiêu hệ thống sửa chữa
+MBA-8 | Done | lam nguyen viet | Due: 2026-09-17 | Lập tôn chỉ dự án (Project Charter)
+MBA-9 | Done | lam nguyen viet | Due: 2026-09-17 | Lập tuyên bố phạm vi (Scope Statement - SOW)
+MBA-10 | Done | lam nguyen viet | Due: 2026-09-17 | Lập cấu trúc phân rã công việc (WBS 8 tuần)
+MBA-11 | Done | Đại Kỳ Nguyễn | Due: 2026-09-17 | Ma trận phân công trách nhiệm RACI
+MBA-12 | Done | Trần Ngọc Lợi | Due: 2026-09-17 | Ước lượng ngân sách và nguồn lực baseline
+MBA-13 | Done | lam nguyen viet | Due: 2026-09-17 | Khởi tạo repo GitHub và branching strategy
+MBA-14 | Done | lam nguyen viet | Due: 2026-09-17 | Quy ước làm việc nhóm và môi trường công nghệ
+MBA-15 | Done | Trần Ngọc Lợi | Due: 2026-09-17 | Nhận diện và lập danh mục rủi ro sơ bộ (Known Risk)
+MBA-16 | Done | Đại Kỳ Nguyễn | Due: 2026-09-17 | Chuẩn bị biểu mẫu biên bản họp nhóm và Sprint Retrospective
+MBA-17 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Khảo sát quy trình nghiệp vụ cửa hàng sửa chữa
+MBA-18 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Xây dựng tài liệu đặc tả SRS 8 nhóm chức năng
+MBA-19 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Chi tiết hóa 16 User Stories kèm tiêu chí AC
+MBA-20 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Thiết kế sơ đồ Use Case tổng quát
+MBA-21 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Xây dựng sơ đồ phân rã chức năng (BFD)
+MBA-22 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Xây dựng sơ đồ luồng dữ liệu DFD mức ngữ cảnh
+MBA-23 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Xây dựng sơ đồ luồng dữ liệu DFD mức 1
+MBA-24 | Done | Trần Ngọc Lợi | Due: 2026-09-21 | Đặc tả từ điển dữ liệu (Data Dictionary) các thực thể
+MBA-25 | Done | Đại Kỳ Nguyễn | Due: 2026-09-21 | Lập Test Plan kiểm thử ban đầu
+MBA-26 | Done | Đại Kỳ Nguyễn | Due: 2026-09-21 | Phân tích kịch bản kiểm thử Use Case cơ sở
+MBA-27 | Done | Đại Kỳ Nguyễn | Due: 2026-09-21 | Soạn thảo bảng thuật ngữ nghiệp vụ cửa hàng TechCare
+MBA-28 | Done | lam nguyen viet | Due: 2026-09-21 | Review và chốt baseline yêu cầu nghiệp vụ
+MBA-29 | Done | lam nguyen viet | Due: 2026-09-28 | Thiết kế kiến trúc tổng thể hệ thống 3 lớp
+MBA-30 | Done | Trần Ngọc Lợi | Due: 2026-09-28 | Thiết kế mô hình ERD quan hệ thực thể 13 bảng
+MBA-31 | Done | Trần Ngọc Lợi | Due: 2026-09-28 | Script SQL Server tạo database và 13 bảng
+MBA-32 | Done | Trần Ngọc Lợi | Due: 2026-09-28 | Script SQL Server tạo ràng buộc PK, FK, Check
+MBA-33 | Done | Trần Ngọc Lợi | Due: 2026-09-28 | Script SQL Server nạp dữ liệu mẫu (Seed Data)
+MBA-34 | Done | Trần Ngọc Lợi | Due: 2026-09-28 | Viết 10 câu queries báo cáo thống kê SQL
+MBA-35 | Done | lam nguyen viet | Due: 2026-09-28 | Khởi tạo project ASP.NET Core 8 Minimal API
+MBA-36 | Done | lam nguyen viet | Due: 2026-09-28 | Xây dựng xác thực token-based session auth
+MBA-37 | Done | lam nguyen viet | Due: 2026-09-28 | Hiện thực phân quyền người dùng RBAC 4 vai trò
+MBA-38 | Done | lam nguyen viet | Due: 2026-09-28 | API quản lý tài khoản và người dùng hệ thống
+MBA-39 | Done | lam nguyen viet | Due: 2026-09-28 | API quản lý danh mục loại dịch vụ sửa chữa
+MBA-40 | Done | lam nguyen viet | Due: 2026-09-28 | API quản lý hồ sơ khách hàng và thiết bị
+MBA-41 | Done | lam nguyen viet | Due: 2026-09-28 | API tiếp nhận và tạo phiếu sửa chữa
+MBA-42 | Done | lam nguyen viet | Due: 2026-09-28 | API phân công kỹ thuật viên và chẩn đoán
+MBA-43 | Done | Đại Kỳ Nguyễn | Due: 2026-09-28 | Cấu trúc khung thư mục web/mobile/tests
+MBA-44 | Done | Đại Kỳ Nguyễn | Due: 2026-09-28 | Viết file test API QLDACNTT.Api.http & Auth
+MBA-45 | Done | Đại Kỳ Nguyễn | Due: 2026-09-28 | Viết Unit Test kiểm tra logic tính tiền công dịch vụ
+MBA-46 | Done | Đại Kỳ Nguyễn | Due: 2026-09-28 | Thiết kế mockup UI Web Admin (Figma - Trễ)
+MBA-47 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Khung layout giao diện Web Admin bằng React
+MBA-48 | Done | Đại Kỳ Nguyễn | Due: 2026-10-05 | Màn hình đăng nhập Web Admin và lưu token
+MBA-49 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Trang quản trị người dùng và vai trò RBAC
+MBA-50 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Trang quản lý khách hàng và tra cứu thiết bị
+MBA-51 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Trang lập phiếu tiếp nhận và in biên nhận
+MBA-52 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Trang phân công kỹ thuật viên theo dõi tiến độ
+MBA-53 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Component Modal xác nhận và Toast thông báo lỗi
+MBA-54 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Xử lý phân trang và tìm kiếm khách hàng trên Web Admin
+MBA-55 | Done | lam nguyen viet | Due: 2026-10-12 | Kết nối Backend Minimal API với SQL Server thật
+MBA-56 | In Progress | lam nguyen viet | Due: 2026-10-12 | Xử lý Transaction cập nhật trạng thái phiếu
+MBA-57 | Done | lam nguyen viet | Due: 2026-10-05 | Hỗ trợ khung giao diện Admin kéo lại tiến độ trễ
+MBA-58 | Done | Đại Kỳ Nguyễn | Due: 2026-10-12 | Kiểm thử tích hợp giao diện Web với API
+MBA-59 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Tối ưu hóa truy vấn dữ liệu lớn và caching
+MBA-60 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Rà soát an toàn bảo mật OWASP cho Web Admin
+MBA-61 | Done | lam nguyen viet | Due: 2026-10-12 | API quản lý danh mục và tồn kho linh kiện
+MBA-62 | Done | Trần Ngọc Lợi | Due: 2026-10-12 | Nghiệp vụ xuất linh kiện thay thế theo phiếu
+MBA-63 | Done | Trần Ngọc Lợi | Due: 2026-10-05 | Cảnh báo tự động linh kiện dưới mức tồn tối thiểu
+MBA-64 | Done | Trần Ngọc Lợi | Due: 2026-10-12 | Nghiệp vụ hoàn trả linh kiện lỗi vào kho
+MBA-65 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Lọc và truy vết lịch sử xuất nhập linh kiện
+MBA-66 | In Progress | lam nguyen viet | Due: 2026-10-12 | API tính chi phí và lập hóa đơn thanh toán
+MBA-67 | To Do | lam nguyen viet | Due: 2026-10-12 | Xử lý thanh toán tiền mặt và chuyển khoản
+MBA-68 | To Do | lam nguyen viet | Due: 2026-10-12 | Tự động kích hoạt sổ bảo hành điện tử theo máy
+MBA-69 | To Do | lam nguyen viet | Due: 2026-10-12 | API tra cứu thời hạn bảo hành theo serial máy
+MBA-70 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Màn hình xuất kho và in hóa đơn thanh toán
+MBA-71 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-12 | Giao diện tra cứu bảo hành điện tử cho khách hàng
+MBA-72 | In Progress | Đại Kỳ Nguyễn | Due: 2026-10-12 | Kiểm thử luồng khép kín tiếp nhận đến thanh toán
+MBA-73 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Xây dựng báo cáo doanh thu theo thợ và dịch vụ
+MBA-74 | To Do | Trần Ngọc Lợi | Due: 2026-10-12 | Báo cáo thống kê linh kiện bán chạy và tồn lâu
+MBA-75 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Lập bộ dữ liệu kiểm thử hệ thống tổng thể
+MBA-76 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử tải và đo thời gian đáp ứng hệ thống
+MBA-77 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử tương thích đa trình duyệt (Chrome, Edge, Firefox)
+MBA-78 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-19 | Kiểm thử thâm nhập an toàn thông tin và chống XSS/CSRF
+MBA-79 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Đo lường và tối ưu hiệu năng truy vấn SQL Server
+MBA-80 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Soạn tài liệu hướng dẫn sử dụng cho nhân viên quầy
+MBA-81 | To Do | Trần Ngọc Lợi | Due: 2026-10-19 | Soạn tài liệu hướng dẫn cho kỹ thuật viên sửa chữa
+MBA-82 | To Do | lam nguyen viet | Due: 2026-10-19 | Soạn tài liệu quản trị hệ thống và cấu hình server
+MBA-83 | To Do | lam nguyen viet | Due: 2026-10-26 | Đóng gói ứng dụng Docker và deploy lên Server
+MBA-84 | To Do | lam nguyen viet | Due: 2026-10-26 | Cấu hình quy trình tự động hóa CI/CD GitHub Actions
+MBA-85 | To Do | Trần Ngọc Lợi | Due: 2026-10-26 | Sao lưu dự phòng CSDL (Backup) trước khi Golive
+MBA-86 | To Do | lam nguyen viet | Due: 2026-10-26 | Tổ chức training bàn giao cho cửa hàng TechCare
+MBA-87 | To Do | Đại Kỳ Nguyễn | Due: 2026-10-26 | Viết kịch bản Demo nghiệm thu đồ án chi tiết
+MBA-88 | To Do | Trần Ngọc Lợi | Due: 2026-10-26 | Khảo sát và đánh giá người dùng sau triển khai
+MBA-89 | To Do | lam nguyen viet | Due: 2026-11-02 | Tiếp nhận phản hồi và vá lỗi phát sinh (Hotfix)
+MBA-90 | To Do | lam nguyen viet | Due: 2026-11-02 | Kế hoạch bảo trì định kỳ hệ thống sau 3 tháng
+MBA-91 | To Do | lam nguyen viet | Due: 2026-11-02 | Hợp đồng hỗ trợ kỹ thuật và cam kết SLA hàng năm
+MBA-92 | To Do | lam nguyen viet | Due: 2026-11-02 | Tổng kết đánh giá KPI và đóng góp của từng thành viên
+MBA-93 | To Do | Trần Ngọc Lợi | Due: 2026-11-02 | Soạn biên bản nghiệm thu và thanh lý hợp đồng dịch vụ
+MBA-94 | To Do | Đại Kỳ Nguyễn | Due: 2026-11-02 | Lập checklist bàn giao mã nguồn và tài liệu cho trường

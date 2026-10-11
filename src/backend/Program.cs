@@ -120,6 +120,7 @@ app.MapCatalogEndpoints(data);
 app.MapTicketEndpoints(data);
 app.MapDashboardEndpoints(data);
 app.MapInventoryEndpoints(data);
+app.MapBillingAndWarrantyEndpoints(data);
 
 app.Run();
 
