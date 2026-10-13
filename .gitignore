@@ -64,3 +64,6 @@ tools/
 !tools/jira_github_sync.env.example
 !tools/README_jira_github_sync.md
 GOI_NGUYEN_DAI_KY/
+
+tools/jira_config.json
+
