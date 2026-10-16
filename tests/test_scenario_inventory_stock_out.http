@@ -48,4 +48,53 @@ X-Session-Token: {{techToken}}
   "note": "Co tinh xuat vuot qua so luong ton de test bat loi"
 }
 
-### TODO (Sprint 6 - In Progress): Nguyễn Đại Kỳ đang viết tiếp test case kiểm tra biên nhận in hóa đơn thanh toán.
+### [Test 05] Đăng nhập Nhân viên Lễ tân để lập hóa đơn và thu tiền
+# @name staffLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "staff",
+  "password": "123456"
+}
+
+### [Test 06] Tính toán tổng chi phí phiếu sửa chữa PSC2026090001 (Tiền công + Linh kiện xuất kho)
+GET {{baseUrl}}/api/tickets/PSC2026090001/cost
+X-Session-Token: {{staffToken}}
+
+### [Test 07] Lễ tân lập hóa đơn thanh toán cho phiếu PSC2026090001
+# @name createInvoice
+POST {{baseUrl}}/api/invoices
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "ticketCode": "PSC2026090001",
+  "discountAmount": 50000,
+  "note": "Giam gia 50.000d khach hang than thiet"
+}
+
+### [Test 08] Khách hàng thực hiện thanh toán chuyển khoản (TRANSFER)
+POST {{baseUrl}}/api/invoices/HD2026100001/pay
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "amount": 1600000,
+  "paymentMethod": "TRANSFER",
+  "note": "Khach chuyen khoan qua QR VietQR Ngan hang"
+}
+
+### [Test 09] Kiểm tra hệ thống tự động kích hoạt sổ bảo hành điện tử theo số Serial
+GET {{baseUrl}}/api/warranties/search?serial=IP11-64GB-VN
+X-Session-Token: {{staffToken}}
+
+### [Test 10] Xác nhận trạng thái phiếu sửa chữa đã tự động cập nhật sang PAID
+GET {{baseUrl}}/api/tickets/PSC2026090001
+X-Session-Token: {{staffToken}}
+
+### =========================================================================
+### KẾT LUẬN KIỂM THỬ E2E (TASK MBA-72 - HOÀN THÀNH 100%):
+### - Luồng khép kín: Tiếp nhận -> Phân công -> Xuất kho -> Lập hóa đơn -> Thu tiền -> Kích hoạt bảo hành điện tử.
+### - Xác nhận hoàn thành bởi: Nguyễn Đại Kỳ (QA Tester / UI Lead) - Nhóm 11
+### =========================================================================

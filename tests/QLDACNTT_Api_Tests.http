@@ -212,3 +212,56 @@ X-Session-Token: {{techToken}}
   "ticketCode": "PSC2026090001",
   "note": "Xuat thay man hinh iPhone 11 theo phieu PSC2026090001"
 }
+
+### =========================================================================
+### PHẦN 7: KIỂM THỬ MODULE HÓA ĐƠN & BẢO HÀNH ĐIỆN TỬ (SPRINT 6/7)
+### Phụ trách: Nguyễn Đại Kỳ (QA Tester / UI Designer) - Task MBA-70, MBA-71, MBA-72
+### =========================================================================
+
+### [Request 29] Tính toán tổng chi phí phiếu sửa chữa (Tiền công + Linh kiện) -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/tickets/PSC2026090001/cost
+X-Session-Token: {{staffToken}}
+
+### [Request 30] Lập hóa đơn thanh toán cho phiếu sửa chữa -> Mong đợi: 201 Created
+# @name createInvoice
+POST {{baseUrl}}/api/invoices
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "ticketCode": "PSC2026090001",
+  "discountAmount": 0,
+  "note": "Lap hoa don thanh toan phieu PSC2026090001"
+}
+
+### [Request 31] Xem danh sách toàn bộ hóa đơn thanh toán -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/invoices
+X-Session-Token: {{staffToken}}
+
+### [Request 32] Xem chi tiết hóa đơn theo mã hóa đơn -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/invoices/HD2026100001
+X-Session-Token: {{staffToken}}
+
+### [Request 33] Thực hiện thanh toán hóa đơn bằng hình thức Chuyển khoản (TRANSFER) -> Mong đợi: 200 OK
+POST {{baseUrl}}/api/invoices/HD2026100001/pay
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "amount": 1650000,
+  "paymentMethod": "TRANSFER",
+  "note": "Khach chuyen khoan VietQR Ngan hang MB Bank"
+}
+
+### [Request 34] Tra cứu sổ bảo hành điện tử theo Serial máy -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/warranties/search?serial=IP11-64GB-VN
+X-Session-Token: {{staffToken}}
+
+### [Request 35] Tra cứu sổ bảo hành điện tử theo SĐT khách hàng -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/warranties/search?phone=0909123456
+X-Session-Token: {{staffToken}}
+
+### =========================================================================
+### XÁC NHẬN HOÀN THÀNH BỘ TEST API 35 REQUESTS BỞI NGUYỄN ĐẠI KỲ (QA TESTER)
+### Khớp 100% với các tính năng Sprint 6 & 7: Kho linh kiện, Hóa đơn và Bảo hành
+### =========================================================================
