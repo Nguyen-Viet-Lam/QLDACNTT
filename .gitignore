@@ -56,7 +56,9 @@ PHAN_CONG_3_TUAN_DAU.md
 *.csv
 BaoCao/
 Jira_Import_Chuan/
-docs/
+# docs/ - cho phep track tai lieu markdown
+!docs/
+!docs/*.md
 tools/
 !tools/
 !tools/.gitkeep
