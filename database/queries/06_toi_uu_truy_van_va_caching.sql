@@ -1,7 +1,7 @@
 /* =========================================================================
    NHÓM 11 - DỰ ÁN QUẢN LÝ CỬA HÀNG SỬA CHỮA (LV33-001)
    MODULE: TỐI ƯU HÓA TRUY VẤN DỮ LIỆU LỚN VÀ CACHING (SPRINT 7)
-   TÁC GIẢ: NGUYỄN VIẾT LÃM (PM / BACKEND LEAD) - TASK JIRA: MBA-59
+   TÁC GIẢ: TRẦN NGỌC LỢI (BA / DATABASE LEAD) - TASK JIRA: MBA-59
    TÊN TÁC VỤ: TỐI ƯU HÓA TRUY VẤN DỮ LIỆU LỚN VÀ CACHING
    CSDL: SQL Server 2022 | Database: RepairShopDB
    ========================================================================= */
@@ -18,7 +18,7 @@ GO
 
 PRINT N'=========================================================================';
 PRINT N'MBA-59: TỐI ƯU HÓA TRUY VẤN DỮ LIỆU LỚN VÀ CACHING';
-PRINT N'Người thực hiện: Nguyễn Viết Lãm (PM / Backend Lead - Nhóm 11)';
+PRINT N'Người thực hiện: Trần Ngọc Lợi (BA / Database Lead - Nhóm 11)';
 PRINT N'=========================================================================';
 GO
 
@@ -512,6 +512,6 @@ EXEC dbo.sp_DanhSachPhieuPhanTrang @LastTicketId = 0, @PageSize = 10;
 GO
 
 PRINT N'=========================================================================';
-PRINT N'HOÀN TẤT SCRIPT MBA-59: TỐI ƯU TRUY VẤN VÀ CACHING - NGUYỄN VIẾT LÃM';
+PRINT N'HOÀN TẤT SCRIPT MBA-59: TỐI ƯU TRUY VẤN VÀ CACHING - TRẦN NGỌC LỢI';
 PRINT N'=========================================================================';
 GO
