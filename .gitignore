@@ -56,10 +56,11 @@ PHAN_CONG_3_TUAN_DAU.md
 *.csv
 BaoCao/
 Jira_Import_Chuan/
-# docs/ - cho phep track tai lieu markdown, bo qua cac file van phong local
+# docs/ - chi track tai lieu quan tri server va bao mat OWASP
 !docs/
 docs/*
-!docs/*.md
+!docs/HUONG_DAN_QUAN_TRI_HE_THONG_VA_SERVER.md
+!docs/MBA-60_bao_mat_owasp_web_admin.md
 tools/
 !tools/
 !tools/.gitkeep
