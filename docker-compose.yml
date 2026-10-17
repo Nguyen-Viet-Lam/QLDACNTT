@@ -1,0 +1,77 @@
+# ====================================================================
+# Docker Compose: Hệ thống Quản lý Cửa hàng Sửa chữa TechCare (LV33-001)
+# Nhóm 11 - Lớp 23DTHC6
+# Sinh viên phụ trách DevOps: Nguyễn Viết Lãm (PM / Backend)
+# ====================================================================
+
+version: '3.8'
+
+services:
+  # ----------------------------------------------------
+  # 1. Cơ sở dữ liệu Microsoft SQL Server 2022
+  # ----------------------------------------------------
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: techcare_mssql
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=TechCare@2026!Secure
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql/data
+    networks:
+      - techcare_network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'TechCare@2026!Secure' -Q 'SELECT 1' -C || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # ----------------------------------------------------
+  # 2. Backend ASP.NET Core 8 Minimal API
+  # ----------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile
+    container_name: techcare_backend
+    restart: unless-stopped
+    depends_on:
+      mssql:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mssql,1433;Database=RepairShopDB;User Id=sa;Password=TechCare@2026!Secure;TrustServerCertificate=True;Connect Timeout=30;
+    ports:
+      - "5000:8080"
+    networks:
+      - techcare_network
+
+  # ----------------------------------------------------
+  # 3. Frontend Web Admin SPA (Nginx Reverse Proxy)
+  # ----------------------------------------------------
+  web-admin:
+    build:
+      context: .
+      dockerfile: src/web-admin/Dockerfile
+    container_name: techcare_web_admin
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - techcare_network
+
+networks:
+  techcare_network:
+    driver: bridge
+
+volumes:
+  mssql_data:
+    driver: local

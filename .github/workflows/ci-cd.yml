@@ -1,0 +1,65 @@
+name: CI/CD Pipeline - TechCare Repair Shop
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & Unit Tests (.NET 8)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore QLDACNTT.slnx
+
+      - name: Build Solution (Release)
+        run: dotnet build QLDACNTT.slnx --configuration Release --no-restore
+
+      - name: Run Unit Tests
+        run: dotnet test tests/QLDACNTT.Tests/QLDACNTT.Tests.csproj --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+  docker-lint-and-build:
+    name: Docker Validation & Container Build
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Validate Docker Compose Config
+        run: docker compose config
+
+      - name: Build Backend API Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: src/backend/Dockerfile
+          push: false
+          tags: techcare-backend:latest
+
+      - name: Build Web Admin Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: src/web-admin/Dockerfile
+          push: false
+          tags: techcare-web-admin:latest

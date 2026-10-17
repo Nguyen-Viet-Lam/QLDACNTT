@@ -1,0 +1,16 @@
+**/.git
+**/.vs
+**/bin
+**/obj
+**/TestResults
+**/*.docx
+**/*.xlsx
+**/*.pdf
+**/*.log
+**/.inspect.ndjson
+tmp/
+outputs/
+docanh/
+sample_templates/
+tools/*.json
+tools/*.bat
