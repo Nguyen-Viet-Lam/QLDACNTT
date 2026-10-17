@@ -61,6 +61,9 @@ Jira_Import_Chuan/
 docs/*
 !docs/HUONG_DAN_QUAN_TRI_HE_THONG_VA_SERVER.md
 !docs/MBA-60_bao_mat_owasp_web_admin.md
+!docs/MBA-76_BAO_CAO_KIEM_THU_TAI_VA_HIEU_NANG.md
+!docs/MBA-77_BAO_CAO_KIEM_THU_TUONG_THICH_DA_TRINH_DUYET.md
+!docs/MBA-78_BAO_CAO_KIEM_THU_AN_TOAN_THONG_TIN.md
 tools/
 !tools/
 !tools/.gitkeep
