@@ -64,6 +64,8 @@ docs/*
 !docs/MBA-76_BAO_CAO_KIEM_THU_TAI_VA_HIEU_NANG.md
 !docs/MBA-77_BAO_CAO_KIEM_THU_TUONG_THICH_DA_TRINH_DUYET.md
 !docs/MBA-78_BAO_CAO_KIEM_THU_AN_TOAN_THONG_TIN.md
+!docs/huong_dan_nhan_vien_quay.md
+!docs/huong_dan_ky_thuat_vien.md
 tools/
 !tools/
 !tools/.gitkeep
