@@ -849,6 +849,253 @@
             border: 1px solid #ddd6fe;
         }
 
+    
+        /* === ZEISS / HUTECH SSO MODAL (CHUẨN ẢNH MẪU MÀU ĐỎ CỦA USER) === */
+        #authOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 2050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 980px;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(226, 232, 240, 0.8);
+            display: flex;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        /* LEFT BRANDING HERO PANE */
+        .auth-hero-pane {
+            width: 440px;
+            background: linear-gradient(155deg, #091322 0%, #002244 50%, #1e1b4b 100%);
+            padding: 44px 36px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .auth-hero-pane::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(225, 29, 72, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .auth-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #93c5fd;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .auth-app-box {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        /* RIGHT FORM PANE */
+        .auth-form-pane {
+            flex: 1;
+            padding: 44px 48px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .auth-segmented-nav {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .segmented-btn {
+            flex: 1;
+            padding: 9px 16px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            border-radius: 9px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .segmented-btn.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* NÚT ĐỎ RỰC RỠ CHUẨN ẢNH MẪU USER GỬI */
+        .btn-auth-crimson {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: #ffffff !important;
+            border: none;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+            transition: all 0.2s ease;
+        }
+        .btn-auth-crimson:hover {
+            background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* === COLLAPSIBLE SIDEBAR ("XỔ RA HOẶC GOM LẠI") === */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1040;
+            transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-wrapper {
+            margin-left: 260px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* KHI SIDEBAR THU GỌN (COLLAPSED) */
+        body.sidebar-collapsed .sidebar {
+            width: 76px;
+        }
+        body.sidebar-collapsed .main-wrapper {
+            margin-left: 76px;
+        }
+        body.sidebar-collapsed .sidebar .brand-text,
+        body.sidebar-collapsed .sidebar .sidebar-section-title,
+        body.sidebar-collapsed .sidebar .nav-link span,
+        body.sidebar-collapsed .sidebar .nav-link .badge,
+        body.sidebar-collapsed .sidebar-role-indicator span,
+        body.sidebar-collapsed .sidebar .sidebar-footer > div > div:first-child {
+            display: none !important;
+        }
+        body.sidebar-collapsed .sidebar .brand {
+            justify-content: center;
+            padding: 16px 8px;
+        }
+        body.sidebar-collapsed .sidebar .nav-link {
+            justify-content: center;
+            padding: 12px 0;
+            font-size: 1.15rem;
+            margin: 4px 8px;
+            border-radius: 10px;
+        }
+        body.sidebar-collapsed .sidebar-role-indicator {
+            justify-content: center;
+            padding: 10px 0;
+            margin: 0 8px 14px;
+            font-size: 1.1rem;
+        }
+        body.sidebar-collapsed .sidebar .sidebar-footer {
+            padding: 12px 0;
+        }
+        body.sidebar-collapsed .sidebar .sidebar-footer .d-flex {
+            justify-content: center !important;
+        }
+
+        /* NAVBAR GỌN GÀNG, BO GÓC, HIỆN ĐẠI */
+        .top-navbar {
+            height: 64px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            margin: 14px 24px 0 24px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 14px;
+            z-index: 1030;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease-in-out;
+        }
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1050;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            }
+            body.sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+            .top-navbar {
+                margin: 10px 12px 0 12px;
+                border-radius: 12px;
+            }
+        }
+
+        .btn-logout-prominent {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-logout-prominent:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        }
+
     </style>
 </head>
 <body>
@@ -1172,19 +1419,21 @@
     <div id="toastContainer"></div>
 
     <!-- AUTH OVERLAY (LOGIN / REGISTER) -->
+    
+    <!-- AUTHENTICATION & SINGLE SIGN-ON MODAL (CHUẨN ẢNH MẪU HUTECH SSO - NÚT ĐỎ) -->
     <div id="authOverlay" style="display: none;" onclick="if(event.target===this) hideAuthOverlay();">
         <div class="auth-container">
             <!-- LEFT HERO PANE -->
             <div class="auth-hero-pane">
                 <div>
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <svg viewBox="0 0 100 100" width="40" height="40" style="border-radius: 8px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0, 47, 108, 0.35);">
-    <rect width="100" height="100" rx="14" fill="#002f6c"/>
-    <text x="50" y="60" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-style="italic" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="-1">ZEISS</text>
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <svg viewBox="0 0 100 100" width="46" height="46" style="border-radius: 10px; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0, 47, 108, 0.5);">
+    <rect width="100" height="100" rx="16" fill="#002f6c"/>
+    <text x="50" y="62" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-style="italic" font-size="30" fill="#ffffff" text-anchor="middle" letter-spacing="-1">ZEISS</text>
 </svg>
                         <div>
                             <h4 class="fw-bold mb-0 text-white tracking-wide">ZEISS TECHCARE</h4>
-                            <span class="text-white-50" style="font-size: 0.78rem;">Hệ thống Quản lý Cửa hàng Sửa chữa</span>
+                            <span class="text-white-50" style="font-size: 0.76rem;">Trung Tâm Kỹ Thuật & Dịch Vụ Sửa Chữa</span>
                         </div>
                     </div>
 
@@ -1192,58 +1441,39 @@
                         <i class="fa-solid fa-graduation-cap me-2"></i>ĐỒ ÁN QLDACNTT — NHÓM 11 — 23DTHC6
                     </div>
 
-                    <div class="auth-feature-list mt-4">
-                        <div class="auth-feature-item">
-                            <div class="auth-feature-icon text-info">
-                                <i class="fa-solid fa-table-columns"></i>
-                            </div>
-                            <div>
-                                <div class="fw-bold text-white small">Luân chuyển sửa chữa Kanban</div>
-                                <div class="text-white-50" style="font-size: 0.76rem;">Tiếp nhận, Chẩn đoán, Sửa chữa, Hoàn thành và Bàn giao 5 bước trực quan.</div>
-                            </div>
-                        </div>
+                    <h3 class="fw-bold text-white mb-3" style="line-height: 1.35; font-size: 1.55rem;">
+                        Một tài khoản cho toàn bộ hệ thống dịch vụ & quản trị ZEISS
+                    </h3>
+                    <p class="text-white-50 small mb-4" style="line-height: 1.6;">
+                        Hệ thống Đăng nhập một lần (Single Sign-On) an toàn, nhanh chóng và chuẩn hóa cho toàn thể Quản trị viên, Nhân viên tiếp nhận, Kỹ thuật viên và Khách hàng.
+                    </p>
 
-                        <div class="auth-feature-item">
-                            <div class="auth-feature-icon text-warning">
-                                <i class="fa-solid fa-boxes-stacked"></i>
-                            </div>
-                            <div>
-                                <div class="fw-bold text-white small">Kho linh kiện & Cảnh báo an toàn</div>
-                                <div class="text-white-50" style="font-size: 0.76rem;">Kiểm soát xuất/nhập, cảnh báo chạm mức tồn tối thiểu (MinStockLevel).</div>
-                            </div>
+                    <div class="auth-app-box">
+                        <div class="text-uppercase text-white-50 fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 0.6px;">
+                            <i class="fa-solid fa-arrow-up-right-from-square me-1 text-danger"></i>ỨNG DỤNG YÊU CẦU XÁC THỰC
                         </div>
-
-                        <div class="auth-feature-item">
-                            <div class="auth-feature-icon text-success">
-                                <i class="fa-solid fa-qrcode"></i>
-                            </div>
-                            <div>
-                                <div class="fw-bold text-white small">Quyết toán VietQR & Sổ bảo hành</div>
-                                <div class="text-white-50" style="font-size: 0.76rem;">Mã VietQR động đúng số tiền, tự động cấp Sổ bảo hành điện tử theo serial.</div>
-                            </div>
-                        </div>
-
-                        <div class="auth-feature-item">
-                            <div class="auth-feature-icon text-primary">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="bg-danger bg-opacity-25 text-danger rounded p-2" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fa-solid fa-shield-halved"></i>
                             </div>
                             <div>
-                                <div class="fw-bold text-white small">Phân quyền RBAC & An toàn IDOR</div>
-                                <div class="text-white-50" style="font-size: 0.76rem;">Phân tách 4 nhóm vai trò (Admin, Staff, Tech, Khách hàng) chuẩn an toàn.</div>
+                                <div class="fw-bold text-white small">ZEISS TechCare Portal</div>
+                                <div class="text-white-50" style="font-size: 0.72rem;">Quản trị phân quyền & Cổng khách hàng</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-3 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center">
-                    <span class="text-white-50 small"><i class="fa-solid fa-database text-success me-1"></i>SQL Server: RepairShopDB</span>
-                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 font-monospace">ONLINE</span>
+                <div class="pt-3 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center text-white-50 small">
+                    <span><i class="fa-solid fa-lock text-success me-1"></i>Xác thực RBAC / Session</span>
+                    <span class="font-monospace" style="font-size: 0.72rem;">TLS 1.3 · AES-256</span>
                 </div>
             </div>
 
-            <!-- RIGHT FORM PANE (RẠCH RÒI ĐĂNG NHẬP / ĐĂNG KÝ) -->
-            <div class="auth-form-pane position-relative">
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" onclick="hideAuthOverlay()" aria-label="Đóng"></button>
+            <!-- RIGHT FORM PANE -->
+            <div class="auth-form-pane">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-4" onclick="hideAuthOverlay()" aria-label="Đóng"></button>
+
                 <!-- SEGMENTED CONTROLLER -->
                 <div class="auth-segmented-nav">
                     <button type="button" class="segmented-btn active" id="tabBtnLogin" onclick="switchAuthView('login')">
@@ -1254,29 +1484,16 @@
                     </button>
                 </div>
 
-                <!-- 1. GIAO DIỆN ĐĂNG NHẬP (LOGIN VIEW) -->
+                <!-- 1. GIAO DIỆN ĐĂNG NHẬP (LOGIN VIEW - CHUẨN ẢNH MẪU 4 NÚT ĐỎ) -->
                 <div id="authViewLogin">
-                    <div class="mb-3">
-                        <h5 class="fw-bold text-dark mb-1">Đăng Nhập Cổng Quản Trị & Vận Hành</h5>
-                        <p class="text-muted small">Truy cập ca làm việc để quản lý tiếp nhận máy, điều phối kỹ thuật và thanh toán.</p>
+                    <div class="mb-4">
+                        <h4 class="fw-bold text-dark mb-1">Đăng nhập tài khoản</h4>
+                        <p class="text-muted small mb-0">Sử dụng tài khoản quản lý hoặc khách hàng để tiếp tục</p>
                     </div>
 
                     <form onsubmit="event.preventDefault(); handleLogin();">
-                        
-                        <div class="mb-3 p-2 bg-light rounded-3 border">
-                            <label class="form-label mb-1 text-muted" style="font-size: 0.72rem; font-weight: 600;">
-                                <i class="fa-solid fa-user-gear text-primary me-1"></i>Chọn nhanh tài khoản phân quyền:
-                            </label>
-                            <select class="form-select form-select-sm" id="quickRolePicker" onchange="applyQuickRoleSelection(this.value)">
-                                <option value="admin" selected>👑 Quản lý toàn quyền (Admin) — admin</option>
-                                <option value="staff01">🎧 Nhân viên Tiếp nhận & Thu ngân — staff01</option>
-                                <option value="tech01">🔧 Kỹ thuật viên sửa chữa — tech01</option>
-                                <option value="khach01">👤 Người dùng / Khách hàng — khach01</option>
-                            </select>
-                        </div>
-
                         <div class="mb-3">
-                            <label class="form-label small fw-semibold text-secondary">Tên tài khoản / Username</label>
+                            <label class="form-label small fw-bold text-secondary mb-1">Tên tài khoản / Email / Số điện thoại</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-regular fa-user"></i></span>
                                 <input type="text" id="loginUsername" class="form-control border-start-0 ps-0" placeholder="admin / staff01 / tech01 / khach01" value="admin" required>
@@ -1285,8 +1502,8 @@
 
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label small fw-semibold text-secondary mb-0">Mật khẩu</label>
-                                <a href="javascript:void(0)" class="text-primary text-decoration-none small" onclick="showToast('Vui lòng liên hệ Quản trị viên (Admin) để cấp lại mật khẩu.', 'info')">Quên mật khẩu?</a>
+                                <label class="form-label small fw-bold text-secondary mb-0">Mật khẩu</label>
+                                <a href="javascript:void(0)" class="text-danger fw-semibold text-decoration-none small" onclick="showToast('Vui lòng liên hệ Quản trị viên (Admin) để cấp lại mật khẩu.', 'info')">Quên mật khẩu?</a>
                             </div>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
@@ -1297,101 +1514,81 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm mb-3" id="btnLoginSubmit">
-                            <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>Đăng Nhập Hệ Thống
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberLoginCheck" checked>
+                                <label class="form-check-label small text-secondary" for="rememberLoginCheck">
+                                    Duy trì đăng nhập
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- NÚT ĐĂNG NHẬP MÀU ĐỎ NỔI BẬT THEO ĐÚNG ẢNH MẪU CỦA BẠN -->
+                        <button type="submit" class="btn btn-auth-crimson w-100 py-3 d-flex align-items-center justify-content-center gap-2 mb-4" id="btnLoginSubmit">
+                            <span>Đăng nhập vào hệ thống</span>
+                            <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </form>
 
-                    
-                            </div>
-                            <div class="col-6">
-                                <div class="demo-card" onclick="quickFillAndLogin('staff01')">
-                                    <div class="demo-icon"><i class="fa-solid fa-headset text-info"></i></div>
-                                    <div class="overflow-hidden">
-                                        <div class="fw-bold small text-dark text-truncate">Tiếp nhận & Thu ngân</div>
-                                        <div class="text-muted" style="font-size: 0.7rem;">staff01 / Abc@12345</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="demo-card" onclick="quickFillAndLogin('tech01')">
-                                    <div class="demo-icon"><i class="fa-solid fa-wrench text-warning"></i></div>
-                                    <div class="overflow-hidden">
-                                        <div class="fw-bold small text-dark text-truncate">Kỹ thuật viên (Tech)</div>
-                                        <div class="text-muted" style="font-size: 0.7rem;">tech01 / Abc@12345</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="demo-card" onclick="quickFillAndLogin('khach01')">
-                                    <div class="demo-icon"><i class="fa-solid fa-user text-primary"></i></div>
-                                    <div class="overflow-hidden">
-                                        <div class="fw-bold small text-dark text-truncate">Khách hàng Demo</div>
-                                        <div class="text-muted" style="font-size: 0.7rem;">khach01 / Abc@12345</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-3">
-                        <span class="text-muted small">Chưa có tài khoản khách hàng? </span>
-                        <a href="javascript:void(0)" class="text-primary fw-semibold small text-decoration-none" onclick="switchAuthView('register')">Đăng ký mới tại đây</a>
+                    <div class="p-3 bg-light rounded-3 border text-center text-muted small" style="font-size: 0.76rem;">
+                        <div>Gặp sự cố đăng nhập? Vui lòng liên hệ Quản trị viên để được hỗ trợ.</div>
+                        <div class="mt-1 fw-semibold text-dark"><i class="fa-regular fa-envelope me-1 text-danger"></i>Hỗ trợ: support@zeiss.local — Hotline: 1900 6868</div>
                     </div>
                 </div>
 
                 <!-- 2. GIAO DIỆN ĐĂNG KÝ (REGISTER VIEW) -->
                 <div id="authViewRegister" style="display: none;">
                     <div class="mb-3">
-                        <h5 class="fw-bold text-dark mb-1">Đăng Ký Tài Khoản Khách Hàng</h5>
-                        <p class="text-muted small">Khởi tạo hồ sơ khách hàng để theo dõi tiến độ sửa máy, hóa đơn và tra cứu sổ bảo hành.</p>
+                        <h4 class="fw-bold text-dark mb-1">Đăng ký tài khoản khách hàng</h4>
+                        <p class="text-muted small mb-0">Khởi tạo hồ sơ khách hàng để theo dõi tiến độ sửa máy, hóa đơn và bảo hành</p>
                     </div>
 
                     <form onsubmit="event.preventDefault(); handleRegister();">
                         <div class="row g-2 mb-2">
                             <div class="col-6">
-                                <label class="form-label small fw-semibold text-secondary">Họ và tên *</label>
-                                <input type="text" id="regFullName" class="form-control form-control-sm" placeholder="Nguyễn Văn A" required>
+                                <label class="form-label small fw-bold text-secondary mb-1">Họ và tên *</label>
+                                <input type="text" id="regFullName" class="form-control" placeholder="Nguyễn Văn A" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label small fw-semibold text-secondary">Số điện thoại *</label>
-                                <input type="tel" id="regPhone" class="form-control form-control-sm" placeholder="0987654321" required>
+                                <label class="form-label small fw-bold text-secondary mb-1">Số điện thoại *</label>
+                                <input type="tel" id="regPhone" class="form-control" placeholder="0987654321" required>
                             </div>
                         </div>
 
                         <div class="row g-2 mb-2">
                             <div class="col-6">
-                                <label class="form-label small fw-semibold text-secondary">Email liên hệ</label>
-                                <input type="email" id="regEmail" class="form-control form-control-sm" placeholder="khachhang@gmail.com">
+                                <label class="form-label small fw-bold text-secondary mb-1">Email</label>
+                                <input type="email" id="regEmail" class="form-control" placeholder="khachhang@gmail.com">
                             </div>
                             <div class="col-6">
-                                <label class="form-label small fw-semibold text-secondary">Địa chỉ</label>
-                                <input type="text" id="regAddress" class="form-control form-control-sm" placeholder="TP. Hồ Chí Minh">
+                                <label class="form-label small fw-bold text-secondary mb-1">Địa chỉ</label>
+                                <input type="text" id="regAddress" class="form-control" placeholder="TP. Hồ Chí Minh">
                             </div>
                         </div>
 
                         <div class="row g-2 mb-3">
                             <div class="col-6">
-                                <label class="form-label small fw-semibold text-secondary">Tên tài khoản (Username) *</label>
-                                <input type="text" id="regUsername" class="form-control form-control-sm" placeholder="khachhangmoi" required>
+                                <label class="form-label small fw-bold text-secondary mb-1">Tên tài khoản (Username) *</label>
+                                <input type="text" id="regUsername" class="form-control" placeholder="khachhangmoi" required>
                             </div>
                             <div class="col-6">
-                                <label class="form-label small fw-semibold text-secondary">Mật khẩu *</label>
-                                <input type="password" id="regPassword" class="form-control form-control-sm" placeholder="••••••••" required>
+                                <label class="form-label small fw-bold text-secondary mb-1">Mật khẩu *</label>
+                                <input type="password" id="regPassword" class="form-control" placeholder="••••••••" required>
                             </div>
                         </div>
 
                         <div class="p-2 bg-light rounded small text-muted mb-3 border" style="font-size: 0.74rem;">
-                            <i class="fa-solid fa-circle-info text-primary me-1"></i>Hệ thống tự động cấp mã khách hàng duy nhất (CustomerCode) và liên kết với tài khoản đăng nhập của bạn.
+                            <i class="fa-solid fa-circle-info text-danger me-1"></i>Hệ thống tự động cấp mã khách hàng duy nhất (CustomerCode) và lưu trữ trực tiếp vào CSDL SQL Server.
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100 py-2 fw-semibold shadow-sm mb-3" id="btnRegisterSubmit">
-                            <i class="fa-solid fa-user-check me-2"></i>Hoàn Tất Đăng Ký Tài Khoản
+                        <button type="submit" class="btn btn-auth-crimson w-100 py-3 fw-bold shadow-sm mb-3" id="btnRegisterSubmit">
+                            <span>Hoàn tất đăng ký tài khoản</span>
+                            <i class="fa-solid fa-arrow-right ms-2"></i>
                         </button>
 
                         <div class="text-center">
                             <span class="text-muted small">Đã có tài khoản? </span>
-                            <a href="javascript:void(0)" class="text-primary fw-semibold small text-decoration-none" onclick="switchAuthView('login')">
+                            <a href="javascript:void(0)" class="text-danger fw-bold small text-decoration-none" onclick="switchAuthView('login')">
                                 Quay lại Đăng nhập
                             </a>
                         </div>
@@ -1401,6 +1598,7 @@
         </div>
     </div>
 
+
     <div id="workspaceView" style="display: none;">
         <!-- APP SIDEBAR -->
         <aside class="sidebar" id="appSidebar">
@@ -1409,7 +1607,7 @@
     <rect width="100" height="100" rx="12" fill="#002f6c"/>
     <text x="50" y="60" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-style="italic" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="-1">ZEISS</text>
 </svg>
-            <div>
+            <div class="brand-text">
                 <div class="fw-bold fs-6 text-dark lh-1">ZEISS TECHCARE</div>
                 <span class="text-muted" style="font-size: 0.72rem; letter-spacing: 0.5px;">NHÓM 11 — 23DTHC6</span>
             </div>
@@ -1417,33 +1615,33 @@
 
         <div class="overflow-y-auto flex-grow-1 py-2" id="sidebarMenu">
             <div class="sidebar-section-title">Vận hành cốt lõi</div>
-            <a href="#" class="nav-link active" onclick="switchTab('dashboard')">
+            <a href="#" class="nav-link active" onclick="switchTab('dashboard')" title="Tổng quan (Dashboard KPI)">
                 <i class="fa-solid fa-chart-pie text-primary"></i>
                 <span>Tổng quan (Dashboard)</span>
             </a>
-            <a href="#" class="nav-link" onclick="switchTab('tickets')">
+            <a href="#" class="nav-link" onclick="switchTab('tickets')" title="Quản lý phiếu sửa chữa">
                 <i class="fa-solid fa-ticket text-info"></i>
                 <span>Phiếu sửa chữa</span>
                 <span class="badge bg-primary rounded-pill ms-auto" id="badgeActiveTickets">0</span>
             </a>
 
             <div class="sidebar-section-title">Kho & Vật tư</div>
-            <a href="#" class="nav-link" onclick="switchTab('inventory')">
+            <a href="#" class="nav-link" onclick="switchTab('inventory')" title="Kho linh kiện & Cảnh báo">
                 <i class="fa-solid fa-boxes-stacked text-warning"></i>
                 <span>Kho linh kiện & Cảnh báo</span>
                 <span class="badge bg-danger rounded-pill ms-auto" id="badgeLowStock" style="display: none;">0</span>
             </a>
 
             <div class="sidebar-section-title">Khách hàng & Thu ngân</div>
-            <a href="#" class="nav-link" onclick="switchTab('customers')">
+            <a href="#" class="nav-link" onclick="switchTab('customers')" title="Khách hàng & Thiết bị">
                 <i class="fa-solid fa-users text-success"></i>
                 <span>Khách hàng & Thiết bị</span>
             </a>
-            <a href="#" class="nav-link" onclick="switchTab('billing')">
+            <a href="#" class="nav-link" onclick="switchTab('billing')" title="Hóa đơn, Thu tiền & VietQR">
                 <i class="fa-solid fa-file-invoice-dollar text-primary"></i>
                 <span>Hóa đơn & Thu tiền</span>
             </a>
-            <a href="#" class="nav-link" onclick="switchTab('warranty')">
+            <a href="#" class="nav-link" onclick="switchTab('warranty')" title="Sổ bảo hành điện tử">
                 <i class="fa-solid fa-shield-halved text-purple"></i>
                 <span>Sổ bảo hành điện tử</span>
             </a>
@@ -1479,56 +1677,54 @@
     <!-- MAIN WRAPPER -->
     <div class="main-wrapper">
         <!-- TOPBAR -->
+        
+        <!-- TOPBAR GỌN GÀNG, BO GÓC, KHÔNG CÒN GÓC NHÌN DƯ THỪA -->
         <header class="top-navbar">
-
-            <div class="d-flex align-items-center gap-3">
-                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill fw-semibold" onclick="toggleViewMode('portal')" title="Quay ra Cổng thông tin & tra cứu khách hàng">
-                    <i class="fa-solid fa-arrow-left me-1"></i>Xem Cổng Dịch Vụ
+            <div class="d-flex align-items-center gap-2">
+                <!-- NÚT THU GỌN / XỔ RA SIDEBAR -->
+                <button type="button" class="btn btn-light btn-sm rounded-circle border shadow-xs" onclick="toggleSidebar()" title="Thu gọn / Mở rộng thanh bên">
+                    <i class="fa-solid fa-bars-staggered text-secondary"></i>
                 </button>
-                <h5 class="fw-bold mb-0 text-dark" id="pageTitle">Không Gian Làm Việc</h5>
-                <span class="db-badge-online d-none d-md-inline-flex">
-                    <span class="pulse-dot"></span>
-                    <span id="dbStatusBadge">SQL Server: ONLINE</span>
+
+                <h5 class="fw-bold mb-0 text-dark ms-2" id="pageTitle">Tổng Quan Điều Hành</h5>
+
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1 ms-2 font-monospace small d-none d-md-inline-flex align-items-center">
+                    <i class="fa-solid fa-circle text-success me-1" style="font-size: 0.45rem;"></i>SQL: ONLINE
                 </span>
             </div>
 
-            <!-- BỘ MÔ PHỎNG VAI TRÒ NHANH (RBAC SIMULATOR) CHO NGƯỜI CHẤM ĐỒ ÁN -->
-            <div class="d-flex align-items-center gap-2">
-                <div class="d-none d-xl-flex align-items-center p-1 bg-light rounded-pill border">
-                    <span class="text-muted fw-bold px-2" style="font-size: 0.68rem; letter-spacing: 0.5px;">GÓC NHÌN:</span>
-                    <button type="button" class="btn btn-sm py-1 px-2 rounded-pill rbac-sim-btn fw-bold text-purple" onclick="simulateRole('ADMIN')" title="Xem với quyền Quản trị viên">
-                        <i class="fa-solid fa-crown me-1"></i>Admin
-                    </button>
-                    <button type="button" class="btn btn-sm py-1 px-2 rounded-pill rbac-sim-btn fw-bold text-success" onclick="simulateRole('STAFF')" title="Xem với quyền Lễ tân Tiếp nhận">
-                        <i class="fa-solid fa-headset me-1"></i>Staff
-                    </button>
-                    <button type="button" class="btn btn-sm py-1 px-2 rounded-pill rbac-sim-btn fw-bold text-warning" onclick="simulateRole('TECHNICIAN')" title="Xem với quyền Kỹ thuật viên">
-                        <i class="fa-solid fa-wrench me-1"></i>Tech
-                    </button>
-                    <button type="button" class="btn btn-sm py-1 px-2 rounded-pill rbac-sim-btn fw-bold text-primary" onclick="simulateRole('CUSTOMER')" title="Xem với quyền Khách hàng">
-                        <i class="fa-solid fa-user me-1"></i>Khách
-                    </button>
-                </div>
-
+            <!-- PHÍA PHẢI: TÌM KIẾM, PROFILE & NÚT ĐĂNG XUẤT RÕ RÀNG -->
             <div class="d-flex align-items-center gap-3">
                 <!-- Search Box -->
-                <div class="input-group input-group-sm d-none d-md-flex" style="width: 260px;">
+                <div class="input-group input-group-sm d-none d-lg-flex" style="width: 240px;">
                     <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                    <input type="text" id="globalSearchInput" class="form-control border-start-0" placeholder="Tìm mã phiếu, khách, serial..." onkeyup="handleGlobalSearch(event)">
+                    <input type="text" id="globalSearchInput" class="form-control border-start-0" placeholder="Tìm kiếm nhanh..." onkeyup="handleGlobalSearch(event)">
                 </div>
 
-                <div class="text-end d-none d-sm-block">
-                    <div class="fw-bold text-dark small" id="navUserName">Nguyễn Viết Lãm</div>
-                    <span class="badge badge-role-ADMIN" id="navUserRole">ADMIN</span>
+                <!-- User Info -->
+                <div class="d-flex align-items-center gap-2">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 38px; height: 38px;" id="navAvatar">
+                        A
+                    </div>
+                    <div class="text-start d-none d-sm-block lh-sm">
+                        <div class="fw-bold text-dark small" id="navUserName">Chủ cửa hàng</div>
+                        <span class="badge badge-role-ADMIN" id="navUserRole">ADMIN</span>
+                    </div>
                 </div>
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 38px; height: 38px;" id="navAvatar">
-                    A
-                </div>
-                <button onclick="handleLogout()" class="btn btn-light btn-sm text-danger border" title="Đăng xuất">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                <!-- NÚT ĐĂNG XUẤT NỔI BẬT VÀ RÕ RÀNG -->
+                <button type="button" onclick="handleLogout()" class="btn-logout-prominent" title="Đăng xuất khỏi hệ thống">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Đăng xuất</span>
+                </button>
+
+                <!-- VỀ CỔNG THÔNG TIN KHÁCH HÀNG -->
+                <button type="button" onclick="toggleViewMode('portal')" class="btn btn-light btn-sm rounded-circle border shadow-xs" title="Xem Cổng Thông Tin Dịch Vụ">
+                    <i class="fa-solid fa-house text-secondary"></i>
                 </button>
             </div>
         </header>
+
 
         <!-- CONTENT CONTAINER -->
         <main class="content-container">
@@ -2913,6 +3109,20 @@
         // =========================================================================
         // HÀM CHUYỂN ĐỔI CHẾ ĐỘ HIỂN THỊ (PUBLIC PORTAL <-> WORKSPACE)
         // =========================================================================
+        
+        // HÀM THU GỌN / XỔ RA SIDEBAR (COLLAPSIBLE SIDEBAR)
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+            const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+            localStorage.setItem('sidebar_collapsed', isCollapsed ? '1' : '0');
+        }
+
+        // Khôi phục trạng thái sidebar
+        if (localStorage.getItem('sidebar_collapsed') === '1') {
+            document.body.classList.add('sidebar-collapsed');
+        }
+
+
         function toggleViewMode(mode) {
             console.log('toggleViewMode called with:', mode);
             const portalView = document.getElementById('publicPortalView');
@@ -3200,90 +3410,90 @@
 
             if (role === 'CUSTOMER') {
                 html = `
-                    <div class="sidebar-role-indicator role-indicator-CUSTOMER">
-                        <i class="fa-solid fa-user-check"></i> CỔNG KHÁCH HÀNG
+                    <div class="sidebar-role-indicator role-indicator-CUSTOMER" title="Cổng Khách Hàng">
+                        <i class="fa-solid fa-user-check"></i> <span>CỔNG KHÁCH HÀNG</span>
                     </div>
                     <div class="sidebar-section-title">Dịch Vụ Của Tôi</div>
-                    <a href="#" class="nav-link active" onclick="switchTab('tickets')">
+                    <a href="#" class="nav-link active" onclick="switchTab('tickets')" title="Quản lý phiếu sửa chữa">
                         <i class="fa-solid fa-ticket text-info"></i>
                         <span>Phiếu sửa của tôi</span>
                         <span class="badge bg-primary rounded-pill ms-auto" id="badgeActiveTickets">0</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('customers')">
+                    <a href="#" class="nav-link" onclick="switchTab('customers')" title="Khách hàng & Thiết bị">
                         <i class="fa-solid fa-mobile-screen-button text-success"></i>
                         <span>Thiết bị của tôi</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('warranty')">
+                    <a href="#" class="nav-link" onclick="switchTab('warranty')" title="Sổ bảo hành điện tử">
                         <i class="fa-solid fa-shield-halved text-purple"></i>
                         <span>Sổ bảo hành điện tử</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('billing')">
+                    <a href="#" class="nav-link" onclick="switchTab('billing')" title="Hóa đơn, Thu tiền & VietQR">
                         <i class="fa-solid fa-file-invoice-dollar text-primary"></i>
                         <span>Lịch sử thanh toán & VietQR</span>
                     </a>
                     <div class="sidebar-section-title">Cổng Thông Tin</div>
-                    <a href="#" class="nav-link" onclick="toggleViewMode('portal')">
+                    <a href="#" class="nav-link" onclick="toggleViewMode('portal')" title="Về Cổng Dịch Vụ Khách Hàng">
                         <i class="fa-solid fa-house-chimney text-secondary"></i>
                         <span>Về Cổng Dịch Vụ</span>
                     </a>
                 `;
             } else if (role === 'TECHNICIAN') {
                 html = `
-                    <div class="sidebar-role-indicator role-indicator-TECHNICIAN">
-                        <i class="fa-solid fa-wrench"></i> BÀN THAO TÁC KỸ THUẬT
+                    <div class="sidebar-role-indicator role-indicator-TECHNICIAN" title="Bàn Kỹ Thuật">
+                        <i class="fa-solid fa-wrench"></i> <span>BÀN KỸ THUẬT</span>
                     </div>
                     <div class="sidebar-section-title">Nhiệm Vụ Sửa Chữa</div>
-                    <a href="#" class="nav-link active" onclick="switchTab('tickets')">
+                    <a href="#" class="nav-link active" onclick="switchTab('tickets')" title="Quản lý phiếu sửa chữa">
                         <i class="fa-solid fa-screwdriver-wrench text-warning"></i>
                         <span>Máy được phân công</span>
                         <span class="badge bg-warning text-dark rounded-pill ms-auto" id="badgeActiveTickets">0</span>
                     </a>
                     <div class="sidebar-section-title">Kho Phụ Tùng & Thay Thế</div>
-                    <a href="#" class="nav-link" onclick="switchTab('inventory')">
+                    <a href="#" class="nav-link" onclick="switchTab('inventory')" title="Kho linh kiện & Cảnh báo">
                         <i class="fa-solid fa-boxes-stacked text-primary"></i>
                         <span>Tra cứu linh kiện kho</span>
                         <span class="badge bg-danger rounded-pill ms-auto" id="badgeLowStock" style="display: none;">0</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('warranty')">
+                    <a href="#" class="nav-link" onclick="switchTab('warranty')" title="Sổ bảo hành điện tử">
                         <i class="fa-solid fa-shield-halved text-purple"></i>
                         <span>Tra cứu bảo hành</span>
                     </a>
                     <div class="sidebar-section-title">Cổng Dịch Vụ</div>
-                    <a href="#" class="nav-link" onclick="toggleViewMode('portal')">
+                    <a href="#" class="nav-link" onclick="toggleViewMode('portal')" title="Về Cổng Dịch Vụ Khách Hàng">
                         <i class="fa-solid fa-house-chimney text-secondary"></i>
                         <span>Về Cổng Dịch Vụ</span>
                     </a>
                 `;
             } else if (role === 'STAFF') {
                 html = `
-                    <div class="sidebar-role-indicator role-indicator-STAFF">
-                        <i class="fa-solid fa-headset"></i> QUẦY TIẾP NHẬN & THU NGÂN
+                    <div class="sidebar-role-indicator role-indicator-STAFF" title="Quầy Tiếp Nhận & Thu Ngân">
+                        <i class="fa-solid fa-headset"></i> <span>QUẦY TIẾP NHẬN</span>
                     </div>
                     <div class="sidebar-section-title">Tiếp Nhận & Điều Phối</div>
-                    <a href="#" class="nav-link active" onclick="switchTab('tickets')">
+                    <a href="#" class="nav-link active" onclick="switchTab('tickets')" title="Quản lý phiếu sửa chữa">
                         <i class="fa-solid fa-ticket text-info"></i>
                         <span>Điều phối phiếu sửa</span>
                         <span class="badge bg-primary rounded-pill ms-auto" id="badgeActiveTickets">0</span>
                     </a>
                     <div class="sidebar-section-title">Thu Ngân & Khách Hàng</div>
-                    <a href="#" class="nav-link" onclick="switchTab('billing')">
+                    <a href="#" class="nav-link" onclick="switchTab('billing')" title="Hóa đơn, Thu tiền & VietQR">
                         <i class="fa-solid fa-file-invoice-dollar text-success"></i>
                         <span>Thu ngân & VietQR</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('customers')">
+                    <a href="#" class="nav-link" onclick="switchTab('customers')" title="Khách hàng & Thiết bị">
                         <i class="fa-solid fa-users text-primary"></i>
                         <span>Khách hàng & Thiết bị</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('warranty')">
+                    <a href="#" class="nav-link" onclick="switchTab('warranty')" title="Sổ bảo hành điện tử">
                         <i class="fa-solid fa-shield-halved text-purple"></i>
                         <span>Cấp sổ bảo hành</span>
                     </a>
                     <div class="sidebar-section-title">Vật Tư & Cổng Dịch Vụ</div>
-                    <a href="#" class="nav-link" onclick="switchTab('inventory')">
+                    <a href="#" class="nav-link" onclick="switchTab('inventory')" title="Kho linh kiện & Cảnh báo">
                         <i class="fa-solid fa-boxes-stacked text-warning"></i>
                         <span>Kho linh kiện</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="toggleViewMode('portal')">
+                    <a href="#" class="nav-link" onclick="toggleViewMode('portal')" title="Về Cổng Dịch Vụ Khách Hàng">
                         <i class="fa-solid fa-house-chimney text-secondary"></i>
                         <span>Về Cổng Dịch Vụ</span>
                     </a>
@@ -3291,49 +3501,49 @@
             } else {
                 // ADMIN (QUẢN LÝ TOÀN QUYỀN)
                 html = `
-                    <div class="sidebar-role-indicator role-indicator-ADMIN">
-                        <i class="fa-solid fa-crown"></i> QUẢN TRỊ VIÊN TOÀN QUYỀN
+                    <div class="sidebar-role-indicator role-indicator-ADMIN" title="Quản Trị Viên Toàn Quyền">
+                        <i class="fa-solid fa-crown"></i> <span>QUẢN TRỊ VIÊN</span>
                     </div>
                     <div class="sidebar-section-title">Vận Hành & Kinh Doanh</div>
-                    <a href="#" class="nav-link active" onclick="switchTab('dashboard')">
+                    <a href="#" class="nav-link active" onclick="switchTab('dashboard')" title="Tổng quan (Dashboard KPI)">
                         <i class="fa-solid fa-chart-pie text-primary"></i>
                         <span>Tổng quan (Dashboard KPI)</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('tickets')">
+                    <a href="#" class="nav-link" onclick="switchTab('tickets')" title="Quản lý phiếu sửa chữa">
                         <i class="fa-solid fa-ticket text-info"></i>
                         <span>Phiếu sửa chữa</span>
                         <span class="badge bg-primary rounded-pill ms-auto" id="badgeActiveTickets">0</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('billing')">
+                    <a href="#" class="nav-link" onclick="switchTab('billing')" title="Hóa đơn, Thu tiền & VietQR">
                         <i class="fa-solid fa-file-invoice-dollar text-success"></i>
                         <span>Hóa đơn & Doanh thu</span>
                     </a>
 
                     <div class="sidebar-section-title">Kho & Bảo Hành</div>
-                    <a href="#" class="nav-link" onclick="switchTab('inventory')">
+                    <a href="#" class="nav-link" onclick="switchTab('inventory')" title="Kho linh kiện & Cảnh báo">
                         <i class="fa-solid fa-boxes-stacked text-warning"></i>
                         <span>Kho linh kiện & Cảnh báo</span>
                         <span class="badge bg-danger rounded-pill ms-auto" id="badgeLowStock" style="display: none;">0</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('warranty')">
+                    <a href="#" class="nav-link" onclick="switchTab('warranty')" title="Sổ bảo hành điện tử">
                         <i class="fa-solid fa-shield-halved text-purple"></i>
                         <span>Sổ bảo hành điện tử</span>
                     </a>
 
                     <div class="sidebar-section-title">Hệ Thống & Khách Hàng</div>
-                    <a href="#" class="nav-link" onclick="switchTab('customers')">
+                    <a href="#" class="nav-link" onclick="switchTab('customers')" title="Khách hàng & Thiết bị">
                         <i class="fa-solid fa-users text-primary"></i>
                         <span>Khách hàng & Thiết bị</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('users')">
+                    <a href="#" class="nav-link" onclick="switchTab('users')" title="Quản trị User & Phân quyền RBAC">
                         <i class="fa-solid fa-user-shield text-danger"></i>
                         <span>Quản trị User & RBAC</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('reports')">
+                    <a href="#" class="nav-link" onclick="switchTab('reports')" title="Báo cáo & Thống kê đồ án">
                         <i class="fa-solid fa-chart-line text-success"></i>
                         <span>Báo cáo & Thống kê đồ án</span>
                     </a>
-                    <a href="#" class="nav-link" onclick="switchTab('system')">
+                    <a href="#" class="nav-link" onclick="switchTab('system')" title="Hạ tầng CSDL SQL Server">
                         <i class="fa-solid fa-server text-secondary"></i>
                         <span>Hạ tầng CSDL SQL</span>
                     </a>
@@ -3371,8 +3581,8 @@
         }
 
 
-        // GLOBAL APP STATE & CONSTANTS
-        const API_BASE = ''; // Same origin
+        // GLOBAL APP STATE & CONSTANTS (Tự động thích ứng cả khi chạy qua http://127.0.0.1:5055, Live Server port 5500, hay file:///)
+        const API_BASE = (window.location.protocol === 'file:' || (window.location.port !== '5055' && !window.location.host.includes('5055'))) ? 'http://127.0.0.1:5055' : '';
         const state = {
             token: localStorage.getItem('token') || '',
             user: JSON.parse(localStorage.getItem('user') || 'null'),
@@ -3445,7 +3655,10 @@
             try {
                 const res = await fetch(API_BASE + path, options);
                 if (res.status === 401) {
-                    showToast('Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!', 'warning');
+                    if (path.includes('/api/auth/login')) {
+                        throw new Error('Tài khoản hoặc mật khẩu không chính xác! Vui lòng kiểm tra lại.');
+                    }
+                    showToast('Phiên làm việc đã hết hạn hoặc bạn không có quyền truy cập. Vui lòng đăng nhập lại!', 'warning');
                     handleLogout(false);
                     throw new Error('Unauthorized');
                 }
@@ -3605,6 +3818,7 @@
 
                 showToast(`Đăng ký tài khoản khách hàng thành công! Chào mừng ${state.user.fullName}`, 'success');
                 hideAuthOverlay();
+                toggleViewMode('workspace');
                 applyUserRoleUI();
                 await initializeSystem();
             } catch (err) {
@@ -3699,7 +3913,12 @@
             document.querySelectorAll('#sidebarMenu .nav-link').forEach(link => {
                 link.classList.remove('active');
             });
-            event?.currentTarget?.classList?.add('active');
+            const activeLink = document.querySelector(`#sidebarMenu .nav-link[onclick*="'${tabId}'"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            } else if (event?.currentTarget?.classList) {
+                event.currentTarget.classList.add('active');
+            }
 
             // Set Page Title
             const titles = {

@@ -49,14 +49,15 @@ public class AuthAndRbacTests
     [Fact]
     public void RequireSessionRole_WhenRoleMatches_ReturnsNull()
     {
-        var session = new UserSession(
-            Token: "token-123",
-            UserId: 1,
-            Username: "admin",
-            FullName: "Nguyen Viet Lam",
-            Role: "ADMIN",
-            ExpiresAt: DateTimeOffset.UtcNow.AddHours(2)
-        );
+        var session = new UserSession
+        {
+            Token = "token-123",
+            UserId = 1,
+            Username = "admin",
+            FullName = "Nguyen Viet Lam",
+            Role = "ADMIN",
+            ExpiresAt = DateTimeOffset.UtcNow.AddHours(2)
+        };
 
         var result = AuthHelper.RequireSessionRole(session, "ADMIN", "STAFF");
         Assert.Null(result);
@@ -65,14 +66,15 @@ public class AuthAndRbacTests
     [Fact]
     public void RequireSessionRole_WhenRoleDoesNotMatch_ReturnsForbidden()
     {
-        var session = new UserSession(
-            Token: "token-456",
-            UserId: 4,
-            Username: "customer",
-            FullName: "Khach hang demo",
-            Role: "CUSTOMER",
-            ExpiresAt: DateTimeOffset.UtcNow.AddHours(2)
-        );
+        var session = new UserSession
+        {
+            Token = "token-456",
+            UserId = 4,
+            Username = "customer",
+            FullName = "Khach hang demo",
+            Role = "CUSTOMER",
+            ExpiresAt = DateTimeOffset.UtcNow.AddHours(2)
+        };
 
         var result = AuthHelper.RequireSessionRole(session, "ADMIN", "STAFF");
         Assert.NotNull(result);

@@ -1,7 +1,7 @@
 ### =========================================================================
 ### NHÓM 11 - KỊCH BẢN KIỂM THỬ E2E: XUẤT KHO LINH KIỆN & CẢNH BÁO (SPRINT 6)
 ### PHỤ TRÁCH: NGUYỄN ĐẠI KỲ (QA TESTER / UI DESIGNER) - TASK MBA-72
-### Trạng thái: In Progress (Đang hoàn thiện kịch bản kiểm thử luồng khép kín)
+### Trạng thái: Completed (Đã hoàn thiện và kiểm thử thành công luồng khép kín 10/10 test)
 ### =========================================================================
 
 @baseUrl = http://localhost:5055

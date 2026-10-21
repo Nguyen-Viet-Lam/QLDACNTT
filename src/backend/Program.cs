@@ -51,40 +51,40 @@ app.MapGet("/portal", () => ServeWebIndex(app));
 app.MapGet("/", (HttpContext context) =>
 {
     var accept = context.Request.Headers.Accept.ToString();
-    if (accept.Contains("text/html") || accept.Contains("*/*"))
+    if (accept.Contains("application/json") && !accept.Contains("text/html"))
     {
-        return ServeWebIndex(app);
+        return Results.Ok(new
+        {
+            name = "QLDACNTT Backend",
+            stage = "He thong quan ly tong the cho cua hang sua chua - LV33-001",
+            authHeader = "X-Session-Token",
+            accounts = new[]
+            {
+                "admin / Abc@12345 (Quan tri vien)",
+                "staff01 / Abc@12345 (Nhan vien tiep nhan)",
+                "tech01 / Abc@12345 (Ky thuat vien)",
+                "tech02 / Abc@12345 (Ky thuat vien)",
+                "khach01 / Abc@12345 (Khach hang demo)"
+            },
+            endpointGroups = new[]
+            {
+                "/api/auth",
+                "/api/public",
+                "/api/users",
+                "/api/customers",
+                "/api/service-types",
+                "/api/spare-parts",
+                "/api/tickets",
+                "/api/dashboard/summary",
+                "/api/inventory",
+                "/api/invoices",
+                "/api/warranties",
+                "/api/reports"
+            }
+        });
     }
 
-    return Results.Ok(new
-    {
-        name = "QLDACNTT Backend",
-        stage = "He thong quan ly tong the cho cua hang sua chua - LV33-001",
-        authHeader = "X-Session-Token",
-        accounts = new[]
-        {
-            "admin / Abc@12345 (Quan tri vien)",
-            "staff01 / Abc@12345 (Nhan vien tiep nhan)",
-            "tech01 / Abc@12345 (Ky thuat vien)",
-            "tech02 / Abc@12345 (Ky thuat vien)",
-            "khach01 / Abc@12345 (Khach hang demo)"
-        },
-        endpointGroups = new[]
-        {
-            "/api/auth",
-            "/api/public",
-            "/api/users",
-            "/api/customers",
-            "/api/service-types",
-            "/api/spare-parts",
-            "/api/tickets",
-            "/api/dashboard/summary",
-            "/api/inventory",
-            "/api/invoices",
-            "/api/warranties",
-            "/api/reports"
-        }
-    });
+    return ServeWebIndex(app);
 });
 
 static IResult ServeWebIndex(WebApplication app)

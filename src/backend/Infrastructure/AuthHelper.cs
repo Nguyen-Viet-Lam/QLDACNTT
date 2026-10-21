@@ -15,10 +15,11 @@ public static class AuthHelper
         "REPAIRING",
         "COMPLETED",
         "DELIVERED",
-        "CANCELLED"
+        "CANCELLED",
+        "PAID"
     ];
 
-    public static UserSession? GetSession(HttpRequest request, AppData data)
+    public static UserSession? GetSession(HttpRequest request, SessionStore store)
     {
         var token = request.Headers["X-Session-Token"].FirstOrDefault();
         if (string.IsNullOrWhiteSpace(token))
@@ -26,23 +27,23 @@ public static class AuthHelper
             return null;
         }
 
-        if (!data.Sessions.TryGetValue(token, out var session))
+        if (!store.Sessions.TryGetValue(token, out var session))
         {
             return null;
         }
 
         if (session.ExpiresAt < DateTimeOffset.UtcNow)
         {
-            data.Sessions.TryRemove(token, out _);
+            store.Sessions.TryRemove(token, out _);
             return null;
         }
 
         return session;
     }
 
-    public static IResult? RequireRole(HttpRequest request, AppData data, params string[] allowedRoles)
+    public static IResult? RequireRole(HttpRequest request, SessionStore store, params string[] allowedRoles)
     {
-        return RequireSessionRole(GetSession(request, data), allowedRoles);
+        return RequireSessionRole(GetSession(request, store), allowedRoles);
     }
 
     public static IResult? RequireSessionRole(UserSession? session, params string[] allowedRoles)
@@ -67,29 +68,29 @@ public static class AuthHelper
         return TicketStatuses.Contains(status.ToUpperInvariant());
     }
 
-    public static object ToUserResponse(UserAccount user)
+    public static object ToUserResponse(User user)
     {
         return new
         {
             user.UserId,
             user.Username,
             user.FullName,
-            user.Role,
+            Role = user.Role?.RoleCode ?? "",
             user.IsActive
         };
     }
 
-    public static object EnrichTicket(RepairTicketDto ticket)
+    public static object EnrichTicket(RepairTicket ticket)
     {
         return new
         {
-            ticket.Code,
-            ticket.CustomerCode,
-            ticket.DeviceCode,
-            ticket.ServiceCode,
+            Code = ticket.TicketCode,
+            CustomerCode = ticket.Customer?.CustomerCode,
+            DeviceCode = ticket.Device?.DeviceCode,
+            ServiceCode = ticket.ServiceType?.ServiceCode,
             ticket.Status,
-            ticket.ReceivedByUsername,
-            ticket.TechnicianUsername,
+            ReceivedByUsername = ticket.ReceivedByUser?.Username,
+            TechnicianUsername = ticket.TechnicianUser?.Username,
             ticket.DeviceCondition,
             ticket.Diagnosis,
             ticket.QuotedLaborCost

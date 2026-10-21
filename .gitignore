@@ -76,3 +76,7 @@ GOI_NGUYEN_DAI_KY/
 
 tools/jira_config.json
 
+tools/social_config.json
+*.zip
+src/backend/sql05_*.txt
+src/backend/sql05_*.sql
