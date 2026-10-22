@@ -105,3 +105,4 @@ if (html.includes(targetDom)) {
 
 fs.writeFileSync('src/web-admin/index.html', html, 'utf8');
 console.log('Hoàn tất lưu file index.html!');
+

@@ -555,3 +555,4 @@ if (updatedHtml.includes(jsTarget)) {
 
 fs.writeFileSync('src/web-admin/index.html', updatedHtml, 'utf-8');
 console.log('✔ Đã lưu tệp src/web-admin/index.html với kích thước:', fs.statSync('src/web-admin/index.html').size, 'bytes');
+

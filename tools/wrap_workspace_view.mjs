@@ -30,3 +30,4 @@ if (html.includes(targetBeforeSidebar) && html.includes(targetAfterMainWrapper))
     console.log('Has targetBeforeSidebar:', html.includes(targetBeforeSidebar));
     console.log('Has targetAfterMainWrapper:', html.includes(targetAfterMainWrapper));
 }
+

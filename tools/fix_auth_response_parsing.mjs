@@ -72,3 +72,4 @@ if (html.includes(targetRegisterBlock)) {
 
 fs.writeFileSync('src/web-admin/index.html', html, 'utf8');
 console.log('Hoàn tất lưu index.html!');
+

@@ -54,3 +54,4 @@ if (html.includes(oldFormPane)) {
 
 fs.writeFileSync('src/web-admin/index.html', html, 'utf8');
 console.log('Hoàn tất polish portal flow!');
+
