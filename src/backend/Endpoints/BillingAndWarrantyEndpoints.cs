@@ -282,9 +282,12 @@ public static class BillingAndWarrantyEndpoints
                     DeviceCode = w.Device.DeviceCode,
                     CustomerCode = w.Customer.CustomerCode,
                     SerialNumber = w.Device.SerialNumber,
+                    DeviceModel = $"{w.Device.Brand} {w.Device.Model}",
+                    CustomerName = w.Customer.FullName,
                     w.StartDate,
                     w.EndDate,
                     w.WarrantyDays,
+                    w.Scope,
                     w.Status
                 })
                 .ToListAsync();

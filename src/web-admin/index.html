@@ -4965,7 +4965,8 @@
             }
         }
 
-        function renderWarranties(list) {
+        function renderWarranties(raw) {
+            const list = Array.isArray(raw) ? raw : (raw?.data || []);
             const tbody = document.getElementById('warrantyTableBody');
             if (!list || list.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">Không tìm thấy sổ bảo hành nào phù hợp.</td></tr>';
@@ -4976,8 +4977,8 @@
                 <tr>
                     <td><strong class="text-purple">${w.warrantyCode}</strong></td>
                     <td><span class="badge bg-light text-dark">${w.ticketCode}</span></td>
-                    <td>${w.customerName || w.customerCode}</td>
-                    <td>${w.deviceBrand || ''} ${w.deviceModel || ''} (SN: ${w.serialNumber || 'N/A'})</td>
+                    <td><strong class="text-dark">${w.customerName || w.customerCode}</strong></td>
+                    <td>${w.deviceModel || ((w.deviceBrand || '') + ' ' + (w.deviceModel || '')).trim()} <small class="text-muted d-block" style="font-size: 0.72rem;">SN: ${w.serialNumber || 'N/A'}</small></td>
                     <td>${formatDate(w.startDate)}</td>
                     <td>${formatDate(w.endDate)}</td>
                     <td><span class="badge bg-info-subtle text-info">${w.warrantyDays || 30} ngày</span></td>
