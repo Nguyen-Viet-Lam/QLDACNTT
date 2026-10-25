@@ -29,11 +29,15 @@ public static class CatalogEndpoints
 
             var customers = await query.Select(x => new
             {
+                x.CustomerId,
+                x.CustomerCode,
                 Code = x.CustomerCode,
                 x.FullName,
                 x.Phone,
                 x.Email,
-                x.Address
+                x.Address,
+                x.Note,
+                x.CreatedAt
             }).ToListAsync();
 
             return Results.Ok(customers);
@@ -170,13 +174,22 @@ public static class CatalogEndpoints
                 query = query.Where(x => x.StockQuantity <= x.MinStockLevel);
             }
 
-            var parts = await query.Select(x => new
+            var parts = await query.Include(x => x.Category).Select(x => new
             {
+                x.PartId,
+                x.PartCode,
                 Code = x.PartCode,
+                x.PartName,
                 Name = x.PartName,
+                CategoryName = x.Category != null ? x.Category.CategoryName : "Linh kiện",
+                x.CategoryId,
+                Unit = x.Unit ?? "Cái",
+                x.PurchasePrice,
+                x.SellingPrice,
                 x.StockQuantity,
                 x.MinStockLevel,
-                x.SellingPrice
+                x.WarrantyDays,
+                x.IsActive
             }).ToListAsync();
 
             return Results.Ok(parts);

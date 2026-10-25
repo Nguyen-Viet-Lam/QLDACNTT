@@ -21,13 +21,20 @@ public static class DashboardEndpoints
                 .Select(g => new { Status = g.Key, Count = g.Count() })
                 .ToListAsync();
 
+            var lowStockCount = await db.SpareParts.CountAsync(x => x.StockQuantity <= x.MinStockLevel);
+            var activeTickets = await db.RepairTickets.CountAsync(x => x.Status != "COMPLETED" && x.Status != "CANCELLED");
+            var unpaidInvoices = await db.Invoices.CountAsync(x => x.PaymentStatus == "UNPAID");
+
             return Results.Ok(new
             {
                 totalCustomers = await db.Customers.CountAsync(),
                 totalDevices = await db.Devices.CountAsync(),
                 totalTickets = await db.RepairTickets.CountAsync(),
+                activeTickets,
+                lowStockCount,
+                lowStockParts = lowStockCount,
+                unpaidInvoices,
                 ticketsByStatus = ticketsByStatus.ToDictionary(x => x.Status, x => x.Count),
-                lowStockParts = await db.SpareParts.CountAsync(x => x.StockQuantity <= x.MinStockLevel),
                 estimatedRevenue = await db.RepairTickets.SumAsync(x => x.QuotedLaborCost)
             });
         });

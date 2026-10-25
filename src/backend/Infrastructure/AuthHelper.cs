@@ -90,16 +90,32 @@ public static class AuthHelper
     {
         return new
         {
+            ticket.TicketId,
+            ticket.TicketCode,
             Code = ticket.TicketCode,
             CustomerCode = ticket.Customer?.CustomerCode,
+            CustomerId = ticket.CustomerId,
+            CustomerName = ticket.Customer?.FullName,
+            CustomerPhone = ticket.Customer?.Phone,
             DeviceCode = ticket.Device?.DeviceCode,
+            DeviceId = ticket.DeviceId,
+            DeviceBrand = ticket.Device?.Brand,
+            DeviceModel = ticket.Device?.Model,
+            DeviceType = ticket.Device?.DeviceType,
+            DeviceSerial = ticket.Device?.SerialNumber,
             ServiceCode = ticket.ServiceType?.ServiceCode,
+            ServiceName = ticket.ServiceType?.ServiceName,
             ticket.Status,
             ReceivedByUsername = ticket.ReceivedByUser?.Username,
+            ReceivedByName = ticket.ReceivedByUser?.FullName,
             TechnicianUsername = ticket.TechnicianUser?.Username,
+            TechnicianName = ticket.TechnicianUser?.FullName,
             ticket.DeviceCondition,
             ticket.Diagnosis,
-            ticket.QuotedLaborCost
+            ticket.QuotedLaborCost,
+            LaborCost = ticket.QuotedLaborCost,
+            ticket.CreatedAt,
+            ticket.UpdatedAt
         };
     }
 }
