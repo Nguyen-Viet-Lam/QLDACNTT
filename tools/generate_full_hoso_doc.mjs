@@ -129,8 +129,8 @@ async function generateCompleteHoSoDocx() {
     ['MBA-83', 'Giai đoạn 7', 'Đóng gói ứng dụng và cấu hình CI/CD GitHub Actions', 'Nguyễn Viết Lãm', 'DONE', 'ci-cd.yml & Dockerfile'],
     ['MBA-85', 'Giai đoạn 8', 'Sao lưu dự phòng CSDL (Backup) trước khi Golive', 'Trần Ngọc Lợi', 'DONE', 'SQL Backup script hàng đêm'],
     ['MBA-86', 'Giai đoạn 8', 'Tổ chức training bàn giao cho cửa hàng TechCare', 'Cả nhóm', 'DONE', 'Tài liệu HDSD 3 vai trò'],
-    ['MBA-87', 'Giai đoạn 8', 'Viết kịch bản Demo nghiệm thu đồ án chi tiết', 'Nguyễn Đại Kỳ', 'DONE', 'Kịch bản thuyết trình bảo vệ'],
-    ['MBA-94', 'Giai đoạn 8', 'Lập checklist bàn giao mã nguồn và tài liệu cho trường', 'Nguyễn Viết Lãm', 'DONE', 'Gói nộp bài MINH_CHUNG_NHOM11']
+    ['MBA-87', 'Giai đoạn 8', 'Viết kịch bản Demo nghiệm thu đồ án chi tiết', 'Nguyễn Đại Kỳ', 'DONE', 'docs/MBA-87_KICH_BAN_DEMO_NGHIEM_THU.md'],
+    ['MBA-94', 'Giai đoạn 8', 'Lập checklist bàn giao mã nguồn và tài liệu cho trường', 'Nguyễn Đại Kỳ', 'DONE', 'Checklist bàn giao mã nguồn và tài liệu cho trường']
   ];
   bXml += tableXml(jH, jR, [1100, 1400, 3100, 1700, 1100, 2400]);
 
