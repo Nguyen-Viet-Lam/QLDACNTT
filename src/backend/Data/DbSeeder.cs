@@ -42,15 +42,15 @@ public static class DbSeeder
         var techRoleId = db.Roles.First(x => x.RoleCode == "TECHNICIAN").RoleId;
         var customerRoleId = db.Roles.First(x => x.RoleCode == "CUSTOMER").RoleId;
 
-        EnsureUser(db, "admin", adminRoleId, "Nguyen Viet Lam (Admin/PM)", "admin@repairshop.local", "0900000001");
-        EnsureUser(db, "staff01", staffRoleId, "Tran Ngoc Loi (Nhan vien tiep nhan)", "staff01@repairshop.local", "0900000002");
-        EnsureUser(db, "tech01", techRoleId, "Pham Van Ky Thuat", "tech01@repairshop.local", "0900000003");
-        EnsureUser(db, "tech02", techRoleId, "Nguyen Dai Ky (Ky thuat vien)", "tech02@repairshop.local", "0900000004");
-        EnsureUser(db, "khach01", customerRoleId, "Nguyen Van An (Khach hang)", "khach01@example.com", "0901000001");
-        EnsureUser(db, "khach02", customerRoleId, "Tran Thi Binh (Khach hang)", "khach02@example.com", "0901000002");
+        EnsureUser(db, "admin", adminRoleId, "Nguyễn Viết Lãm (Admin/PM)", "admin@repairshop.local", "0900000001");
+        EnsureUser(db, "staff01", staffRoleId, "Lê Thị Tiếp Nhận", "staff01@repairshop.local", "0900000002");
+        EnsureUser(db, "tech01", techRoleId, "Phạm Văn Kỹ Thuật", "tech01@repairshop.local", "0900000003");
+        EnsureUser(db, "tech02", techRoleId, "Võ Minh Kỹ Thuật", "tech02@repairshop.local", "0900000004");
+        EnsureUser(db, "khach01", customerRoleId, "Nguyễn Văn An (Khách hàng)", "khach01@example.com", "0901000001");
+        EnsureUser(db, "khach02", customerRoleId, "Trần Thị Bình (Khách hàng)", "khach02@example.com", "0901000002");
 
-        EnsureUser(db, "loi.staff", staffRoleId, "Trần Ngọc Lợi (Lễ tân/BA)", "loi@repairshop.local", "0900000005");
-        EnsureUser(db, "ky.tech", techRoleId, "Nguyễn Đại Kỳ (Kỹ thuật/QA)", "ky@repairshop.local", "0900000006");
+        EnsureUser(db, "loi.staff", staffRoleId, "Trần Ngọc Lợi (Lễ tân / BA)", "loi@repairshop.local", "0900000005");
+        EnsureUser(db, "ky.tech", techRoleId, "Nguyễn Đại Kỳ (Kỹ thuật / QA)", "ky@repairshop.local", "0900000006");
         EnsureUser(db, "customer", customerRoleId, "Khách hàng Demo", "customer@example.com", "0901000003");
 
         // Hoàn thiện bảo mật: chuẩn hóa hash BCrypt cho toàn bộ tài khoản
@@ -67,8 +67,13 @@ public static class DbSeeder
 
     private static void EnsureUser(AppDbContext db, string username, int roleId, string fullName, string email, string phone)
     {
-        if (db.Users.Any(x => x.Username == username))
+        var existing = db.Users.FirstOrDefault(x => x.Username == username);
+        if (existing is not null)
         {
+            existing.FullName = fullName;
+            existing.RoleId = roleId;
+            if (string.IsNullOrWhiteSpace(existing.Email)) existing.Email = email;
+            if (string.IsNullOrWhiteSpace(existing.Phone)) existing.Phone = phone;
             return;
         }
 

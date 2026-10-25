@@ -76,6 +76,12 @@ public static class AuthHelper
             user.Username,
             user.FullName,
             Role = user.Role?.RoleCode ?? "",
+            RoleCode = user.Role?.RoleCode ?? "",
+            RoleName = user.Role?.RoleName ?? (user.Role?.RoleCode == "ADMIN" ? "Quản trị viên" : user.Role?.RoleCode == "STAFF" ? "Nhân viên" : user.Role?.RoleCode == "TECHNICIAN" ? "Kỹ thuật viên" : "Khách hàng"),
+            user.Email,
+            user.Phone,
+            user.LastLoginAt,
+            user.CreatedAt,
             user.IsActive
         };
     }

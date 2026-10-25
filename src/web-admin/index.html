@@ -5061,21 +5061,33 @@
                     return;
                 }
 
-                tbody.innerHTML = users.map(u => `
+                tbody.innerHTML = users.map(u => {
+                    const rCode = (u.roleCode || u.role || 'GUEST').toUpperCase();
+                    const roleBadgeNames = {
+                        'ADMIN': 'Quản trị viên',
+                        'STAFF': 'Nhân viên quầy',
+                        'TECHNICIAN': 'Kỹ thuật viên',
+                        'CUSTOMER': 'Khách hàng'
+                    };
+                    const roleLabel = u.roleName || roleBadgeNames[rCode] || rCode;
+                    const contact = [u.email, u.phone].filter(Boolean).join(' • ') || '--';
+                    const lastLogin = u.lastLoginAt ? formatDate(u.lastLoginAt) : '--';
+
+                    return `
                     <tr>
                         <td>${u.userId}</td>
                         <td><strong class="text-dark">${u.username}</strong></td>
-                        <td>${u.fullName || '--'}</td>
-                        <td><span class="badge badge-role-${u.roleCode}">${u.roleCode}</span></td>
-                        <td>${u.email || u.phone || '--'}</td>
+                        <td><span class="fw-medium text-dark">${u.fullName || '--'}</span></td>
+                        <td><span class="badge badge-role-${rCode}">${roleLabel}</span></td>
+                        <td><span class="text-muted small">${contact}</span></td>
                         <td>
                             ${u.isActive ? `
-                                <span class="badge bg-success-subtle text-success border border-success-subtle">Hoạt động</span>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-solid fa-circle-check me-1"></i>Hoạt động</span>
                             ` : `
-                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Bị khóa</span>
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="fa-solid fa-ban me-1"></i>Bị khóa</span>
                             `}
                         </td>
-                        <td>${formatDate(u.lastLoginAt)}</td>
+                        <td><span class="text-muted small">${lastLogin}</span></td>
                         <td class="text-end">
                             <div class="btn-group btn-group-sm">
                                 <button class="btn btn-outline-warning" onclick="openResetPasswordModal('${u.username}')" title="Đổi mật khẩu">
@@ -5087,7 +5099,8 @@
                             </div>
                         </td>
                     </tr>
-                `).join('');
+                `;
+                }).join('');
             } catch (err) {
                 console.error('Error loading users:', err);
             }

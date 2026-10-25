@@ -1,6 +1,7 @@
-﻿/* =====================================================================
-   Script sửa trực tiếp dữ liệu tiếng Việt bị lỗi font trong Database
-   Chỉ cần mở trong SSMS và bấm Execute (F5) là sạch đẹp ngay 100%!
+/* =====================================================================
+   Script sửa toàn bộ dữ liệu tiếng Việt bị lỗi font (Unicode UTF-8)
+   trong Database RepairShopDB.
+   Hỗ trợ sửa: Roles, Users, Customers, RepairTickets, ServiceTypes, SpareParts.
    ===================================================================== */
 
 USE RepairShopDB;
@@ -10,21 +11,38 @@ SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 GO
 
-PRINT N'Đang sửa font tiếng Việt bảng Roles...';
+PRINT N'1. Đang sửa font tiếng Việt bảng Roles...';
 UPDATE dbo.Roles SET RoleName = N'Quản trị viên', Description = N'Chủ cửa hàng / quản lý, toàn quyền hệ thống' WHERE RoleCode = 'ADMIN';
 UPDATE dbo.Roles SET RoleName = N'Nhân viên', Description = N'Tiếp nhận thiết bị, lập phiếu, thu tiền' WHERE RoleCode = 'STAFF';
 UPDATE dbo.Roles SET RoleName = N'Kỹ thuật viên', Description = N'Chẩn đoán, sửa chữa, xuất linh kiện' WHERE RoleCode = 'TECHNICIAN';
-UPDATE dbo.Roles SET RoleName = N'Khách hàng', Description = N'Tra cứu tiến độ và bảo hành qua mobile app' WHERE RoleCode = 'CUSTOMER';
+UPDATE dbo.Roles SET RoleName = N'Khách hàng', Description = N'Tra cứu tiến độ và bảo hành' WHERE RoleCode = 'CUSTOMER';
 GO
 
-PRINT N'Đang sửa font tiếng Việt bảng Users...';
-UPDATE dbo.Users SET FullName = N'Chủ cửa hàng' WHERE Username = 'admin';
-UPDATE dbo.Users SET FullName = N'Lê Thị Tiếp Nhận' WHERE Username = 'staff01';
-UPDATE dbo.Users SET FullName = N'Phạm Văn Kỹ Thuật' WHERE Username = 'tech01';
-UPDATE dbo.Users SET FullName = N'Võ Minh Kỹ Thuật' WHERE Username = 'tech02';
+PRINT N'2. Đang sửa font tiếng Việt bảng Users...';
+UPDATE dbo.Users SET FullName = N'Nguyễn Viết Lãm (Admin/PM)', Email = 'admin@repairshop.local', Phone = '0900000001' WHERE Username = 'admin';
+UPDATE dbo.Users SET FullName = N'Lê Thị Tiếp Nhận', Email = 'staff01@repairshop.local', Phone = '0900000002' WHERE Username = 'staff01';
+UPDATE dbo.Users SET FullName = N'Phạm Văn Kỹ Thuật', Email = 'tech01@repairshop.local', Phone = '0900000003' WHERE Username = 'tech01';
+UPDATE dbo.Users SET FullName = N'Võ Minh Kỹ Thuật', Email = 'tech02@repairshop.local', Phone = '0900000004' WHERE Username = 'tech02';
+UPDATE dbo.Users SET FullName = N'Trần Ngọc Lợi (Lễ tân / BA)', Email = 'loi@repairshop.local', Phone = '0900000005' WHERE Username = 'loi.staff';
+UPDATE dbo.Users SET FullName = N'Nguyễn Đại Kỳ (Kỹ thuật / QA)', Email = 'ky@repairshop.local', Phone = '0900000006' WHERE Username = 'ky.tech';
+UPDATE dbo.Users SET FullName = N'Khách hàng Demo', Email = 'customer@example.com', Phone = '0901000003' WHERE Username = 'customer';
+UPDATE dbo.Users SET FullName = N'Nguyễn Văn An (Khách hàng)', Email = 'khach01@example.com', Phone = '0901000001' WHERE Username = 'khach01';
+UPDATE dbo.Users SET FullName = N'Trần Thị Bình (Khách hàng)', Email = 'khach02@example.com', Phone = '0901000002' WHERE Username = 'khach02';
 GO
 
-PRINT N'Đang sửa font tiếng Việt bảng ServiceTypes...';
+PRINT N'3. Đang sửa font tiếng Việt bảng Customers...';
+UPDATE dbo.Customers SET FullName = N'Nguyễn Văn An', Address = N'Quận 1, TP.HCM' WHERE CustomerCode = 'KH000001';
+UPDATE dbo.Customers SET FullName = N'Trần Thị Bình', Address = N'Quận 3, TP.HCM' WHERE CustomerCode = 'KH000002';
+GO
+
+PRINT N'4. Đang sửa font tiếng Việt bảng RepairTickets...';
+UPDATE dbo.RepairTickets SET DeviceCondition = N'Bụi nhiều, keo tản nhiệt khô', Diagnosis = N'Quạt tản nhiệt bám bụi, CPU nóng 92 độ C' WHERE TicketCode = 'PSC2026090001';
+UPDATE dbo.RepairTickets SET DeviceCondition = N'Vỏ trầy xước nhẹ, màn hình hiển thị tốt', Diagnosis = N'Đang chờ chẩn đoán nguồn sạc' WHERE TicketCode = 'PSC2026090002';
+UPDATE dbo.RepairTickets SET DeviceCondition = N'Vỡ kính màn hình', Diagnosis = N'Màn hình sọc méo hình' WHERE TicketCode = 'PSC2026100003';
+UPDATE dbo.RepairTickets SET DeviceCondition = N'Máy nóng', Diagnosis = N'Bụi nhiều khô keo' WHERE TicketCode = 'PSC2026100004';
+GO
+
+PRINT N'5. Đang sửa font tiếng Việt bảng ServiceTypes...';
 UPDATE dbo.ServiceTypes SET ServiceName = N'Thay màn hình điện thoại', Description = N'Tháo lắp và thay màn hình' WHERE ServiceCode = 'DV001';
 UPDATE dbo.ServiceTypes SET ServiceName = N'Thay pin điện thoại', Description = N'Thay pin và kiểm tra sạc' WHERE ServiceCode = 'DV002';
 UPDATE dbo.ServiceTypes SET ServiceName = N'Vệ sinh máy, tra keo tản nhiệt', Description = N'Vệ sinh laptop, thay keo tản nhiệt' WHERE ServiceCode = 'DV003';
@@ -35,7 +53,7 @@ UPDATE dbo.ServiceTypes SET ServiceName = N'Sửa nguồn máy tính', Descripti
 UPDATE dbo.ServiceTypes SET ServiceName = N'Thay mực, sửa máy in', Description = N'Vệ sinh, thay mực, sửa cơ cấu nạp giấy' WHERE ServiceCode = 'DV008';
 GO
 
-PRINT N'Đang sửa font tiếng Việt bảng SparePartCategories...';
+PRINT N'6. Đang sửa font tiếng Việt bảng SparePartCategories...';
 UPDATE dbo.SparePartCategories SET CategoryName = N'Màn hình', Description = N'Màn hình điện thoại, laptop' WHERE CategoryId = 1;
 UPDATE dbo.SparePartCategories SET CategoryName = N'Pin & Sạc', Description = N'Pin, adapter, cáp sạc' WHERE CategoryId = 2;
 UPDATE dbo.SparePartCategories SET CategoryName = N'Ổ cứng & RAM', Description = N'HDD, SSD, thanh RAM' WHERE CategoryId = 3;
@@ -44,7 +62,7 @@ UPDATE dbo.SparePartCategories SET CategoryName = N'Vật tư tiêu hao', Descri
 UPDATE dbo.SparePartCategories SET CategoryName = N'Phụ kiện khác', Description = N'Bàn phím, loa, camera, quạt' WHERE CategoryId = 6;
 GO
 
-PRINT N'Đang sửa font tiếng Việt bảng SpareParts...';
+PRINT N'7. Đang sửa font tiếng Việt bảng SpareParts...';
 UPDATE dbo.SpareParts SET PartName = N'Màn hình iPhone 11 (linh kiện)', Unit = N'Cái' WHERE PartCode = 'LK00001';
 UPDATE dbo.SpareParts SET PartName = N'Màn hình Samsung A32', Unit = N'Cái' WHERE PartCode = 'LK00002';
 UPDATE dbo.SpareParts SET PartName = N'Màn hình laptop 15.6" FHD', Unit = N'Cái' WHERE PartCode = 'LK00003';
@@ -63,5 +81,5 @@ UPDATE dbo.SpareParts SET PartName = N'Quạt tản nhiệt laptop', Unit = N'C�
 UPDATE dbo.SpareParts SET PartName = N'Loa trong điện thoại', Unit = N'Cái' WHERE PartCode = 'LK00016';
 GO
 
-PRINT N'Hoàn tất sửa dữ liệu tiếng Việt!';
+PRINT N'Hoàn tất sửa toàn bộ dữ liệu tiếng Việt chuẩn Unicode 100%!';
 GO
