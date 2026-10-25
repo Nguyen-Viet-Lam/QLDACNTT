@@ -195,37 +195,39 @@ public static class BillingAndWarrantyEndpoints
             invoice.PaidAt = DateTime.Now;
 
             var ticket = invoice.Ticket;
-            var oldStatus = ticket.Status;
-            ticket.Status = "PAID";
-            ticket.UpdatedAt = DateTime.Now;
-
-            db.TicketStatusHistories.Add(new TicketStatusHistory
+            if (ticket is not null)
             {
-                TicketId = ticket.TicketId,
-                FromStatus = oldStatus,
-                ToStatus = "PAID",
-                ChangedByUserId = currentUser?.UserId ?? invoice.CreatedByUserId,
-                Note = $"Khach hang da thanh toan qua {method}. Phieu chuyen sang PAID."
-            });
+                ticket.UpdatedAt = DateTime.Now;
+                db.TicketStatusHistories.Add(new TicketStatusHistory
+                {
+                    TicketId = ticket.TicketId,
+                    FromStatus = ticket.Status,
+                    ToStatus = ticket.Status,
+                    ChangedByUserId = currentUser?.UserId ?? invoice.CreatedByUserId,
+                    Note = $"Khach hang da thanh toan hoa don {invoice.InvoiceCode} qua {method}."
+                });
+            }
 
             // =========================================================================
             // MBA-68: TỰ ĐỘNG KÍCH HOẠT SỔ BẢO HÀNH ĐIỆN TỬ THEO MÁY
             // =========================================================================
-            var device = await db.Devices.FirstOrDefaultAsync(x => x.DeviceId == ticket.DeviceId);
-            var service = await db.ServiceTypes.FirstOrDefaultAsync(x => x.ServiceTypeId == ticket.ServiceTypeId);
+            var device = await db.Devices.FirstOrDefaultAsync(x => x.DeviceId == ticket!.DeviceId);
+            var service = await db.ServiceTypes.FirstOrDefaultAsync(x => x.ServiceTypeId == ticket!.ServiceTypeId);
             var warrantyDays = service?.WarrantyDays ?? 30;
 
             var warrantyCount = await db.Warranties.CountAsync();
             var newWarranty = new Warranty
             {
                 WarrantyCode = $"BH{DateTime.Now:yyyyMM}{warrantyCount + 1:0000}",
-                TicketId = ticket.TicketId,
+                TicketId = ticket!.TicketId,
                 DeviceId = ticket.DeviceId,
                 CustomerId = ticket.CustomerId,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddDays(warrantyDays),
                 WarrantyDays = warrantyDays,
-                Status = "ACTIVE"
+                Scope = $"Bao hanh dich vu {service?.ServiceName ?? "Sua chua"}",
+                Status = "ACTIVE",
+                CreatedAt = DateTime.Now
             };
             db.Warranties.Add(newWarranty);
 
