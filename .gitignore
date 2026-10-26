@@ -1,4 +1,4 @@
-# ---------- .NET / ASP.NET Core ----------
+﻿# ---------- .NET / ASP.NET Core ----------
 bin/
 obj/
 *.user
