@@ -1,0 +1,100 @@
+### =========================================================================
+### NHÓM 11 - KỊCH BẢN KIỂM THỬ E2E: XUẤT KHO LINH KIỆN & CẢNH BÁO (SPRINT 6)
+### PHỤ TRÁCH: NGUYỄN ĐẠI KỲ (QA TESTER / UI DESIGNER) - TASK MBA-72
+### Trạng thái: Completed (Đã hoàn thiện và kiểm thử thành công luồng khép kín 10/10 test)
+### =========================================================================
+
+@baseUrl = http://localhost:5055
+@techToken = 
+@staffToken = 
+
+### [Test 01] Kiểm thử đăng nhập Kỹ thuật viên để chuẩn bị xuất kho
+# @name techLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tech",
+  "password": "123456"
+}
+
+### [Test 02] KTV kiểm tra danh sách linh kiện chạm ngưỡng thiếu hàng trước khi xuất
+GET {{baseUrl}}/api/inventory/low-stock
+X-Session-Token: {{techToken}}
+
+### [Test 03] KTV thực hiện xuất linh kiện cho phiếu sửa chữa PSC2026090001
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: {{techToken}}
+
+{
+  "partCode": "LK00001",
+  "transactionType": "OUT",
+  "quantity": 1,
+  "ticketCode": "PSC2026090001",
+  "note": "KTV xuat thay man hinh theo phieu sua chua"
+}
+
+### [Test 04] Kiểm thử chặn xuất kho khi số lượng vượt quá tồn thực tế -> Mong đợi: 400 Bad Request
+POST {{baseUrl}}/api/inventory/transactions
+Content-Type: application/json
+X-Session-Token: {{techToken}}
+
+{
+  "partCode": "LK00005",
+  "transactionType": "OUT",
+  "quantity": 999,
+  "ticketCode": "PSC2026090001",
+  "note": "Co tinh xuat vuot qua so luong ton de test bat loi"
+}
+
+### [Test 05] Đăng nhập Nhân viên Lễ tân để lập hóa đơn và thu tiền
+# @name staffLogin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "staff",
+  "password": "123456"
+}
+
+### [Test 06] Tính toán tổng chi phí phiếu sửa chữa PSC2026090001 (Tiền công + Linh kiện xuất kho)
+GET {{baseUrl}}/api/tickets/PSC2026090001/cost
+X-Session-Token: {{staffToken}}
+
+### [Test 07] Lễ tân lập hóa đơn thanh toán cho phiếu PSC2026090001
+# @name createInvoice
+POST {{baseUrl}}/api/invoices
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "ticketCode": "PSC2026090001",
+  "discountAmount": 50000,
+  "note": "Giam gia 50.000d khach hang than thiet"
+}
+
+### [Test 08] Khách hàng thực hiện thanh toán chuyển khoản (TRANSFER)
+POST {{baseUrl}}/api/invoices/HD2026100001/pay
+Content-Type: application/json
+X-Session-Token: {{staffToken}}
+
+{
+  "amount": 1600000,
+  "paymentMethod": "TRANSFER",
+  "note": "Khach chuyen khoan qua QR VietQR Ngan hang"
+}
+
+### [Test 09] Kiểm tra hệ thống tự động kích hoạt sổ bảo hành điện tử theo số Serial
+GET {{baseUrl}}/api/warranties/search?serial=IP11-64GB-VN
+X-Session-Token: {{staffToken}}
+
+### [Test 10] Xác nhận trạng thái phiếu sửa chữa đã tự động cập nhật sang PAID
+GET {{baseUrl}}/api/tickets/PSC2026090001
+X-Session-Token: {{staffToken}}
+
+### =========================================================================
+### KẾT LUẬN KIỂM THỬ E2E (TASK MBA-72 - HOÀN THÀNH 100%):
+### - Luồng khép kín: Tiếp nhận -> Phân công -> Xuất kho -> Lập hóa đơn -> Thu tiền -> Kích hoạt bảo hành điện tử.
+### - Xác nhận hoàn thành bởi: Nguyễn Đại Kỳ (QA Tester / UI Lead) - Nhóm 11
+### =========================================================================

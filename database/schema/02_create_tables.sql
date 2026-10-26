@@ -1,4 +1,4 @@
-﻿/* =====================================================================
+/* =====================================================================
    LV33-001 — Hệ thống quản lý tổng thể cho cửa hàng sửa chữa
    Script 02: Tạo bảng
    Người viết: Trần Ngọc Lợi (Database)
@@ -30,28 +30,7 @@ CREATE TABLE dbo.Roles (
 );
 GO
 
-/* ---------- 2. Người dùng hệ thống ---------- */
-IF OBJECT_ID('dbo.Users') IS NULL
-CREATE TABLE dbo.Users (
-    UserId          INT IDENTITY(1,1) PRIMARY KEY,
-    RoleId          INT           NOT NULL,
-    Username        VARCHAR(50)   NOT NULL UNIQUE,
-    PasswordHash    VARCHAR(255)  NOT NULL,
-    FullName        NVARCHAR(100) NOT NULL,
-    Email           VARCHAR(100)  NULL,
-    Phone           VARCHAR(20)   NULL,
-    IsActive        BIT           NOT NULL DEFAULT 1,
-    LastLoginAt     DATETIME2     NULL,
-    CreatedAt       DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
-    UpdatedAt       DATETIME2     NULL,
-    CONSTRAINT FK_Users_Roles FOREIGN KEY (RoleId) REFERENCES dbo.Roles(RoleId)
-);
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Users_RoleId' AND object_id=OBJECT_ID('dbo.Users'))
-    CREATE INDEX IX_Users_RoleId ON dbo.Users(RoleId);
-GO
-
-/* ---------- 3. Khách hàng ---------- */
+/* ---------- 2. Khach hang ---------- */
 IF OBJECT_ID('dbo.Customers') IS NULL
 CREATE TABLE dbo.Customers (
     CustomerId      INT IDENTITY(1,1) PRIMARY KEY,
@@ -69,6 +48,32 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Customers_Phone' AND object_id=OBJECT_ID('dbo.Customers'))
     CREATE INDEX IX_Customers_Phone ON dbo.Customers(Phone);
 GO
+
+/* ---------- 3. Nguoi dung he thong ---------- */
+IF OBJECT_ID('dbo.Users') IS NULL
+CREATE TABLE dbo.Users (
+    UserId          INT IDENTITY(1,1) PRIMARY KEY,
+    RoleId          INT           NOT NULL,
+    Username        VARCHAR(50)   NOT NULL UNIQUE,
+    PasswordHash    VARCHAR(255)  NOT NULL,
+    FullName        NVARCHAR(100) NOT NULL,
+    Email           VARCHAR(100)  NULL,
+    Phone           VARCHAR(20)   NULL,
+    IsActive        BIT           NOT NULL DEFAULT 1,
+    LastLoginAt     DATETIME2     NULL,
+    CreatedAt       DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
+    UpdatedAt       DATETIME2     NULL,
+    CustomerId      INT           NULL,
+    CONSTRAINT FK_Users_Roles     FOREIGN KEY (RoleId) REFERENCES dbo.Roles(RoleId),
+    CONSTRAINT FK_Users_Customers FOREIGN KEY (CustomerId) REFERENCES dbo.Customers(CustomerId)
+);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Users_RoleId' AND object_id=OBJECT_ID('dbo.Users'))
+    CREATE INDEX IX_Users_RoleId ON dbo.Users(RoleId);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Users_CustomerId' AND object_id=OBJECT_ID('dbo.Users'))
+    CREATE INDEX IX_Users_CustomerId ON dbo.Users(CustomerId);
+GO
+
 
 /* ---------- 4. Thiết bị của khách ---------- */
 IF OBJECT_ID('dbo.Devices') IS NULL
@@ -322,5 +327,25 @@ IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Warranties_EndDate' AND 
     CREATE INDEX IX_Warranties_EndDate ON dbo.Warranties(EndDate);
 GO
 
-PRINT 'Da tao xong 13 bang cua RepairShopDB.';
+/* ---------- 14. Bang thanh toan hoa don ---------- */
+IF OBJECT_ID('dbo.Payments') IS NULL
+CREATE TABLE dbo.Payments (
+    PaymentId           INT IDENTITY(1,1) PRIMARY KEY,
+    InvoiceId           INT            NOT NULL,
+    Amount              DECIMAL(18,2)  NOT NULL,
+    PaymentMethod       VARCHAR(20)    NOT NULL, -- CASH, TRANSFER, VNPAY, MOMO
+    ReceivedByUserId    INT            NOT NULL,
+    PaidAt              DATETIME2      NOT NULL DEFAULT SYSDATETIME(),
+    Note                NVARCHAR(500)  NULL,
+    CONSTRAINT FK_Payments_Invoices FOREIGN KEY (InvoiceId) REFERENCES dbo.Invoices(InvoiceId),
+    CONSTRAINT FK_Payments_Users    FOREIGN KEY (ReceivedByUserId) REFERENCES dbo.Users(UserId),
+    CONSTRAINT CK_Payments_Method   CHECK (PaymentMethod IN ('CASH','TRANSFER','VNPAY','MOMO')),
+    CONSTRAINT CK_Payments_Amount   CHECK (Amount > 0)
+);
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Payments_InvoiceId' AND object_id=OBJECT_ID('dbo.Payments'))
+    CREATE INDEX IX_Payments_InvoiceId ON dbo.Payments(InvoiceId);
+GO
+
+PRINT 'Da tao xong 14 bang cua RepairShopDB.';
 GO

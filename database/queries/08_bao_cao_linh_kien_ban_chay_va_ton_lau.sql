@@ -72,7 +72,7 @@ SELECT
         ), 0)                                                   AS DoanhThuThucTe,
     -- Ước tính lợi nhuận gộp (doanh thu bán - giá vốn)
     ISNULL(
-        (SELECT SUM(tp2.LineTotal) - SUM(tp2.Quantity * p.PurchasePrice)
+        (SELECT SUM(tp2.LineTotal) - (SUM(tp2.Quantity) * p.PurchasePrice)
          FROM dbo.TicketParts tp2
          JOIN dbo.RepairTickets t2 ON t2.TicketId = tp2.TicketId
          WHERE tp2.PartId = p.PartId

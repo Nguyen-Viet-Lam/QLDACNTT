@@ -1,0 +1,162 @@
+[
+  {
+    "name": "[E2E 01] Tech Login",
+    "method": "POST",
+    "endpoint": "/api/auth/login",
+    "url": "http://127.0.0.1:5055/api/auth/login",
+    "status": 401,
+    "durationMs": 16,
+    "requestHeaders": {
+      "Content-Type": "application/json"
+    },
+    "requestBody": {
+      "username": "tech",
+      "password": "123456"
+    },
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 02] KTV Check Low-Stock",
+    "method": "GET",
+    "endpoint": "/api/inventory/low-stock",
+    "url": "http://127.0.0.1:5055/api/inventory/low-stock",
+    "status": 401,
+    "durationMs": 15,
+    "requestHeaders": {
+      "X-Session-Token": ""
+    },
+    "requestBody": null,
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 03] KTV Xuat LK00001 cho PSC2026090001",
+    "method": "POST",
+    "endpoint": "/api/inventory/transactions",
+    "url": "http://127.0.0.1:5055/api/inventory/transactions",
+    "status": 401,
+    "durationMs": 15,
+    "requestHeaders": {
+      "X-Session-Token": "",
+      "Content-Type": "application/json"
+    },
+    "requestBody": {
+      "partCode": "LK00001",
+      "transactionType": "OUT",
+      "quantity": 1,
+      "ticketCode": "PSC2026090001",
+      "note": "KTV xuat thay man hinh theo phieu sua chua"
+    },
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 04] Test Chan Xuat Vuot Ton (400 Bad Request)",
+    "method": "POST",
+    "endpoint": "/api/inventory/transactions",
+    "url": "http://127.0.0.1:5055/api/inventory/transactions",
+    "status": 401,
+    "durationMs": 16,
+    "requestHeaders": {
+      "X-Session-Token": "",
+      "Content-Type": "application/json"
+    },
+    "requestBody": {
+      "partCode": "LK00005",
+      "transactionType": "OUT",
+      "quantity": 999,
+      "ticketCode": "PSC2026090001",
+      "note": "Co tinh xuat vuot qua so luong ton de test bat loi"
+    },
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 05] Staff Login",
+    "method": "POST",
+    "endpoint": "/api/auth/login",
+    "url": "http://127.0.0.1:5055/api/auth/login",
+    "status": 401,
+    "durationMs": 16,
+    "requestHeaders": {
+      "Content-Type": "application/json"
+    },
+    "requestBody": {
+      "username": "staff",
+      "password": "123456"
+    },
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 06] Tinh Tong Chi Phi Phieu",
+    "method": "GET",
+    "endpoint": "/api/tickets/PSC2026090001/cost",
+    "url": "http://127.0.0.1:5055/api/tickets/PSC2026090001/cost",
+    "status": 401,
+    "durationMs": 15,
+    "requestHeaders": {
+      "X-Session-Token": ""
+    },
+    "requestBody": null,
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 07] Lap Hoa Don Thanh Toan",
+    "method": "POST",
+    "endpoint": "/api/invoices",
+    "url": "http://127.0.0.1:5055/api/invoices",
+    "status": 401,
+    "durationMs": 2,
+    "requestHeaders": {
+      "X-Session-Token": "",
+      "Content-Type": "application/json"
+    },
+    "requestBody": {
+      "ticketCode": "PSC2026090001",
+      "discountAmount": 50000,
+      "note": "Giam gia 50.000d khach hang than thiet"
+    },
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 08] Thanh Toan Chuyen Khoan TRANSFER",
+    "method": "POST",
+    "endpoint": "/api/invoices/HD2026100001/pay",
+    "url": "http://127.0.0.1:5055/api/invoices/HD2026100001/pay",
+    "status": 401,
+    "durationMs": 13,
+    "requestHeaders": {
+      "X-Session-Token": "",
+      "Content-Type": "application/json"
+    },
+    "requestBody": {
+      "amount": 1600000,
+      "paymentMethod": "TRANSFER",
+      "note": "Khach chuyen khoan qua QR VietQR Ngan hang"
+    },
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 09] Kich Hoat So Bao Hanh Theo Serial",
+    "method": "GET",
+    "endpoint": "/api/warranties/search?serial=IP11-64GB-VN",
+    "url": "http://127.0.0.1:5055/api/warranties/search?serial=IP11-64GB-VN",
+    "status": 401,
+    "durationMs": 1,
+    "requestHeaders": {
+      "X-Session-Token": ""
+    },
+    "requestBody": null,
+    "responseBody": ""
+  },
+  {
+    "name": "[E2E 10] Xac Nhan Phieu Chuyen PAID",
+    "method": "GET",
+    "endpoint": "/api/tickets/PSC2026090001",
+    "url": "http://127.0.0.1:5055/api/tickets/PSC2026090001",
+    "status": 401,
+    "durationMs": 14,
+    "requestHeaders": {
+      "X-Session-Token": ""
+    },
+    "requestBody": null,
+    "responseBody": ""
+  }
+]
