@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ### [PenTest 02] Đăng nhập với mật khẩu rỗng / sai cấu trúc
-### Mong đợi: 401 Unauthorized
+### Mong đợi: 400 Bad Request (validation từ chối mật khẩu rỗng)
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
@@ -52,15 +52,15 @@ Content-Type: application/json
 X-Session-Token: token-customer-demo-session
 
 {
-  "partCode": "PIN-IP11",
+  "partCode": "LK00001",
   "transactionType": "OUT",
   "quantity": 1,
-  "ticketCode": "PSC2026090001"
+  "ticketCode": "PSC202610001"
 }
 
 ### [PenTest 06] Tấn công leo quyền ngang IDOR (Khách hàng xem lén phiếu sửa chữa của khách khác)
 ### Mong đợi: 403 Forbidden (Đã có chốt chặn kiểm tra quyền sở hữu IDOR L05)
-GET {{baseUrl}}/api/tickets/PSC2026090002
+GET {{baseUrl}}/api/tickets/PSC202610002
 X-Session-Token: token-khach01-session
 
 ### =========================================================================
@@ -92,7 +92,7 @@ X-Session-Token: token-staff01-session
 
 {
   "customerCode": "KH000001",
-  "deviceCode": "DEV001",
+  "deviceCode": "TB000001",
   "serviceCode": "DV001",
   "customerRequest": "Thay pin máy <svg/onload=alert('XSS')>",
   "deviceCondition": "Màn hình trầy <iframe src='javascript:alert(1)'></iframe>"
@@ -104,7 +104,7 @@ X-Session-Token: token-staff01-session
 
 ### [PenTest 09] Cố tình thanh toán hóa đơn với số tiền âm (Negative Amount Attack)
 ### Mong đợi: 400 Bad Request
-POST {{baseUrl}}/api/invoices/HD2026100001/pay
+POST {{baseUrl}}/api/invoices/HD2026100011/pay
 Content-Type: application/json
 X-Session-Token: token-staff01-session
 
@@ -121,10 +121,10 @@ Content-Type: application/json
 X-Session-Token: token-tech01-session
 
 {
-  "partCode": "PIN-IP11",
+  "partCode": "LK00001",
   "transactionType": "OUT",
   "quantity": 999999,
-  "ticketCode": "PSC2026090001",
+  "ticketCode": "PSC202610001",
   "note": "Co tinh xuat am kho"
 }
 

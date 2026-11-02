@@ -3226,10 +3226,10 @@
                             <div class="d-flex flex-wrap align-items-center justify-content-between border-bottom pb-3 mb-3 gap-2">
                                 <div>
                                     <span class="badge ${statusBadge} px-3 py-2 rounded-pill font-monospace fw-bold mb-1">${statusText}</span>
-                                    <h5 class="fw-bold text-dark mb-0 font-monospace">${t.ticketCode}</h5>
+                                    <h5 class="fw-bold text-dark mb-0 font-monospace">${esc(t.ticketCode)}</h5>
                                 </div>
                                 <div class="text-md-end">
-                                    <div class="text-muted small">Khách hàng: <strong class="text-dark">${t.customerName}</strong> (${t.phone})</div>
+                                    <div class="text-muted small">Khách hàng: <strong class="text-dark">${esc(t.customerName)}</strong> (${esc(t.phone)})</div>
                                     <div class="text-muted small">Thời gian tiếp nhận: ${formatDate(t.createdAt)}</div>
                                 </div>
                             </div>
@@ -3238,14 +3238,14 @@
                                 <div class="col-md-6">
                                     <div class="p-3 bg-light rounded-3 border">
                                         <div class="text-muted small fw-semibold">Thiết bị sửa chữa:</div>
-                                        <div class="fw-bold text-dark fs-6">${t.deviceModel} (${t.deviceType})</div>
-                                        <div class="text-muted small">Số Serial / IMEI: ${t.serialNumber || 'Đang cập nhật'}</div>
+                                        <div class="fw-bold text-dark fs-6">${esc(t.deviceModel)} (${esc(t.deviceType)})</div>
+                                        <div class="text-muted small">Số Serial / IMEI: ${esc(t.serialNumber || 'Đang cập nhật')}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="p-3 bg-light rounded-3 border">
                                         <div class="text-muted small fw-semibold">Kỹ thuật viên phụ trách:</div>
-                                        <div class="fw-bold text-dark fs-6">${t.technicianName}</div>
+                                        <div class="fw-bold text-dark fs-6">${esc(t.technicianName)}</div>
                                         <div class="text-muted small">Dự kiến hoàn thành: ${t.expectedFinishAt ? formatDate(t.expectedFinishAt) : 'Trong ngày'}</div>
                                     </div>
                                 </div>
@@ -3253,7 +3253,7 @@
 
                             <div class="p-3 bg-white rounded-3 border mb-3">
                                 <div class="fw-bold text-dark small mb-1"><i class="fa-solid fa-stethoscope text-primary me-2"></i>Hiện tượng & Chẩn đoán lỗi:</div>
-                                <div class="text-secondary small">${t.diagnosis || t.faultDescription || 'Đang được kỹ thuật viên kiểm tra đo đạc'}</div>
+                                <div class="text-secondary small">${esc(t.diagnosis || t.faultDescription || 'Đang được kỹ thuật viên kiểm tra đo đạc')}</div>
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between pt-2 border-top">
@@ -3273,7 +3273,7 @@
                 if (heroResult) heroResult.innerHTML = htmlResults;
             } catch (err) {
                 console.error(err);
-                if (container) container.innerHTML = '<div class="alert alert-danger">Lỗi tra cứu: ' + err.message + '</div>';
+                if (container) container.innerHTML = '<div class="alert alert-danger">Lỗi tra cứu: ' + esc(err.message) + '</div>';
             }
         }
 
@@ -3309,20 +3309,20 @@
                             <div class="service-pricing-card">
                                 <div>
                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold font-monospace">${s.code || 'DỊCH VỤ'}</span>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold font-monospace">${esc(s.code || 'DỊCH VỤ')}</span>
                                         <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 small">
-                                            <i class="fa-solid fa-shield-halved me-1"></i>Bảo hành ${s.warrantyDays || 90} ngày
+                                            <i class="fa-solid fa-shield-halved me-1"></i>Bảo hành ${esc(s.warrantyDays || 90)} ngày
                                         </span>
                                     </div>
-                                    <h5 class="fw-bold text-dark mb-2">${s.name}</h5>
-                                    <p class="text-muted small mb-3">${s.description || 'Dịch vụ sửa chữa tiêu chuẩn ZEISS kỹ thuật cao, lấy liền trong ngày.'}</p>
+                                    <h5 class="fw-bold text-dark mb-2">${esc(s.name)}</h5>
+                                    <p class="text-muted small mb-3">${esc(s.description || 'Dịch vụ sửa chữa tiêu chuẩn ZEISS kỹ thuật cao, lấy liền trong ngày.')}</p>
                                 </div>
                                 <div class="pt-3 border-top d-flex align-items-center justify-content-between">
                                     <div>
                                         <div class="text-muted" style="font-size: 0.72rem;">Chi phí nhân công:</div>
                                         <div class="service-price-tag">${formatVND(s.laborCost || 0)}</div>
                                     </div>
-                                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold" onclick="selectServiceForBooking('${s.name}')">
+                                    <button class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold" onclick="selectServiceForBooking('${esc(s.name)}')">
                                         Đặt lịch ngay
                                     </button>
                                 </div>
@@ -3616,6 +3616,11 @@
         }
 
         // TOAST NOTIFICATION ENGINE
+        // Escape dữ liệu người dùng/API trước khi chèn vào innerHTML (chống XSS)
+        function esc(v) {
+            return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -3664,7 +3669,7 @@
                 }
                 const data = await res.json().catch(() => null);
                 if (!res.ok) {
-                    const errMsg = data?.message || data?.error || `Lỗi HTTP ${res.status}`;
+                    const errMsg = data?.message || data?.error || `Lỗi HTTP ${esc(res.status)}`;
                     throw new Error(errMsg);
                 }
                 return data;
@@ -3769,7 +3774,7 @@
                 localStorage.setItem('token', state.token);
                 localStorage.setItem('user', JSON.stringify(state.user));
 
-                showToast(`Đăng nhập thành công! Chào mừng ${state.user.fullName} (${state.user.role})`, 'success');
+                showToast(`Đăng nhập thành công! Chào mừng ${esc(state.user.fullName)} (${esc(state.user.role)})`, 'success');
                 hideAuthOverlay();
                 toggleViewMode('workspace');
                 await initializeSystem();
@@ -3816,7 +3821,7 @@
                 localStorage.setItem('token', state.token);
                 localStorage.setItem('user', JSON.stringify(state.user));
 
-                showToast(`Đăng ký tài khoản khách hàng thành công! Chào mừng ${state.user.fullName}`, 'success');
+                showToast(`Đăng ký tài khoản khách hàng thành công! Chào mừng ${esc(state.user.fullName)}`, 'success');
                 hideAuthOverlay();
                 toggleViewMode('workspace');
                 applyUserRoleUI();
@@ -3988,10 +3993,10 @@
                         return `
                         <tr>
                             <td><strong class="text-primary">${tCode}</strong></td>
-                            <td>${cName}</td>
-                            <td>${dBrand} ${dModel}</td>
-                            <td><span class="text-muted small">${dCond}</span></td>
-                            <td>${techName ? `<span class="badge bg-light text-dark"><i class="fa-solid fa-user-gear me-1"></i>${techName}</span>` : '<span class="text-muted small">Chưa phân công</span>'}</td>
+                            <td>${esc(cName)}</td>
+                            <td>${esc(dBrand)} ${esc(dModel)}</td>
+                            <td><span class="text-muted small">${esc(dCond)}</span></td>
+                            <td>${techName ? `<span class="badge bg-light text-dark"><i class="fa-solid fa-user-gear me-1"></i>${esc(techName)}</span>` : '<span class="text-muted small">Chưa phân công</span>'}</td>
                             <td><span class="badge-status status-${tStatus}">${tStatus}</span></td>
                             <td>
                                 <button class="btn btn-outline-primary btn-sm py-0 px-2" onclick="openDiagnosisModal('${tCode}', ${laborCost})" title="Chẩn đoán">
@@ -4149,18 +4154,18 @@
                         <div class="text-muted" style="font-size: 0.72rem;">${tCreated ? formatDate(tCreated) : '--'}</div>
                     </td>
                     <td>
-                        <div class="fw-semibold text-dark">${cName}</div>
+                        <div class="fw-semibold text-dark">${esc(cName)}</div>
                         <div class="text-muted small"><i class="fa-solid fa-phone me-1"></i>${cPhone || 'Chưa có SĐT'}</div>
                     </td>
                     <td>
-                        <div class="fw-semibold text-dark">${dBrand} ${dModel}</div>
+                        <div class="fw-semibold text-dark">${esc(dBrand)} ${esc(dModel)}</div>
                         <div class="text-muted" style="font-size: 0.72rem;">SN: ${dSerial || 'Chưa có'}</div>
                     </td>
-                    <td>${sName}</td>
+                    <td>${esc(sName)}</td>
                     <td>
                         ${techName ? `
                             <span class="badge bg-light text-dark border">
-                                <i class="fa-solid fa-user-gear text-warning me-1"></i>${techName}
+                                <i class="fa-solid fa-user-gear text-warning me-1"></i>${esc(techName)}
                             </span>
                         ` : `
                             <button class="btn btn-outline-warning btn-sm py-0 px-2 sec-staff-only" onclick="openAssignTechModal('${tCode}')">
@@ -4220,17 +4225,17 @@
                 card.className = 'kanban-card';
                 card.innerHTML = `
                     <div class="d-flex justify-content-between align-items-center mb-1">
-                        <strong class="text-primary small">${t.ticketCode}</strong>
-                        <span class="badge-status status-${t.status}" style="font-size: 0.65rem;">${t.status}</span>
+                        <strong class="text-primary small">${esc(t.ticketCode)}</strong>
+                        <span class="badge-status status-${esc(t.status)}" style="font-size: 0.65rem;">${esc(t.status)}</span>
                     </div>
-                    <div class="fw-semibold text-dark small">${t.customerName || t.customerCode}</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">${t.deviceBrand || ''} ${t.deviceModel || ''}</div>
-                    <div class="text-muted text-truncate mt-1" style="font-size: 0.72rem;">${t.deviceCondition || 'Kiểm tra'}</div>
+                    <div class="fw-semibold text-dark small">${esc(t.customerName || t.customerCode)}</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">${esc(t.deviceBrand || '')} ${esc(t.deviceModel || '')}</div>
+                    <div class="text-muted text-truncate mt-1" style="font-size: 0.72rem;">${esc(t.deviceCondition || 'Kiểm tra')}</div>
                     <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
-                        <small class="text-muted">${t.technicianName ? `<i class="fa-solid fa-user-gear me-1"></i>${t.technicianName}` : 'Chưa giao'}</small>
+                        <small class="text-muted">${t.technicianName ? `<i class="fa-solid fa-user-gear me-1"></i>${esc(t.technicianName)}` : 'Chưa giao'}</small>
                         <div class="btn-group btn-group-sm">
-                            <button class="btn btn-light btn-sm p-1 text-primary" onclick="openDiagnosisModal('${t.ticketCode}', ${t.quotedLaborCost || 0})" title="Chẩn đoán"><i class="fa-solid fa-stethoscope"></i></button>
-                            <button class="btn btn-light btn-sm p-1 text-info" onclick="openUpdateStatusModal('${t.ticketCode}', '${t.status}')" title="Đổi trạng thái"><i class="fa-solid fa-arrows-rotate"></i></button>
+                            <button class="btn btn-light btn-sm p-1 text-primary" onclick="openDiagnosisModal('${esc(t.ticketCode)}', ${esc(t.quotedLaborCost || 0)})" title="Chẩn đoán"><i class="fa-solid fa-stethoscope"></i></button>
+                            <button class="btn btn-light btn-sm p-1 text-info" onclick="openUpdateStatusModal('${esc(t.ticketCode)}', '${esc(t.status)}')" title="Đổi trạng thái"><i class="fa-solid fa-arrows-rotate"></i></button>
                         </div>
                     </div>
                 `;
@@ -4256,14 +4261,14 @@
             state.services = services;
 
             const custSelect = document.getElementById('ticketCustSelect');
-            custSelect.innerHTML = custs.map(c => `<option value="${c.customerCode}">${c.fullName} (${c.phone || c.customerCode})</option>`).join('');
+            custSelect.innerHTML = custs.map(c => `<option value="${esc(c.customerCode)}">${esc(c.fullName)} (${esc(c.phone || c.customerCode)})</option>`).join('');
 
             const svcSelect = document.getElementById('ticketServiceSelect');
-            svcSelect.innerHTML = services.map(s => `<option value="${s.serviceCode}">${s.serviceName} - ${formatVND(s.laborCost)}</option>`).join('');
+            svcSelect.innerHTML = services.map(s => `<option value="${esc(s.serviceCode)}">${esc(s.serviceName)} - ${formatVND(s.laborCost)}</option>`).join('');
 
             const techSelect = document.getElementById('ticketTechSelect');
             const techs = users.filter(u => u.roleCode === 'TECHNICIAN' || u.role === 'TECHNICIAN');
-            techSelect.innerHTML = '<option value="">-- Chưa phân công --</option>' + techs.map(t => `<option value="${t.username}">${t.fullName || t.username}</option>`).join('');
+            techSelect.innerHTML = '<option value="">-- Chưa phân công --</option>' + techs.map(t => `<option value="${esc(t.username)}">${esc(t.fullName || t.username)}</option>`).join('');
 
             await onCustomerSelectChanged();
             new bootstrap.Modal(document.getElementById('modalCreateTicket')).show();
@@ -4283,7 +4288,7 @@
                 if (!devs || devs.length === 0) {
                     devSelect.innerHTML = '<option value="">Khách chưa có thiết bị (Bấm + để thêm)</option>';
                 } else {
-                    devSelect.innerHTML = devs.map(d => `<option value="${d.deviceCode}">${d.brand || ''} ${d.model || ''} (SN: ${d.serialNumber || 'N/A'})</option>`).join('');
+                    devSelect.innerHTML = devs.map(d => `<option value="${esc(d.deviceCode)}">${esc(d.brand || '')} ${esc(d.model || '')} (SN: ${esc(d.serialNumber || 'N/A')})</option>`).join('');
                 }
             } catch (err) {
                 devSelect.innerHTML = '<option value="">Lỗi tải thiết bị</option>';
@@ -4314,10 +4319,10 @@
                     }
                 });
 
-                showToast(`Lập phiếu thành công! Mã: ${newTicket.ticketCode}`, 'success');
+                showToast(`Lập phiếu thành công! Mã: ${esc(newTicket.ticketCode)}`, 'success');
 
                 if (techUsername) {
-                    await api(`/api/tickets/${newTicket.ticketCode}/assign`, {
+                    await api(`/api/tickets/${esc(newTicket.ticketCode)}/assign`, {
                         method: 'PATCH',
                         body: { technicianUsername: techUsername }
                     }).catch(() => {});
@@ -4398,7 +4403,7 @@
             const users = await api('/api/users').catch(() => []);
             const techs = users.filter(u => u.roleCode === 'TECHNICIAN' || u.role === 'TECHNICIAN');
             const select = document.getElementById('assignTechSelect');
-            select.innerHTML = techs.map(t => `<option value="${t.username}">${t.fullName || t.username}</option>`).join('');
+            select.innerHTML = techs.map(t => `<option value="${esc(t.username)}">${esc(t.fullName || t.username)}</option>`).join('');
 
             new bootstrap.Modal(document.getElementById('modalAssignTech')).show();
         }
@@ -4443,11 +4448,11 @@
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="badge-status status-${l.toStatus}">${l.toStatus}</span>
+                            <span class="badge-status status-${esc(l.toStatus)}">${esc(l.toStatus)}</span>
                             <small class="text-muted">${formatDate(l.changedAt)}</small>
                         </div>
-                        <div class="small text-dark">${l.note || 'Cập nhật trạng thái'}</div>
-                        <div class="text-muted" style="font-size: 0.72rem;">Người thao tác: <strong>${l.changedByUsername || 'Hệ thống'}</strong></div>
+                        <div class="small text-dark">${esc(l.note || 'Cập nhật trạng thái')}</div>
+                        <div class="text-muted" style="font-size: 0.72rem;">Người thao tác: <strong>${esc(l.changedByUsername || 'Hệ thống')}</strong></div>
                     </div>
                 `).join('');
             } catch (err) {
@@ -4463,7 +4468,7 @@
             document.getElementById('rcpDate').textContent = formatDate(ticket.createdAt || new Date());
             document.getElementById('rcpCustName').textContent = ticket.customerName || ticket.customerCode;
             document.getElementById('rcpCustPhone').textContent = ticket.customerPhone || 'Chưa cung cấp';
-            document.getElementById('rcpDevice').textContent = `${ticket.deviceBrand || ''} ${ticket.deviceModel || ''}`;
+            document.getElementById('rcpDevice').textContent = `${esc(ticket.deviceBrand || '')} ${esc(ticket.deviceModel || '')}`;
             document.getElementById('rcpSerial').textContent = ticket.deviceSerial || 'Chưa có Serial';
             document.getElementById('rcpCondition').textContent = ticket.deviceCondition || 'Kiểm tra máy';
             document.getElementById('rcpRequest').textContent = ticket.customerRequest || 'Sửa chữa theo quy trình';
@@ -4512,10 +4517,10 @@
                         <tr>
                             <td><strong class="text-primary">${pCode}</strong></td>
                             <td>
-                                <div class="fw-semibold text-dark">${pName}</div>
-                                <span class="text-muted" style="font-size: 0.72rem;">ĐVT: ${pUnit}</span>
+                                <div class="fw-semibold text-dark">${esc(pName)}</div>
+                                <span class="text-muted" style="font-size: 0.72rem;">ĐVT: ${esc(pUnit)}</span>
                             </td>
-                            <td><span class="badge bg-light text-dark border">${pCat}</span></td>
+                            <td><span class="badge bg-light text-dark border">${esc(pCat)}</span></td>
                             <td>${formatVND(pPurchase)}</td>
                             <td><strong class="text-dark">${formatVND(pSelling)}</strong></td>
                             <td style="min-width: 140px;">
@@ -4564,7 +4569,7 @@
             const parts = await api('/api/spare-parts').catch(() => []);
             state.spareParts = parts;
             const select = document.getElementById('stockOutPartSelect');
-            select.innerHTML = parts.map(p => `<option value="${p.partCode}">${p.partName} (${p.partCode}) - Tồn: ${p.stockQuantity} ${p.unit || 'Cái'} - ${formatVND(p.sellingPrice)}</option>`).join('');
+            select.innerHTML = parts.map(p => `<option value="${esc(p.partCode)}">${esc(p.partName)} (${esc(p.partCode)}) - Tồn: ${esc(p.stockQuantity)} ${esc(p.unit || 'Cái')} - ${formatVND(p.sellingPrice)}</option>`).join('');
 
             document.getElementById('stockOutQty').value = 1;
             document.getElementById('stockOutTicketCode').value = '';
@@ -4619,14 +4624,14 @@
                 tbody.innerHTML = txs.map(tx => `
                     <tr>
                         <td>${formatDate(tx.transactionAt)}</td>
-                        <td><strong class="text-primary">${tx.partCode}</strong></td>
+                        <td><strong class="text-primary">${esc(tx.partCode)}</strong></td>
                         <td>
-                            <span class="badge ${tx.transactionType === 'OUT' ? 'bg-warning text-dark' : 'bg-success'}">${tx.transactionType}</span>
+                            <span class="badge ${tx.transactionType === 'OUT' ? 'bg-warning text-dark' : 'bg-success'}">${esc(tx.transactionType)}</span>
                         </td>
-                        <td><strong>${tx.quantity}</strong></td>
-                        <td>${tx.stockBefore} → ${tx.stockAfter}</td>
-                        <td>${tx.ticketCode || '--'}</td>
-                        <td>${tx.performedByUsername}</td>
+                        <td><strong>${esc(tx.quantity)}</strong></td>
+                        <td>${esc(tx.stockBefore)} → ${esc(tx.stockAfter)}</td>
+                        <td>${esc(tx.ticketCode || '--')}</td>
+                        <td>${esc(tx.performedByUsername)}</td>
                     </tr>
                 `).join('');
             } catch (err) {
@@ -4657,10 +4662,10 @@
                     return `
                     <tr>
                         <td><strong class="text-primary">${cCode}</strong></td>
-                        <td><div class="fw-semibold text-dark">${cName}</div></td>
-                        <td><i class="fa-solid fa-phone text-muted me-1"></i>${cPhone}</td>
-                        <td>${cEmail}</td>
-                        <td><span class="text-muted small">${cAddr}</span></td>
+                        <td><div class="fw-semibold text-dark">${esc(cName)}</div></td>
+                        <td><i class="fa-solid fa-phone text-muted me-1"></i>${esc(cPhone)}</td>
+                        <td>${esc(cEmail)}</td>
+                        <td><span class="text-muted small">${esc(cAddr)}</span></td>
                         <td>${cCreated ? formatDate(cCreated) : '--'}</td>
                         <td class="text-end">
                             <div class="btn-group btn-group-sm">
@@ -4710,7 +4715,7 @@
                     body: { fullName, phone, email, address }
                 });
 
-                showToast(`Thêm khách hàng thành công! Mã: ${res.customerCode}`, 'success');
+                showToast(`Thêm khách hàng thành công! Mã: ${esc(res.customerCode)}`, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('modalCreateCustomer')).hide();
                 loadCustomers();
                 loadDashboard();
@@ -4745,7 +4750,7 @@
                     body: { deviceType, brand, model, serialNumber }
                 });
 
-                showToast(`Đã thêm thiết bị mới ${brand} ${model} cho khách hàng!`, 'success');
+                showToast(`Đã thêm thiết bị mới ${esc(brand)} ${esc(model)} cho khách hàng!`, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('modalCreateDevice')).hide();
 
                 if (document.getElementById('modalCreateTicket').classList.contains('show')) {
@@ -4777,10 +4782,10 @@
             } else {
                 devsBody.innerHTML = devs.map(d => `
                     <tr>
-                        <td><strong>${d.deviceCode}</strong></td>
-                        <td>${d.deviceType}</td>
-                        <td>${d.brand || ''} ${d.model || ''}</td>
-                        <td>${d.serialNumber || 'N/A'}</td>
+                        <td><strong>${esc(d.deviceCode)}</strong></td>
+                        <td>${esc(d.deviceType)}</td>
+                        <td>${esc(d.brand || '')} ${esc(d.model || '')}</td>
+                        <td>${esc(d.serialNumber || 'N/A')}</td>
                     </tr>
                 `).join('');
             }
@@ -4792,11 +4797,11 @@
             } else {
                 tBody.innerHTML = custTickets.map(t => `
                     <tr>
-                        <td><strong class="text-primary">${t.ticketCode}</strong></td>
-                        <td>${t.deviceBrand || ''} ${t.deviceModel || ''}</td>
-                        <td>${t.serviceName || t.serviceCode}</td>
+                        <td><strong class="text-primary">${esc(t.ticketCode)}</strong></td>
+                        <td>${esc(t.deviceBrand || '')} ${esc(t.deviceModel || '')}</td>
+                        <td>${esc(t.serviceName || t.serviceCode)}</td>
                         <td>${formatDate(t.createdAt)}</td>
-                        <td><span class="badge-status status-${t.status}">${t.status}</span></td>
+                        <td><span class="badge-status status-${esc(t.status)}">${esc(t.status)}</span></td>
                     </tr>
                 `).join('');
             }
@@ -4816,23 +4821,23 @@
 
                 tbody.innerHTML = invoices.map(inv => `
                     <tr>
-                        <td><strong class="text-primary">${inv.invoiceCode}</strong></td>
-                        <td><span class="badge bg-light text-dark">${inv.ticketCode}</span></td>
-                        <td>${inv.customerName || inv.customerCode}</td>
+                        <td><strong class="text-primary">${esc(inv.invoiceCode)}</strong></td>
+                        <td><span class="badge bg-light text-dark">${esc(inv.ticketCode)}</span></td>
+                        <td>${esc(inv.customerName || inv.customerCode)}</td>
                         <td>${formatVND(inv.laborCost)}</td>
                         <td>${formatVND(inv.partsCost)}</td>
                         <td class="text-danger">-${formatVND(inv.discountAmount)}</td>
                         <td><strong class="text-success fs-6">${formatVND(inv.totalAmount)}</strong></td>
-                        <td><span class="badge bg-light text-dark">${inv.paymentMethod || 'CASH'}</span></td>
-                        <td><span class="badge-status status-${inv.paymentStatus}">${inv.paymentStatus}</span></td>
+                        <td><span class="badge bg-light text-dark">${esc(inv.paymentMethod || 'CASH')}</span></td>
+                        <td><span class="badge-status status-${esc(inv.paymentStatus)}">${esc(inv.paymentStatus)}</span></td>
                         <td class="text-end">
                             <div class="btn-group btn-group-sm">
                                 ${inv.paymentStatus === 'UNPAID' ? `
-                                    <button class="btn btn-success fw-semibold sec-staff-only" onclick="openPaymentModal('${inv.invoiceCode}', ${inv.totalAmount})" title="Thu tiền">
+                                    <button class="btn btn-success fw-semibold sec-staff-only" onclick="openPaymentModal('${esc(inv.invoiceCode)}', ${esc(inv.totalAmount)})" title="Thu tiền">
                                         <i class="fa-solid fa-cash-register me-1"></i>Thu tiền
                                     </button>
                                 ` : ''}
-                                <button class="btn btn-outline-primary" onclick="openPrintInvoiceModal('${inv.invoiceCode}')" title="In hóa đơn">
+                                <button class="btn btn-outline-primary" onclick="openPrintInvoiceModal('${esc(inv.invoiceCode)}')" title="In hóa đơn">
                                     <i class="fa-solid fa-print"></i>
                                 </button>
                             </div>
@@ -4869,7 +4874,7 @@
                     body: { ticketCode, discountAmount: discount }
                 });
 
-                showToast(`Lập hóa đơn thành công! Mã: ${res.invoice?.invoiceCode || res.invoiceCode}`, 'success');
+                showToast(`Lập hóa đơn thành công! Mã: ${esc(res.invoice?.invoiceCode || res.invoiceCode)}`, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('modalCreateInvoice')).hide();
                 switchTab('billing');
             } catch (err) {
@@ -4920,7 +4925,7 @@
                     body: {
                         paymentMethod: state.currentPayMethod,
                         amount: amount,
-                        note: note || `Thanh toán qua ${state.currentPayMethod}`
+                        note: note || `Thanh toán qua ${esc(state.currentPayMethod)}`
                     }
                 });
 
@@ -4942,14 +4947,14 @@
             document.getElementById('prnCustName').textContent = inv.customerName || inv.customerCode;
             document.getElementById('prnCustPhone').textContent = inv.customerPhone || '0987.654.321';
             document.getElementById('prnTicketCode').textContent = inv.ticketCode;
-            document.getElementById('prnDevice').textContent = `${inv.deviceBrand || ''} ${inv.deviceModel || ''}`;
+            document.getElementById('prnDevice').textContent = `${esc(inv.deviceBrand || '')} ${esc(inv.deviceModel || '')}`;
             document.getElementById('prnLaborUnit').textContent = formatVND(inv.laborCost);
             document.getElementById('prnLaborTotal').textContent = formatVND(inv.laborCost);
             document.getElementById('prnDiscount').textContent = formatVND(inv.discountAmount);
             document.getElementById('prnGrandTotal').textContent = formatVND(inv.totalAmount);
             document.getElementById('prnSignCust').textContent = inv.customerName || inv.customerCode;
 
-            const cost = await api(`/api/tickets/${inv.ticketCode}/cost`).catch(() => null);
+            const cost = await api(`/api/tickets/${esc(inv.ticketCode)}/cost`).catch(() => null);
             const tbody = document.getElementById('prnCostDetailsBody');
             tbody.innerHTML = `
                 <tr>
@@ -4966,8 +4971,8 @@
                     tbody.innerHTML += `
                         <tr>
                             <td>${idx + 2}</td>
-                            <td>${p.partName} (${p.partCode})</td>
-                            <td class="text-center">${p.quantity}</td>
+                            <td>${esc(p.partName)} (${esc(p.partCode)})</td>
+                            <td class="text-center">${esc(p.quantity)}</td>
                             <td class="text-end">${formatVND(p.unitPrice)}</td>
                             <td class="text-end">${formatVND(p.subtotal)}</td>
                         </tr>
@@ -5017,14 +5022,14 @@
 
             tbody.innerHTML = list.map(w => `
                 <tr>
-                    <td><strong class="text-purple">${w.warrantyCode}</strong></td>
-                    <td><span class="badge bg-light text-dark">${w.ticketCode}</span></td>
-                    <td><strong class="text-dark">${w.customerName || w.customerCode}</strong></td>
-                    <td>${w.deviceModel || ((w.deviceBrand || '') + ' ' + (w.deviceModel || '')).trim()} <small class="text-muted d-block" style="font-size: 0.72rem;">SN: ${w.serialNumber || 'N/A'}</small></td>
+                    <td><strong class="text-purple">${esc(w.warrantyCode)}</strong></td>
+                    <td><span class="badge bg-light text-dark">${esc(w.ticketCode)}</span></td>
+                    <td><strong class="text-dark">${esc(w.customerName || w.customerCode)}</strong></td>
+                    <td>${esc(w.deviceModel || ((w.deviceBrand || '') + ' ' + (w.deviceModel || '')).trim())} <small class="text-muted d-block" style="font-size: 0.72rem;">SN: ${esc(w.serialNumber || 'N/A')}</small></td>
                     <td>${formatDate(w.startDate)}</td>
                     <td>${formatDate(w.endDate)}</td>
-                    <td><span class="badge bg-info-subtle text-info">${w.warrantyDays || 30} ngày</span></td>
-                    <td><span class="badge bg-success-subtle text-success border border-success-subtle fw-bold">${w.status || 'ACTIVE'}</span></td>
+                    <td><span class="badge bg-info-subtle text-info">${esc(w.warrantyDays || 30)} ngày</span></td>
+                    <td><span class="badge bg-success-subtle text-success border border-success-subtle fw-bold">${esc(w.status || 'ACTIVE')}</span></td>
                 </tr>
             `).join('');
         }
@@ -5043,7 +5048,7 @@
                     const revenue = d.totalLaborRevenue ?? d.DoanhThuTienCong ?? 0;
                     return `
                     <tr>
-                        <td><strong>${techName}</strong></td>
+                        <td><strong>${esc(techName)}</strong></td>
                         <td>${count} phiếu</td>
                         <td class="text-end fw-bold text-success">${formatVND(revenue)}</td>
                     </tr>
@@ -5063,7 +5068,7 @@
                     const revenue = d.totalRevenue ?? d.TongDoanhThuDichVu ?? 0;
                     return `
                     <tr>
-                        <td><strong>${sName}</strong></td>
+                        <td><strong>${esc(sName)}</strong></td>
                         <td>${count} lượt</td>
                         <td class="text-end fw-bold text-primary">${formatVND(revenue)}</td>
                     </tr>
@@ -5085,8 +5090,8 @@
                     const amount = d.totalSalesAmount ?? d.DoanhThuThucTe ?? 0;
                     return `
                     <tr>
-                        <td><strong>${pName}</strong> ${pCode ? `(${pCode})` : ''}</td>
-                        <td>${sold} ${unit}</td>
+                        <td><strong>${esc(pName)}</strong> ${pCode ? `(${pCode})` : ''}</td>
+                        <td>${sold} ${esc(unit)}</td>
                         <td class="text-end fw-bold text-danger">${formatVND(amount)}</td>
                     </tr>
                 `;
@@ -5107,8 +5112,8 @@
                     const locked = d.lockedCapital ?? d.GiaTriTonKho ?? 0;
                     return `
                     <tr>
-                        <td><strong>${pName}</strong> ${pCode ? `(${pCode})` : ''}</td>
-                        <td>${stock} ${unit}</td>
+                        <td><strong>${esc(pName)}</strong> ${pCode ? `(${pCode})` : ''}</td>
+                        <td>${stock} ${esc(unit)}</td>
                         <td class="text-end fw-bold text-warning">${formatVND(locked)}</td>
                     </tr>
                 `;
@@ -5142,11 +5147,11 @@
 
                     return `
                     <tr>
-                        <td>${u.userId}</td>
-                        <td><strong class="text-dark">${u.username}</strong></td>
-                        <td><span class="fw-medium text-dark">${u.fullName || '--'}</span></td>
-                        <td><span class="badge badge-role-${rCode}">${roleLabel}</span></td>
-                        <td><span class="text-muted small">${contact}</span></td>
+                        <td>${esc(u.userId)}</td>
+                        <td><strong class="text-dark">${esc(u.username)}</strong></td>
+                        <td><span class="fw-medium text-dark">${esc(u.fullName || '--')}</span></td>
+                        <td><span class="badge badge-role-${rCode}">${esc(roleLabel)}</span></td>
+                        <td><span class="text-muted small">${esc(contact)}</span></td>
                         <td>
                             ${u.isActive ? `
                                 <span class="badge bg-success-subtle text-success border border-success-subtle"><i class="fa-solid fa-circle-check me-1"></i>Hoạt động</span>
@@ -5154,13 +5159,13 @@
                                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle"><i class="fa-solid fa-ban me-1"></i>Bị khóa</span>
                             `}
                         </td>
-                        <td><span class="text-muted small">${lastLogin}</span></td>
+                        <td><span class="text-muted small">${esc(lastLogin)}</span></td>
                         <td class="text-end">
                             <div class="btn-group btn-group-sm">
-                                <button class="btn btn-outline-warning" onclick="openResetPasswordModal('${u.username}')" title="Đổi mật khẩu">
+                                <button class="btn btn-outline-warning" onclick="openResetPasswordModal('${esc(u.username)}')" title="Đổi mật khẩu">
                                     <i class="fa-solid fa-key"></i>
                                 </button>
-                                <button class="btn ${u.isActive ? 'btn-outline-danger' : 'btn-outline-success'}" onclick="handleToggleUserStatus('${u.username}', ${!u.isActive})" title="${u.isActive ? 'Khóa tài khoản' : 'Kích hoạt'}">
+                                <button class="btn ${u.isActive ? 'btn-outline-danger' : 'btn-outline-success'}" onclick="handleToggleUserStatus('${esc(u.username)}', ${!u.isActive})" title="${u.isActive ? 'Khóa tài khoản' : 'Kích hoạt'}">
                                     <i class="fa-solid ${u.isActive ? 'fa-user-slash' : 'fa-user-check'}"></i>
                                 </button>
                             </div>
@@ -5201,7 +5206,7 @@
                     body: { username, password, fullName, role, email, phone }
                 });
 
-                showToast(`Tạo tài khoản ${username} (${role}) thành công!`, 'success');
+                showToast(`Tạo tài khoản ${esc(username)} (${role}) thành công!`, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('modalAddUser')).hide();
                 loadUsers();
             } catch (err) {
@@ -5226,12 +5231,12 @@
             }
 
             try {
-                await api(`/api/users/${username}/password`, {
+                await api(`/api/users/${esc(username)}/password`, {
                     method: 'PATCH',
                     body: { newPassword }
                 });
 
-                showToast(`Đặt lại mật khẩu cho tài khoản ${username} thành công!`, 'success');
+                showToast(`Đặt lại mật khẩu cho tài khoản ${esc(username)} thành công!`, 'success');
                 bootstrap.Modal.getInstance(document.getElementById('modalResetPassword')).hide();
             } catch (err) {
                 console.error(err);
@@ -5240,12 +5245,12 @@
 
         async function handleToggleUserStatus(username, newStatus) {
             try {
-                await api(`/api/users/${username}/status`, {
+                await api(`/api/users/${esc(username)}/status`, {
                     method: 'PATCH',
                     body: { isActive: newStatus }
                 });
 
-                showToast(`Đã ${newStatus ? 'kích hoạt' : 'khóa'} tài khoản ${username}!`, 'success');
+                showToast(`Đã ${newStatus ? 'kích hoạt' : 'khóa'} tài khoản ${esc(username)}!`, 'success');
                 loadUsers();
             } catch (err) {
                 console.error(err);
@@ -5256,7 +5261,7 @@
         async function checkDbHealth() {
             try {
                 const res = await api('/api/db/status');
-                document.getElementById('sysDbStatus').innerHTML = `<span class="badge bg-success">${res.status || 'CONNECTED'}</span>`;
+                document.getElementById('sysDbStatus').innerHTML = `<span class="badge bg-success">${esc(res.status || 'CONNECTED')}</span>`;
                 document.getElementById('sysDbName').textContent = res.database || 'RepairShopDB';
                 document.getElementById('sysDbServer').textContent = res.server || '. (MSSQLSERVER)';
                 document.getElementById('sysDbCheckedAt').textContent = formatDate(res.checkedAt || new Date());
@@ -5265,7 +5270,7 @@
                 document.getElementById('sysCountTickets').textContent = res.ticketsInDb ?? '--';
                 document.getElementById('sysCountParts').textContent = res.sparePartsInDb ?? '--';
 
-                document.getElementById('dbStatusBadge').textContent = `SQL Server: ${res.status} (${res.database})`;
+                document.getElementById('dbStatusBadge').textContent = `SQL Server: ${esc(res.status)} (${esc(res.database)})`;
             } catch (err) {
                 document.getElementById('sysDbStatus').innerHTML = '<span class="badge bg-danger">ERROR</span>';
                 document.getElementById('dbStatusBadge').textContent = 'SQL Server: DISCONNECTED';

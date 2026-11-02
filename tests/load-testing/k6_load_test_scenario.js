@@ -45,7 +45,7 @@ export default function () {
     // ==========================================
     group('01_Auth_Login', function () {
         const payload = JSON.stringify({
-            username: 'staff',
+            username: 'admin', // dashboard/summary chỉ cho ADMIN
             password: '123456',
         });
         const params = {
@@ -98,7 +98,7 @@ export default function () {
     // 3. Kiểm thử Tải API Tính chi phí phiếu (Cost Calculation)
     // ==========================================
     group('03_Ticket_Cost_Calculation', function () {
-        const res = http.get(`${BASE_URL}/api/tickets/PSC2026090001/cost`, authHeaders);
+        const res = http.get(`${BASE_URL}/api/tickets/PSC202610001/cost`, authHeaders);
         costCalcDuration.add(res.timings.duration);
 
         const isSuccess = check(res, {
@@ -115,7 +115,7 @@ export default function () {
     // 4. Kiểm thử Tải Tra cứu bảo hành điện tử (Warranty Search)
     // ==========================================
     group('04_Warranty_Search', function () {
-        const res = http.get(`${BASE_URL}/api/warranties/search?serial=IP11-64GB-VN`, authHeaders);
+        const res = http.get(`${BASE_URL}/api/warranties/search?serial=DLXPS-9520-VN01`, authHeaders);
         warrantySearchDuration.add(res.timings.duration);
 
         const isSuccess = check(res, {
