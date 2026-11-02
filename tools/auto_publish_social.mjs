@@ -35,9 +35,8 @@ if (fs.existsSync(configPath)) {
   }
 }
 
-// Không lưu access token trong repo hoặc bộ minh chứng.
-// Nếu vẫn dùng Facebook Graph API, truyền token qua biến môi trường.
-config.facebook.access_token = process.env.FACEBOOK_PAGE_ACCESS_TOKEN || '';
+// Ưu tiên đọc access token từ biến môi trường, nếu không có thì đọc từ social_config.json
+config.facebook.access_token = process.env.FACEBOOK_PAGE_ACCESS_TOKEN || config.facebook.access_token || '';
 
 function getFormattedTimestamp() {
   const d = new Date();
@@ -51,22 +50,34 @@ function getFormattedTimestamp() {
   return `${day}/${month}/${year} ${hours}:${mins}:${secs}`;
 }
 
-async function postToFacebook(post) {
+async function postToFacebook(post, dryRun = false) {
+  if (dryRun) {
+    console.log(`[DRY-RUN] Không gửi lên Facebook. Nội dung sẽ đăng:
+${post.content}`);
+    return { success: false, simulated: true, error: 'dry-run' };
+  }
+  // Loại bỏ hashtag nếu có sót lại trong nội dung
+  let cleanContent = post.content || '';
+  if (config.facebook?.use_hashtag === false) {
+    cleanContent = cleanContent.replace(/#[a-zA-Z0-9_]+/g, '').trim();
+  }
+
   if (config.facebook && config.facebook.enabled && config.facebook.page_id && config.facebook.access_token && !config.facebook.access_token.includes('YOUR_')) {
     try {
-      console.log(`[FB LIVE] Đang gửi bài viết lên Facebook Fanpage ID: ${config.facebook.page_id}...`);
+      console.log(`[FB CÁ NHÂN - CHẾ ĐỘ CHỈ MÌNH TÔI (SELF)] Đang gửi bài viết lên Facebook...`);
       const url = `https://graph.facebook.com/v19.0/${config.facebook.page_id}/feed`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: post.content,
-          access_token: config.facebook.access_token
+          message: cleanContent,
+          access_token: config.facebook.access_token,
+          privacy: JSON.stringify({ value: 'SELF' }) // Chế độ Chỉ mình tôi
         })
       });
       const data = await res.json();
       if (res.ok && data.id) {
-        console.log(`[FB THÀNH CÔNG] Post ID: ${data.id}`);
+        console.log(`[FB THÀNH CÔNG] Post ID: ${data.id} (Chế độ: Chỉ mình tôi)`);
         return { success: true, id: data.id };
       } else {
         console.error(`[FB LỖI] ${JSON.stringify(data)}`);
@@ -77,10 +88,11 @@ async function postToFacebook(post) {
       return { success: false, error: err.message };
     }
   } else {
-    console.log(`[FB GIẢ LẬP / KIỂM THỬ] Chưa bật Live API (hoặc chưa nhập Token). Giả lập gửi thành công lên Fanpage riêng tư.`);
-    console.log(`--- [NỘI DUNG FACEBOOK PREVIEW] ---`);
-    console.log(post.content.slice(0, 160) + '...\n----------------------------------');
-    return { success: false, simulated: true, error: 'Facebook Live API chưa được cấu hình.' };
+    console.log(`[FB CÁ NHÂN - CHẾ ĐỘ CHỈ MÌNH TÔI (SELF)] Chạy thử nghiệm / Giả lập (Không hashtag, hiển thị riêng tư cá nhân).`);
+    console.log(`--- [NỘI DUNG BÀI ĐĂNG FACEBOOK CÁ NHÂN] ---`);
+    console.log(cleanContent);
+    console.log(`--------------------------------------------`);
+    return { success: false, simulated: true, error: 'Facebook Live API chưa được cấu hình token.' };
   }
 }
 
@@ -92,7 +104,7 @@ async function postToZalo(post) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          text: `📢 [COWORK AUTO-POST] ${post.title}\n\n${post.summary}\n\nTài liệu: ${post.link}\nTác giả: ${config.author.name} (${config.author.email})`
+          text: `📢 [TECHCARE AUTO-POST] ${post.title}\n\n${post.summary}\n\nTài liệu: ${post.link}\nTác giả: ${config.author.name} (${config.author.email})`
         })
       });
       console.log(`[ZALO THÀNH CÔNG] HTTP Status: ${res.status}`);
@@ -102,7 +114,7 @@ async function postToZalo(post) {
       return { success: false, error: err.message };
     }
   } else {
-    console.log(`[ZALO GIẢ LẬP / KIỂM THỬ] Đã giả lập gửi tin nhắn webhook vào nhóm Zalo riêng tư.`);
+    // Không chạy Zalo khi đã tắt
     return { success: true, simulated: true };
   }
 }
@@ -121,12 +133,17 @@ async function runAutoPublish() {
     : null;
 
   console.log(`================================================================`);
-  console.log(`   HỆ THỐNG TỰ ĐỘNG HÓA ĐĂNG BÀI FACEBOOK & ZALO RIÊNG TƯ       `);
+  console.log(`   HỆ THỐNG TỰ ĐỘNG HÓA TRUYỀN THÔNG ĐỒ ÁN TECHCARE (LV33-001)   `);
+  console.log(`   Kênh xuất bản: FACEBOOK CÁ NHÂN (CHẾ ĐỘ RIÊNG TƯ - CHỈ MÌNH TÔI)`);
   console.log(`   Tác giả: ${config.author.name} | Email: ${config.author.email}`);
-  console.log(`   Tài khoản Jira tích hợp: ${config.author.jira_email}          `);
+  console.log(`   Chính sách: KHÔNG DÙNG HASHTAG • NỘI DUNG NHẬT KÝ ĐỒ ÁN CHÂN THẬT`);
   console.log(`================================================================\n`);
 
-  const excelPath = config.excel.filePath;
+  let excelPath = config.excel.filePath;
+  const altPath = config.excel.altFilePath || excelPath.replace('.xlsx', '_MoiNhat.xlsx');
+  if (fs.existsSync(altPath)) {
+    excelPath = altPath;
+  }
   if (!fs.existsSync(excelPath)) {
     console.error(`[LỖI] Không tìm thấy file Excel tại: ${excelPath}`);
     process.exit(1);
@@ -245,7 +262,7 @@ async function runAutoPublish() {
     console.log(`   Tác giả: ${post.author || config.author.name}`);
 
     // Step 1: Send to Facebook
-    const facebookResult = await postToFacebook(post);
+    const facebookResult = await postToFacebook(post, isDryRun);
 
     // Step 2: Send to Zalo
     await postToZalo(post);

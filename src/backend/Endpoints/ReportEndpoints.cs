@@ -7,8 +7,7 @@ namespace QLDACNTT.Api.Endpoints;
 
 /// <summary>
 /// API báo cáo thống kê, đọc trực tiếp từ các VIEW đã có trong database
-/// (database/queries/05_bao_cao_doanh_thu_theo_tho_va_dich_vu.sql,
-///  database/queries/08_bao_cao_linh_kien_ban_chay_va_ton_lau.sql).
+/// (database/QLDACNTT_full_database.sql)
 /// </summary>
 public static class ReportEndpoints
 {

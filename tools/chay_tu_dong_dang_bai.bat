@@ -1,10 +1,11 @@
 @echo off
 chcp 65001 >nul
-title Hệ thống Tự Động Hóa Đăng Bài Facebook & Zalo - Cowork Claude
+title Tự Động Hóa Truyền Thông Đồ Án TechCare (LV33-001) - Facebook Cá Nhân
 echo ================================================================
-echo    HỆ THỐNG TỰ ĐỘNG HÓA ĐĂNG BÀI FACEBOOK & ZALO - COWORK
+echo    HỆ THỐNG TRUYỀN THÔNG ĐỒ ÁN TECHCARE (LV33-001)
+echo    Kênh: Facebook Cá Nhân (Chế độ riêng tư: Chỉ mình tôi)
+echo    Chính sách: KHÔNG DÙNG HASHTAG • LƯU VẾT TIẾN ĐỘ THỰC TẾ
 echo    Tác giả: Nguyễn Viết Lãm (lamnguyenadc@gmail.com)
-echo    Jira: lamnguyenadc1@gmail.com
 echo ================================================================
 echo.
 echo 1. Xem danh sách & trạng thái bài đăng (--status)

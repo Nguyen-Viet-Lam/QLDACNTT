@@ -31,7 +31,7 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "staff",
+  "username": "staff01",
   "password": "123456"
 }
 
@@ -40,7 +40,7 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "tech",
+  "username": "tech01",
   "password": "123456"
 }
 
@@ -49,7 +49,7 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "customer",
+  "username": "khach01",
   "password": "123456"
 }
 
@@ -154,12 +154,12 @@ X-Session-Token: {{staffToken}}
 }
 
 ### [Request 21] Staff: Phân công kỹ thuật viên cho phiếu sửa chữa -> Mong đợi: 200 OK
-PATCH {{baseUrl}}/api/tickets/PSC2026090001/assign
+PATCH {{baseUrl}}/api/tickets/PSC202610006/assign
 Content-Type: application/json
 X-Session-Token: {{staffToken}}
 
 {
-  "technicianUsername": "tech"
+  "technicianUsername": "tech01"
 }
 
 ### [Request 22] Admin: Xem tổng hợp bảng điều khiển Dashboard -> Mong đợi: 200 OK
@@ -172,16 +172,16 @@ X-Session-Token: {{adminToken}}
 ### Vá lỗi P0: "Người dùng xem được đơn hàng của người khác" trong bài Pareto
 ### -------------------------------------------------------------------------
 
-### [Request 23] Khách hàng xem danh sách phiếu hợp lệ của chính mình -> Mong đợi: 200 OK (Chỉ trả về phiếu KH000001)
+### [Request 23] Khách hàng xem danh sách phiếu hợp lệ của chính mình -> Mong đợi: 200 OK (chỉ trả về phiếu của KH000001)
 GET {{baseUrl}}/api/tickets
 X-Session-Token: {{customerToken}}
 
-### [Request 24] Khách hàng xem chi tiết phiếu hợp lệ của chính mình (PSC2026090001) -> Mong đợi: 200 OK
-GET {{baseUrl}}/api/tickets/PSC2026090001
+### [Request 24] Khách hàng xem chi tiết phiếu hợp lệ của chính mình (PSC202610001) -> Mong đợi: 200 OK
+GET {{baseUrl}}/api/tickets/PSC202610001
 X-Session-Token: {{customerToken}}
 
-### [Request 25] Kiểm thử IDOR L05: Khách hàng cố tình xem phiếu PSC2026090002 của người khác (KH000002) -> Mong đợi: 403 Forbidden!
-GET {{baseUrl}}/api/tickets/PSC2026090002
+### [Request 25] Kiểm thử IDOR L05: Khách hàng cố tình xem phiếu PSC202610002 của người khác (KH000002) -> Mong đợi: 403 Forbidden!
+GET {{baseUrl}}/api/tickets/PSC202610002
 X-Session-Token: {{customerToken}}
 
 
@@ -209,8 +209,8 @@ X-Session-Token: {{techToken}}
   "partCode": "LK00001",
   "transactionType": "OUT",
   "quantity": 1,
-  "ticketCode": "PSC2026090001",
-  "note": "Xuat thay man hinh iPhone 11 theo phieu PSC2026090001"
+  "ticketCode": "PSC202610012",
+  "note": "Xuat thay man hinh iPhone 11 theo phieu PSC202610012"
 }
 
 ### =========================================================================
@@ -219,7 +219,7 @@ X-Session-Token: {{techToken}}
 ### =========================================================================
 
 ### [Request 29] Tính toán tổng chi phí phiếu sửa chữa (Tiền công + Linh kiện) -> Mong đợi: 200 OK
-GET {{baseUrl}}/api/tickets/PSC2026090001/cost
+GET {{baseUrl}}/api/tickets/PSC202610001/cost
 X-Session-Token: {{staffToken}}
 
 ### [Request 30] Lập hóa đơn thanh toán cho phiếu sửa chữa -> Mong đợi: 201 Created
@@ -229,9 +229,9 @@ Content-Type: application/json
 X-Session-Token: {{staffToken}}
 
 {
-  "ticketCode": "PSC2026090001",
+  "ticketCode": "PSC202610013",
   "discountAmount": 0,
-  "note": "Lap hoa don thanh toan phieu PSC2026090001"
+  "note": "Lap hoa don thanh toan phieu PSC202610013"
 }
 
 ### [Request 31] Xem danh sách toàn bộ hóa đơn thanh toán -> Mong đợi: 200 OK
@@ -243,22 +243,22 @@ GET {{baseUrl}}/api/invoices/HD2026100001
 X-Session-Token: {{staffToken}}
 
 ### [Request 33] Thực hiện thanh toán hóa đơn bằng hình thức Chuyển khoản (TRANSFER) -> Mong đợi: 200 OK
-POST {{baseUrl}}/api/invoices/HD2026100001/pay
+POST {{baseUrl}}/api/invoices/HD2026100011/pay
 Content-Type: application/json
 X-Session-Token: {{staffToken}}
 
 {
-  "amount": 1650000,
+  "amount": 2370000,
   "paymentMethod": "TRANSFER",
   "note": "Khach chuyen khoan VietQR Ngan hang MB Bank"
 }
 
 ### [Request 34] Tra cứu sổ bảo hành điện tử theo Serial máy -> Mong đợi: 200 OK
-GET {{baseUrl}}/api/warranties/search?serial=IP11-64GB-VN
+GET {{baseUrl}}/api/warranties/search?serial=DLXPS-9520-VN01
 X-Session-Token: {{staffToken}}
 
 ### [Request 35] Tra cứu sổ bảo hành điện tử theo SĐT khách hàng -> Mong đợi: 200 OK
-GET {{baseUrl}}/api/warranties/search?phone=0909123456
+GET {{baseUrl}}/api/warranties/search?phone=0982345678
 X-Session-Token: {{staffToken}}
 
 ### =========================================================================
